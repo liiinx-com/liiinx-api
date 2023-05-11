@@ -13,10 +13,10 @@ export abstract class BaseEntity {
   isActive: boolean;
 
   @Column({ type: 'boolean', default: false })
-  isArchived: boolean;
+  isArchived: boolean; // visible to user
 
   @Column({ type: 'boolean', default: false })
-  isDeleted: boolean;
+  isDeleted: boolean; // only visible to admin
 
   @CreateDateColumn({
     type: 'timestamp',
@@ -32,8 +32,6 @@ export abstract class BaseEntity {
     onUpdate: 'CURRENT_TIMESTAMP(6)',
   })
   public updatedAt: Date;
-  @Column({ type: 'varchar', length: 300 })
-  createdBy: string;
 
   @Column({ type: 'varchar', length: 300, nullable: true })
   internalComment: string | null;
