@@ -1,0 +1,22 @@
+@handle=salamat-trading
+@page=home
+
+GET http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages/{{page}}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/websites
+Content-Type: application/json
+
+{
+  "handle": "salamat-trading"
+}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/websites/{{handle}}/sync
+Content-Type: application/json
+
+{
+  "youtubeHandle": "salamattrading"
+}

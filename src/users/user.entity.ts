@@ -1,5 +1,5 @@
 import { BaseEntity } from 'src/shared/base.entity';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column } from 'typeorm';
 
 export enum UserRole {
   USER = 'USER',
