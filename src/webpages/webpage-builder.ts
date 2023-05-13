@@ -18,7 +18,7 @@ export class WebpageBuilder {
     const layoutParams: CreateWebPageParams = {
       website,
       pageType: PageTypes.LAYOUT,
-      pageVariant: 'SIMPLE',
+      pageVariant: 'SIMPLE_LAYOUT',
       themeCode: 'THEME1',
     };
 

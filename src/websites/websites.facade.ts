@@ -40,7 +40,7 @@ export class WebsitesFacadeService {
     if (!webpage)
       throw new HttpException('WEBPAGE_NOT_FOUND', HttpStatus.NOT_FOUND);
 
-    return new WebpageDtoBuilder(website, webpage, layout)
+    return new WebpageDtoBuilder(website, layout, webpage)
       .buildLayout()
       .buildPage()
       .getDto();
