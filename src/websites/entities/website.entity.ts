@@ -1,6 +1,7 @@
 import { BaseEntity } from 'src/shared/base.entity';
 import { WebPage } from 'src/webpages/entities/webpage.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
+import { SeoMetadata, WebsiteConfig } from '../types';
 
 @Entity({ name: 'websites' })
 export class Website extends BaseEntity {
@@ -8,10 +9,10 @@ export class Website extends BaseEntity {
   handle: string;
 
   @Column({ type: 'json', default: {} })
-  config: object;
+  config: WebsiteConfig;
 
   @Column({ type: 'json', default: {}, name: 'seo_metadata' })
-  seoMetadata: object;
+  seoMetadata: SeoMetadata;
 
   @Column()
   ownerId: string;

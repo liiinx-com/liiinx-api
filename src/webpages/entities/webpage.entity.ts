@@ -1,7 +1,9 @@
 import { Website } from 'src/websites/entities/website.entity';
 import { Column, Entity, ManyToOne } from 'typeorm';
-import { PageConfig, PageTypes } from './section-info';
+
 import { BaseEntity } from 'src/shared/base.entity';
+import { LayoutConfig, PageConfig, PageTypes } from '../types';
+import { SeoMetadata } from 'src/websites/types';
 
 @Entity({ name: 'website_pages' })
 export class WebPage extends BaseEntity {
@@ -28,10 +30,10 @@ export class WebPage extends BaseEntity {
   @Column({ length: 50, name: 'page_custom_layout_code', nullable: true })
   customLayoutCode?: string; // custom layout for a website page (landing pages)
   @Column({ type: 'json', default: {}, name: 'page_custom_layout_overrides' })
-  customLayoutOverrides?: object; // TODO: strong type
+  customLayoutOverrides?: LayoutConfig;
 
   @Column({ type: 'json', default: {}, name: 'seo_metadata' })
-  seoMetadata?: object;
+  seoMetadata?: SeoMetadata;
 
   //   // from pageSectionFactory
   //   @Column(() => SectionInfo)

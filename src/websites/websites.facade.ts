@@ -3,7 +3,7 @@ import { CreateWebsiteDto, WebpageDto, WebpageDtoBuilder } from './dto';
 import { WebsitesService } from './websites.service';
 import { WebpagesService } from 'src/webpages/webpages.service';
 import { WebpageBuilder } from 'src/webpages/webpage-builder';
-import { PageTypes } from 'src/webpages/entities/section-info';
+import { PageTypes } from 'src/webpages/types';
 
 @Injectable()
 export class WebsitesFacadeService {

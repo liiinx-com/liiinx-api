@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { WebPage } from './entities/webpage.entity';
 import { Repository, DataSource, InsertResult } from 'typeorm';
-import { PageTypes } from './entities/section-info';
+import { PageTypes } from './types';
 
 @Injectable()
 export class WebpagesService {

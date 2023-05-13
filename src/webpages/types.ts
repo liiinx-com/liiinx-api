@@ -1,5 +1,6 @@
 import { Website } from 'src/websites/entities/website.entity';
-import { PageConfig, PageTypes } from './entities/section-info';
+
+export class LayoutConfig {}
 
 // TODO: replace with WebPageEntity
 export class CreateWebPageParams {
@@ -17,4 +18,16 @@ export class CreateWebPageParams {
   seoMetadata?: object;
   themeCode?: string;
   themeOverrides?: object;
+}
+
+export enum PageTypes {
+  LAYOUT = 'LAYOUT',
+  HOME = 'HOME',
+  ABOUT = 'ABOUT',
+  CONTACT = 'CONTACT',
+}
+
+export class PageConfig {
+  icon: string;
+  isRtl: boolean;
 }
