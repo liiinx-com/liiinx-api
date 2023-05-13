@@ -1,13 +1,9 @@
 import { Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
-import { WebsitesSeederService } from './websites/websites.seeder';
 
 @Controller()
 export class AppController {
-  constructor(
-    private readonly appService: AppService,
-    private readonly websitesSeeder: WebsitesSeederService,
-  ) {}
+  constructor(private readonly appService: AppService) {}
 
   @Get()
   async getHello(): Promise<string> {
@@ -18,6 +14,6 @@ export class AppController {
   // TODO: admin only
   @Post('seed')
   async seedData() {
-    return this.websitesSeeder.seed();
+    return 'seeded';
   }
 }

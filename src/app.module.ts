@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/user.module';
 import { ConfigurationService } from './configuration/configuration.service';
 import { WebsitesModule } from './websites/websites.module';
+import { WebpagesModule } from './webpages/webpages.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { WebsitesModule } from './websites/websites.module';
     ConfigurationModule,
     UsersModule,
     WebsitesModule,
+    WebpagesModule,
   ],
   providers: [AppService],
   controllers: [AppController],

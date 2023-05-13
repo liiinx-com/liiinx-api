@@ -6,20 +6,20 @@ import {
   Post,
 } from '@nestjs/common';
 import { CreateWebsiteDto } from './dto';
-import { WebsitesDomainService } from './websites.domain.service';
+import { WebsitesFacadeService } from './websites.facade';
 
 @Controller('websites')
 export class WebsitesController {
-  constructor(private readonly websitesDomainService: WebsitesDomainService) {}
+  constructor(private readonly websitesFacadeService: WebsitesFacadeService) {}
 
   @Post()
   async newWebsite(@Body() websiteDto: CreateWebsiteDto) {
     const ownerId = 'someuserid';
-    const newWebsite = await this.websitesDomainService.createNewWebsite(
+    const newWebsite = await this.websitesFacadeService.createNewWebsite(
       ownerId,
       websiteDto,
     );
     if (!newWebsite.id)
-      throw new HttpException('SERVER_ERROR', HttpStatus.BAD_REQUEST);
+      throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
   }
 }

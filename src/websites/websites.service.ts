@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Website } from './entities/website.entity';
 import { Repository } from 'typeorm';
-import { CreateWebsiteDto as CreateWebsiteDto } from './dto';
+import { CreateWebsiteDto } from './dto';
 import { WebsiteBuilder } from './website-builder';
 
 @Injectable()
@@ -13,7 +13,14 @@ export class WebsitesService {
     private websiteBuilder: WebsiteBuilder,
   ) {}
 
-  create(ownerId: string, websiteDto: CreateWebsiteDto): Promise<Website> {
+  async create(
+    ownerId: string,
+    websiteDto: CreateWebsiteDto,
+  ): Promise<Website> {
+    const { handle } = websiteDto;
+    if (await this.getByHandle(handle)) {
+      throw new HttpException('ALREADY_EXIST', HttpStatus.CONFLICT);
+    }
     return this.websitesRepository.save(
       this.websiteBuilder.createWebsiteEntity(ownerId, websiteDto),
     );
