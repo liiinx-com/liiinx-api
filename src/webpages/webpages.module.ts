@@ -7,6 +7,6 @@ import { WebpageBuilder } from './webpage-builder';
 @Module({
   imports: [TypeOrmModule.forFeature([WebPage])],
   providers: [WebpagesService, WebpageBuilder],
-  exports: [WebpagesService],
+  exports: [WebpagesService, WebpageBuilder],
 })
 export class WebpagesModule {}

@@ -1,8 +1,7 @@
 @handle=salamat-trading
 @page=home
 
-GET http://localhost:{{$dotenv PORT}}/websites/{{handle}}/{{page}}
-Content-Type: application/json
+GET http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages/{{page}}
 
 ###
 

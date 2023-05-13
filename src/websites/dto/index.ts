@@ -1,6 +1,2 @@
-import { IsNotEmpty } from 'class-validator';
-
-export class CreateWebsiteDto {
-  @IsNotEmpty()
-  handle: string;
-}
+export * from './dto-builder';
+export * from './webpage.dto';

@@ -26,11 +26,11 @@ export class WebsitesService {
     );
   }
 
-  findAll(): Promise<Website[]> {
+  async findAll(): Promise<Website[]> {
     return this.websitesRepository.find();
   }
 
-  getByHandle(handle: string): Promise<Website | null> {
+  async getByHandle(handle: string): Promise<Website | null> {
     return this.websitesRepository.findOneBy({ handle });
   }
 }
