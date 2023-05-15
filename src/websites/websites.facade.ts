@@ -2,26 +2,43 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateWebsiteDto, WebpageDto, WebpageDtoBuilder } from './dto';
 import { WebsitesService } from './websites.service';
 import { WebpagesService } from 'src/webpages/webpages.service';
-import { WebpageBuilder } from 'src/webpages/webpage-builder';
 import { PageTypes } from 'src/webpages/types';
+import { WebsiteBuilder } from './website-builder';
 
 @Injectable()
 export class WebsitesFacadeService {
   constructor(
     private websiteService: WebsitesService,
     private webpageService: WebpagesService,
-    private webpageBuilder: WebpageBuilder,
+    private websiteBuilder: WebsiteBuilder,
   ) {}
 
   async createNewWebsite(ownerId: string, websiteDto: CreateWebsiteDto) {
-    const saveWebsite = await this.websiteService.create(ownerId, websiteDto);
-    this.webpageService.saveBulk(
-      await this.webpageBuilder.getPagesByTemplate(
-        'simple-template',
-        saveWebsite,
-      ),
+    const templateName = 'simple-template';
+    const { handle } = websiteDto;
+    if (await this.websiteService.getByHandle(handle)) {
+      throw new HttpException('ALREADY_EXIST', HttpStatus.CONFLICT);
+    }
+
+    const newWebsite = await this.websiteService.save(
+      await this.websiteBuilder
+        .withTemplate(templateName, websiteDto)
+        .then((builder) => builder.createWebsite(ownerId))
+        .then((builder) => builder.addPages())
+        .then((builder) => builder.addMenus())
+        .then((builder) => builder.getWebsite())
+        .catch((error) => {
+          console.error(error);
+          throw new HttpException(
+            'SERVER_ERROR',
+            HttpStatus.INTERNAL_SERVER_ERROR,
+          );
+        }),
     );
-    return saveWebsite;
+
+    // add to sync-content queue
+
+    return newWebsite;
   }
 
   async getPage(handle: string, pageSlug: string): Promise<WebpageDto> {

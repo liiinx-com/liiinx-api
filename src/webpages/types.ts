@@ -1,24 +1,4 @@
-import { Website } from 'src/websites/entities/website.entity';
-
 export class LayoutConfig {}
-
-// TODO: replace with WebPageEntity
-export class CreateWebPageParams {
-  website: Website;
-  title?: string;
-  slug?: string;
-
-  pageType: PageTypes;
-  pageVariant: string;
-  pageOverrides?: PageConfig;
-
-  customLayoutCode?: string;
-  customLayoutOverrides?: object;
-
-  seoMetadata?: object;
-  themeCode?: string;
-  themeOverrides?: object;
-}
 
 export enum PageTypes {
   LAYOUT = 'LAYOUT',
@@ -30,4 +10,24 @@ export enum PageTypes {
 export class PageConfig {
   icon: string;
   isRtl: boolean;
+}
+
+export class Section {
+  sectionType: string;
+  sectionVariant: string;
+  sectionProps: object;
+
+  constructor() {
+    this.sectionProps = {};
+  }
+}
+
+export class SeoMetadata {}
+
+export class TopBar {}
+
+export class Header extends Section {
+  constructor() {
+    super();
+  }
 }

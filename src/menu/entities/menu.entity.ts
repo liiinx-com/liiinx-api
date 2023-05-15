@@ -1,8 +1,38 @@
-import { Entity } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
 
-@Entity({ name: 'website_menus' })
-export class Menu extends BaseEntity {}
+@Entity({ name: 'website_menu' })
+export class Menu extends BaseEntity {
+  @OneToMany(() => Menu, (m) => m.menu, {
+    cascade: true,
+    nullable: true,
+  })
+  items?: Menu[];
 
-@Entity({ name: 'website_menu_items' })
-export class MenuItem extends BaseEntity {}
+  @Column({ default: false })
+  isParent: boolean;
+
+  @ManyToOne(() => Menu, (menu) => menu.items)
+  menu?: Menu;
+
+  @Column({ default: 0 })
+  order?: number;
+
+  @Column({ length: 50, nullable: true })
+  title?: string;
+
+  @Column({ length: 100, nullable: true })
+  url?: string;
+
+  @Column({ length: 10, nullable: true })
+  target?: string;
+
+  @Column({ default: false })
+  isFeatured?: boolean;
+
+  @Column({ type: 'json', default: {}, name: 'ui_props' })
+  uiProps?: object;
+
+  @Column({ length: 100, nullable: true })
+  icon?: string;
+}

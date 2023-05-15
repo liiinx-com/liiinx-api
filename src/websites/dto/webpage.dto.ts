@@ -1,6 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { PageTypes } from 'src/webpages/types';
-import { Footer, Header, Hero, TopBar } from '../types';
+import { Header, PageTypes, TopBar } from 'src/webpages/types';
 
 export class CreateWebsiteDto {
   @IsNotEmpty()
@@ -12,8 +11,8 @@ export class LayoutDto {
   variant: string;
   topBar?: TopBar;
   header?: Header;
-  hero?: Hero;
-  footer?: Footer;
+  // hero?: Hero;
+  // footer?: Footer;
 }
 export class PageDto {
   type: PageTypes;

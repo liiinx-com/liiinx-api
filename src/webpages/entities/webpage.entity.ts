@@ -1,14 +1,22 @@
 import { Website } from 'src/websites/entities/website.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
-
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
-import { LayoutConfig, PageConfig, PageTypes } from '../types';
-import { SeoMetadata } from 'src/websites/types';
+import {
+  Header,
+  LayoutConfig,
+  PageConfig,
+  PageTypes,
+  SeoMetadata,
+} from '../types';
 
 @Entity({ name: 'website_pages' })
 export class WebPage extends BaseEntity {
   @ManyToOne(() => Website, (ws) => ws.pages)
+  @JoinColumn()
   website: Website;
+
+  @Column()
+  websiteId: string;
 
   @Column({ length: 100, nullable: true })
   title?: string;
@@ -39,9 +47,9 @@ export class WebPage extends BaseEntity {
   //   @Column(() => SectionInfo)
   //   topBarConfig: SectionInfo;
 
-  //   // from pageSectionFactory
-  //   @Column(() => SectionInfo)
-  //   headerConfig: SectionInfo;
+  // from pageSectionFactory
+  // @Column({ type: 'json', default: {} })
+  // header?: Header;
 
   //   // from pageSectionFactory
   //   @Column(() => SectionInfo)
