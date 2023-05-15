@@ -23,9 +23,8 @@ export class WebsitesFacadeService {
     const newWebsite = await this.websiteService.save(
       await this.websiteBuilder
         .withTemplate(templateName, websiteDto)
-        .then((builder) => builder.createWebsite(ownerId))
+        .then((builder) => builder.create(ownerId))
         .then((builder) => builder.addPages())
-        .then((builder) => builder.addMenus())
         .then((builder) => builder.getWebsite())
         .catch((error) => {
           console.error(error);

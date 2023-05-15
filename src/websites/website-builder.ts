@@ -9,9 +9,8 @@ interface IWebsiteBuilder {
     templateName: string,
     params: CreateWebsiteDto,
   ) => Promise<IWebsiteBuilder>;
-  createWebsite: (ownerId: string) => Promise<IWebsiteBuilder>;
+  create: (ownerId: string) => Promise<IWebsiteBuilder>;
   addPages: () => Promise<IWebsiteBuilder>;
-  addMenus: () => Promise<IWebsiteBuilder>;
   getWebsite: () => Promise<Website>;
 }
 
@@ -33,7 +32,7 @@ export class WebsiteBuilder implements IWebsiteBuilder {
     return this;
   }
 
-  async createWebsite(ownerId: string) {
+  async create(ownerId: string) {
     this.website.handle = this.params.handle;
     this.website.ownerId = ownerId;
     return this;
@@ -43,12 +42,6 @@ export class WebsiteBuilder implements IWebsiteBuilder {
     this.website.pages = await this.webpagesService.getPagesByTemplate(
       this.templateName,
     );
-    return this;
-  }
-
-  async addMenus() {
-    // TODO: add menus
-    // this.website.m
     return this;
   }
 

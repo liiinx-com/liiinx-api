@@ -1,36 +1,38 @@
 import { Injectable } from '@nestjs/common';
-import { WebPage } from './entities/webpage.entity';
+import { Webpage as Webpage } from './entities/webpage.entity';
 import { LayoutConfig, PageConfig, PageTypes, SeoMetadata } from './types';
+import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
+import { Menu } from 'src/menu/entities/menu.entity';
 
-interface IWebPageBuilder {
-  webpage: WebPage;
-
-  getPage: () => Promise<WebPage>;
+interface IWebpageBuilder {
+  getPage: () => Promise<Webpage>;
   create: (
     websiteId: string,
     type: PageTypes,
     variant: string,
-  ) => Promise<IWebPageBuilder>;
-  withTitle: (title: string, slug: string) => Promise<IWebPageBuilder>;
-  withPageOverride: (overrideConfig: PageConfig) => Promise<IWebPageBuilder>;
-  withSeoMetadata: (metadata: SeoMetadata) => Promise<IWebPageBuilder>;
-  withLayout: (code: string) => Promise<IWebPageBuilder>;
-  withLayoutConfig: (config: LayoutConfig) => Promise<IWebPageBuilder>;
+  ) => Promise<IWebpageBuilder>;
+  withSettings: (settings: WebpageSetting[]) => Promise<IWebpageBuilder>;
+  withTitle: (title: string, slug: string) => Promise<IWebpageBuilder>;
+  withPageOverride: (overrideConfig: PageConfig) => Promise<IWebpageBuilder>;
+  withSeoMetadata: (metadata: SeoMetadata) => Promise<IWebpageBuilder>;
+  withLayout: (code: string) => Promise<IWebpageBuilder>;
+  withLayoutConfig: (config: LayoutConfig) => Promise<IWebpageBuilder>;
+  withMenu: (menus: Menu[]) => Promise<IWebpageBuilder>;
+  withWebsiteId: (websiteId: string) => Promise<IWebpageBuilder>;
   // withHeader: (header: Header) => Promise<IWebPageBuilder>;
-  withWebsiteId: (websiteId: string) => Promise<IWebPageBuilder>;
-  // with: () => Promise<IWebPageBuilder>;
+  // withFooter: (footer: Footer) => Promise<IWebPageBuilder>;
 }
 
 @Injectable()
-export class WebpageBuilder implements IWebPageBuilder {
-  webpage: WebPage;
+export class WebpageBuilder implements IWebpageBuilder {
+  private webpage: Webpage;
 
   async getPage() {
     return this.webpage;
   }
 
   async create(type: PageTypes, variant: string) {
-    this.webpage = new WebPage();
+    this.webpage = new Webpage();
     this.webpage.pageType = type;
     this.webpage.pageVariant = variant;
 
@@ -53,6 +55,11 @@ export class WebpageBuilder implements IWebPageBuilder {
     return this;
   }
 
+  async withMenu(menus: Menu[]) {
+    this.webpage.menus = menus;
+    return this;
+  }
+
   async withSeoMetadata(metadata: SeoMetadata) {
     this.webpage.seoMetadata = metadata;
     return this;
@@ -68,24 +75,8 @@ export class WebpageBuilder implements IWebPageBuilder {
     return this;
   }
 
-  // async withHeader(header: Header) {
-  //   this.webpage.header = header;
-  //   return this;
-  // }
-
-  // async getPagesByTemplate(templateName: string): Promise<WebPage[]> {
-  //   const layoutParams: WebPage = {
-  //     pageType: PageTypes.LAYOUT,
-  //     pageVariant: 'SIMPLE_LAYOUT',
-  //     themeCode: 'THEME1',
-  //   };
-  //   const homeParams: WebPage = {
-  //     pageType: PageTypes.HOME,
-  //     pageVariant: 'HOME1',
-  //     slug: 'home',
-  //   };
-  //   const result = this.createWebpageEntity([layoutParams, homeParams]);
-  //   console.log('result :>> ', result);
-  //   return result;
-  // }
+  async withSettings(settings: WebpageSetting[]) {
+    this.webpage.settings = settings;
+    return this;
+  }
 }

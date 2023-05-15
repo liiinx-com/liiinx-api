@@ -1,22 +1,21 @@
 import { Website } from 'src/websites/entities/website.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
-import {
-  Header,
-  LayoutConfig,
-  PageConfig,
-  PageTypes,
-  SeoMetadata,
-} from '../types';
+import { LayoutConfig, PageConfig, PageTypes, SeoMetadata } from '../types';
+import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
+import { Menu } from 'src/menu/entities/menu.entity';
 
 @Entity({ name: 'website_pages' })
-export class WebPage extends BaseEntity {
+export class Webpage extends BaseEntity {
   @ManyToOne(() => Website, (ws) => ws.pages)
   @JoinColumn()
   website: Website;
 
   @Column()
   websiteId: string;
+
+  @OneToMany(() => Menu, (m) => m.webpage, { cascade: true })
+  menus: Menu[];
 
   @Column({ length: 100, nullable: true })
   title?: string;
@@ -67,4 +66,9 @@ export class WebPage extends BaseEntity {
   themeCode?: string;
   @Column({ type: 'json', default: {}, name: 'theme_overrides' })
   themeOverrides?: object; // TODO: strong type
+
+  @OneToMany(() => WebpageSetting, (setting) => setting.webpage, {
+    cascade: true,
+  })
+  settings: WebpageSetting[];
 }
