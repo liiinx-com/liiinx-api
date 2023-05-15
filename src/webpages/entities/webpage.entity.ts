@@ -1,12 +1,21 @@
 import { Website } from 'src/websites/entities/website.entity';
-import { Column, Entity, ManyToOne } from 'typeorm';
-import { PageConfig, PageTypes } from './section-info';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
+import { LayoutConfig, PageConfig, PageTypes, SeoMetadata } from '../types';
+import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
+import { Menu } from 'src/menu/entities/menu.entity';
 
 @Entity({ name: 'website_pages' })
-export class WebPage extends BaseEntity {
+export class Webpage extends BaseEntity {
   @ManyToOne(() => Website, (ws) => ws.pages)
+  @JoinColumn()
   website: Website;
+
+  @Column()
+  websiteId: string;
+
+  @OneToMany(() => Menu, (m) => m.webpage, { cascade: true })
+  menus: Menu[];
 
   @Column({ length: 100, nullable: true })
   title?: string;
@@ -28,18 +37,18 @@ export class WebPage extends BaseEntity {
   @Column({ length: 50, name: 'page_custom_layout_code', nullable: true })
   customLayoutCode?: string; // custom layout for a website page (landing pages)
   @Column({ type: 'json', default: {}, name: 'page_custom_layout_overrides' })
-  customLayoutOverrides?: object; // TODO: strong type
+  customLayoutOverrides?: LayoutConfig;
 
   @Column({ type: 'json', default: {}, name: 'seo_metadata' })
-  seoMetadata?: object;
+  seoMetadata?: SeoMetadata;
 
   //   // from pageSectionFactory
   //   @Column(() => SectionInfo)
   //   topBarConfig: SectionInfo;
 
-  //   // from pageSectionFactory
-  //   @Column(() => SectionInfo)
-  //   headerConfig: SectionInfo;
+  // from pageSectionFactory
+  // @Column({ type: 'json', default: {} })
+  // header?: Header;
 
   //   // from pageSectionFactory
   //   @Column(() => SectionInfo)
@@ -57,4 +66,9 @@ export class WebPage extends BaseEntity {
   themeCode?: string;
   @Column({ type: 'json', default: {}, name: 'theme_overrides' })
   themeOverrides?: object; // TODO: strong type
+
+  @OneToMany(() => WebpageSetting, (setting) => setting.webpage, {
+    cascade: true,
+  })
+  settings: WebpageSetting[];
 }

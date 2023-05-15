@@ -1,32 +1,18 @@
 import { IsNotEmpty } from 'class-validator';
-import { PageTypes } from 'src/webpages/entities/section-info';
+import { Header, PageTypes, TopBar } from 'src/webpages/types';
 
 export class CreateWebsiteDto {
   @IsNotEmpty()
   handle: string;
 }
 
-export class TopBarDto {}
-
-export class HeaderDto {
-  dir: 'ltr' | 'rtl';
-}
-
-export class HeroDto {
-  dir: 'ltr' | 'rtl';
-}
-
-export class FooterDto {
-  dir: 'ltr' | 'rtl';
-}
-
 export class LayoutDto {
   handle: string;
   variant: string;
-  topBar?: TopBarDto;
-  header?: HeaderDto;
-  hero?: HeroDto;
-  footer?: FooterDto;
+  topBar?: TopBar;
+  header?: Header;
+  // hero?: Hero;
+  // footer?: Footer;
 }
 export class PageDto {
   type: PageTypes;

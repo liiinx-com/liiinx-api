@@ -1,20 +1,33 @@
-import { Website } from 'src/websites/entities/website.entity';
-import { PageConfig, PageTypes } from './entities/section-info';
+export class LayoutConfig {}
 
-// TODO: replace with WebPageEntity
-export class CreateWebPageParams {
-  website: Website;
-  title?: string;
-  slug?: string;
+export enum PageTypes {
+  LAYOUT = 'LAYOUT',
+  HOME = 'HOME',
+  ABOUT = 'ABOUT',
+  CONTACT = 'CONTACT',
+}
 
-  pageType: PageTypes;
-  pageVariant: string;
-  pageOverrides?: PageConfig;
+export class PageConfig {
+  icon: string;
+  isRtl: boolean;
+}
 
-  customLayoutCode?: string;
-  customLayoutOverrides?: object;
+export class Section {
+  sectionType: string;
+  sectionVariant: string;
+  sectionProps: object;
 
-  seoMetadata?: object;
-  themeCode?: string;
-  themeOverrides?: object;
+  constructor() {
+    this.sectionProps = {};
+  }
+}
+
+export class SeoMetadata {}
+
+export class TopBar {}
+
+export class Header extends Section {
+  constructor() {
+    super();
+  }
 }

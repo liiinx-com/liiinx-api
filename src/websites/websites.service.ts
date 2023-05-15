@@ -10,20 +10,10 @@ export class WebsitesService {
   constructor(
     @InjectRepository(Website)
     private websitesRepository: Repository<Website>,
-    private websiteBuilder: WebsiteBuilder,
   ) {}
 
-  async create(
-    ownerId: string,
-    websiteDto: CreateWebsiteDto,
-  ): Promise<Website> {
-    const { handle } = websiteDto;
-    if (await this.getByHandle(handle)) {
-      throw new HttpException('ALREADY_EXIST', HttpStatus.CONFLICT);
-    }
-    return this.websitesRepository.save(
-      this.websiteBuilder.createWebsiteEntity(ownerId, websiteDto),
-    );
+  async save(website: Website): Promise<Website> {
+    return this.websitesRepository.save(website);
   }
 
   async findAll(): Promise<Website[]> {
