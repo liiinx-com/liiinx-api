@@ -1,13 +1,7 @@
 import { Website } from 'src/websites/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
-import {
-  Header,
-  LayoutConfig,
-  PageConfig,
-  PageTypes,
-  SeoMetadata,
-} from '../types';
+import { LayoutConfig, PageConfig, PageTypes, SeoMetadata } from '../types';
 
 @Entity({ name: 'website_pages' })
 export class WebPage extends BaseEntity {

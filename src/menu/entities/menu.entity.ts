@@ -3,17 +3,19 @@ import { BaseEntity } from 'src/shared/base.entity';
 
 @Entity({ name: 'website_menu' })
 export class Menu extends BaseEntity {
-  @OneToMany(() => Menu, (m) => m.menu, {
+  @OneToMany(() => Menu, (m) => m.parent, {
     cascade: true,
     nullable: true,
+    eager: true,
   })
+  @JoinColumn()
   items?: Menu[];
 
   @Column({ default: false })
   isParent: boolean;
 
   @ManyToOne(() => Menu, (menu) => menu.items)
-  menu?: Menu;
+  parent?: Menu;
 
   @Column({ default: 0 })
   order?: number;
