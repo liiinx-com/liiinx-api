@@ -10,6 +10,7 @@ import { WebsitesModule } from './websites/websites.module';
 import { WebpagesModule } from './webpages/webpages.module';
 import { MenuModule } from './menu/menu.module';
 import { WebpageSettingsModule } from './webpage-settings/webpage-settings.module';
+import { ThemesModule } from './themes/themes.module';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { WebpageSettingsModule } from './webpage-settings/webpage-settings.modul
       useFactory: async (configService: ConfigurationService) => ({
         type: 'postgres',
         url: configService.getPostgresConfig().url,
-        synchronize: true, // ! TODO: NO PROD,
+        synchronize: true, // ! TODO: NOT IN PROD
         autoLoadEntities: true,
       }),
     }),
@@ -30,6 +31,7 @@ import { WebpageSettingsModule } from './webpage-settings/webpage-settings.modul
     WebpagesModule,
     MenuModule,
     WebpageSettingsModule,
+    ThemesModule,
   ],
   providers: [AppService],
   controllers: [AppController],
