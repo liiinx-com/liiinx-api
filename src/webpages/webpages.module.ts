@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { WebpageBuilder } from './webpage-builder';
 import { WebpageSettingsModule } from 'src/webpage-settings/webpage-settings.module';
 import { MenuModule } from 'src/menu/menu.module';
+import { WebpageFactory } from './webpage-factory';
 
 @Module({
   imports: [
@@ -12,7 +13,7 @@ import { MenuModule } from 'src/menu/menu.module';
     WebpageSettingsModule,
     MenuModule,
   ],
-  providers: [WebpagesService, WebpageBuilder],
+  providers: [WebpagesService, WebpageBuilder, WebpageFactory],
   exports: [WebpagesService, WebpageBuilder],
 })
 export class WebpagesModule {}
