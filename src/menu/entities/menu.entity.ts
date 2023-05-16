@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
 
 @Entity({ name: 'website_menu' })
