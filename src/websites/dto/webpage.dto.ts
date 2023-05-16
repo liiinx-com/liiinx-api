@@ -1,5 +1,5 @@
 import { IsNotEmpty } from 'class-validator';
-import { Header, PageTypes, TopBar } from 'src/webpages/types';
+import { Header, MenuItem, PageTypes } from 'src/webpages/types';
 
 export class CreateWebsiteDto {
   @IsNotEmpty()
@@ -9,8 +9,9 @@ export class CreateWebsiteDto {
 export class LayoutDto {
   handle: string;
   variant: string;
-  topBar?: TopBar;
-  header?: Header;
+  headerPrimaryMenu?: MenuItem[];
+  // topBar?: TopBar;
+  // header?: Header;
   // hero?: Hero;
   // footer?: Footer;
 }
@@ -22,8 +23,12 @@ export class PageDto {
 }
 
 export class WebpageDto {
+  constructor() {
+    this.layout = new LayoutDto();
+    this.page = new PageDto();
+  }
+
   layout: LayoutDto;
   page: PageDto;
-
   // theme: {};
 }

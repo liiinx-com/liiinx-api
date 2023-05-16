@@ -4,10 +4,12 @@ import { Webpage } from 'src/webpages/entities/webpage.entity';
 
 @Entity({ name: 'menu' })
 export class Menu extends BaseEntity {
-  @OneToMany(() => Menu, (m) => m.menu, {
+  @OneToMany(() => Menu, (m) => m.parent, {
     cascade: true,
     nullable: true,
+    eager: true,
   })
+  @JoinColumn()
   items?: Menu[];
 
   @ManyToOne(() => Webpage, (wp) => wp.menus)
@@ -23,7 +25,7 @@ export class Menu extends BaseEntity {
   isParent: boolean;
 
   @ManyToOne(() => Menu, (menu) => menu.items)
-  menu?: Menu;
+  parent?: Menu;
 
   @Column({ default: 0 })
   order?: number;

@@ -15,7 +15,7 @@ export class PageConfig {
 export class Section {
   sectionType: string;
   sectionVariant: string;
-  sectionProps: object;
+  sectionProps?: object;
 
   constructor() {
     this.sectionProps = {};
@@ -26,8 +26,19 @@ export class SeoMetadata {}
 
 export class TopBar {}
 
+export class MenuItem {
+  title: string;
+  icon?: string;
+  url: string;
+  target: string;
+  order: number;
+  isFeatured: boolean;
+  props?: object;
+}
+
 export class Header extends Section {
   constructor() {
     super();
+    this.sectionType = 'HEADER';
   }
 }

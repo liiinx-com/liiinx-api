@@ -27,10 +27,19 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
     return this.webpageDto;
   }
 
+  // TODO: clean the arch and design
   buildLayout(): WebpageDtoBuilder {
+    const menus = this.layout.menus.reduce((result, item) => {
+      result[item.menuType] = item;
+      return result;
+    }, {});
+
     this.webpageDto.layout = {
       variant: this.layout.pageVariant,
       handle: this.website.handle,
+      ...(menus['HEADER_PRIMARY']
+        ? { headerPrimaryMenu: menus['HEADER_PRIMARY'] }
+        : {}),
     };
     return this;
   }

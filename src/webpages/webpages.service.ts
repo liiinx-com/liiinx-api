@@ -23,7 +23,13 @@ export class WebpagesService {
 
   private getActiveWebpageWhereParams(websiteHandle: string) {
     return {
-      relations: { website: true },
+      relations: {
+        website: true,
+        settings: true,
+        menus: {
+          parent: true,
+        },
+      },
       where: {
         website: { handle: websiteHandle },
         isDeleted: false,
