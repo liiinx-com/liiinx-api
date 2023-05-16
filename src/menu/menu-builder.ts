@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Menu } from './entities/menu.entity';
 
 interface IMenuBuilder {
-  reset: () => IMenuBuilder;
+  create: (type: string) => IMenuBuilder;
   getMenu: () => Menu;
   withUrl: (url: string) => IMenuBuilder;
   withTitle: (title: string) => IMenuBuilder;
@@ -22,16 +22,18 @@ export class MenuBuilder implements IMenuBuilder {
     return this.menu;
   }
 
-  reset() {
+  create(type = 'ITEM', target = '_blank') {
     this.menu = new Menu();
     this.menu.isFeatured = false;
-    this.menu.target = '_blank';
+    this.menu.target = target;
+    this.menu.menuType = type;
     this.menu.isParent = false;
 
     return this;
   }
 
   withChild(child: Menu) {
+    if (!this.menu.items) this.menu.items = [];
     this.menu.items.push(child);
     return this;
   }

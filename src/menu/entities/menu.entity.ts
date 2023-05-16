@@ -1,7 +1,8 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
+import { Webpage } from 'src/webpages/entities/webpage.entity';
 
-@Entity({ name: 'website_menu' })
+@Entity({ name: 'menu' })
 export class Menu extends BaseEntity {
   @OneToMany(() => Menu, (m) => m.parent, {
     cascade: true,
@@ -10,6 +11,15 @@ export class Menu extends BaseEntity {
   })
   @JoinColumn()
   items?: Menu[];
+
+  @ManyToOne(() => Webpage, (wp) => wp.menus)
+  @JoinColumn()
+  webpage?: Webpage;
+  @Column({ nullable: true })
+  webpageId?: string;
+
+  @Column({ default: 'ITEM' }) // TOP_BAR, HEADER_PRIMARY, HEADER_SECONDARY, SIDEBAR, FOOTER_PRIMARY, FOOTER_SECONDARY
+  menuType: string;
 
   @Column({ default: false })
   isParent: boolean;

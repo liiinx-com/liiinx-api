@@ -1,5 +1,5 @@
 import { BaseEntity } from 'src/shared/base.entity';
-import { WebPage } from 'src/webpages/entities/webpage.entity';
+import { Webpage } from 'src/webpages/entities/webpage.entity';
 import { Entity, Column, OneToMany } from 'typeorm';
 import { WebsiteConfig } from '../types';
 
@@ -14,6 +14,6 @@ export class Website extends BaseEntity {
   @Column()
   ownerId: string;
 
-  @OneToMany(() => WebPage, (page) => page.website, { cascade: true })
-  pages: WebPage[];
+  @OneToMany(() => Webpage, (page) => page.website, { cascade: true })
+  pages: Webpage[];
 }

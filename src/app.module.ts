@@ -9,6 +9,7 @@ import { ConfigurationService } from './configuration/configuration.service';
 import { WebsitesModule } from './websites/websites.module';
 import { WebpagesModule } from './webpages/webpages.module';
 import { MenuModule } from './menu/menu.module';
+import { WebpageSettingsModule } from './webpage-settings/webpage-settings.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { MenuModule } from './menu/menu.module';
     WebsitesModule,
     WebpagesModule,
     MenuModule,
+    WebpageSettingsModule,
   ],
   providers: [AppService],
   controllers: [AppController],

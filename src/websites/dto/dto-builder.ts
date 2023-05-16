@@ -1,11 +1,12 @@
-import { WebPage } from 'src/webpages/entities/webpage.entity';
+import { Webpage } from 'src/webpages/entities/webpage.entity';
 import { Website } from '../entities/website.entity';
 import { WebpageDto } from './webpage.dto';
 
 interface IWebpageDtoBuilder {
-  getDto(): WebpageDto;
-  buildLayout(): WebpageDtoBuilder;
-  buildPage(): WebpageDtoBuilder;
+  create: () => WebpageDtoBuilder;
+  getDto: () => WebpageDto;
+  buildLayout: () => WebpageDtoBuilder;
+  buildPage: () => WebpageDtoBuilder;
 }
 
 export class WebpageDtoBuilder implements IWebpageDtoBuilder {
@@ -13,10 +14,13 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
 
   constructor(
     public website: Website,
-    public layout: WebPage,
-    public webpage: WebPage,
-  ) {
+    public layout: Webpage,
+    public webpage: Webpage,
+  ) {}
+
+  create() {
     this.webpageDto = new WebpageDto();
+    return this;
   }
 
   getDto(): WebpageDto {
