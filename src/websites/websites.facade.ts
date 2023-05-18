@@ -64,6 +64,7 @@ export class WebsitesFacadeService {
       .create(website, layout, webpage)
       .then((builder) => builder.buildLayout())
       .then((builder) => builder.buildPage())
+      .then((builder) => builder.buildTheme())
       .then((builder) => builder.getDto());
   }
 }

@@ -21,6 +21,7 @@ interface IWebpageBuilder {
   withLayoutConfig: (config: PageSettingsDto) => Promise<IWebpageBuilder>;
   withMenu: (menus: Menu[]) => Promise<IWebpageBuilder>;
   withWebsiteId: (websiteId: string) => Promise<IWebpageBuilder>;
+  withThemeCode: (themeCode: string) => Promise<IWebpageBuilder>;
   // withHeader: (header: Header) => Promise<IWebPageBuilder>;
   // withFooter: (footer: Footer) => Promise<IWebPageBuilder>;
 }
@@ -43,6 +44,11 @@ export class WebpageBuilder implements IWebpageBuilder {
 
   async withWebsiteId(websiteId: string) {
     this.webpage.websiteId = websiteId;
+    return this;
+  }
+
+  async withThemeCode(themeCode: string) {
+    this.webpage.themeCode = themeCode;
     return this;
   }
 

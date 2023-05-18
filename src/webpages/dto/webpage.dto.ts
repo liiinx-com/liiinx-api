@@ -2,6 +2,7 @@ import { AutoMap } from '@automapper/classes';
 import { MenusDto } from '../../menu/dto/menu.dto';
 import { PageTypes } from 'src/webpages/entities/webpage.entity';
 import { PageSettingsDto } from 'src/webpage-settings/dto';
+import { ThemeDto } from 'src/themes/dto/theme.dto';
 
 export class SeoMetadataDto {}
 
@@ -40,5 +41,5 @@ export class WebpageDto {
   layout: LayoutDto;
 
   page: PageDto;
-  // theme: {};
+  theme: ThemeDto;
 }
