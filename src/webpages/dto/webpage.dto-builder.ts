@@ -1,8 +1,10 @@
 import { Webpage } from 'src/webpages/entities/webpage.entity';
-import { Website } from '../entities/website.entity';
-import { WebpageDto } from './webpage.dto';
+import { Website } from 'src/websites/entities/website.entity';
+import { PageDto, WebpageDto } from './webpage.dto';
 import { Injectable } from '@nestjs/common';
 import { MenuService } from 'src/menu/menu.service';
+import { InjectMapper } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
 
 interface IWebpageDtoBuilder {
   create: (
@@ -12,7 +14,6 @@ interface IWebpageDtoBuilder {
   ) => WebpageDtoBuilder;
   getDto: () => WebpageDto;
   buildLayout: () => WebpageDtoBuilder;
-  buildMenus: () => WebpageDtoBuilder;
   buildPage: () => WebpageDtoBuilder;
 }
 
@@ -23,7 +24,11 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   private layout: Webpage;
   private webpage: Webpage;
 
-  constructor(private menuService: MenuService) {}
+  constructor(
+    private menuService: MenuService,
+    @InjectMapper()
+    private readonly mapper: Mapper,
+  ) {}
 
   create(website: Website, layout: Webpage, webpage: Webpage) {
     this.webpageDto = new WebpageDto();
@@ -42,25 +47,15 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
     this.webpageDto.layout = {
       variant: this.layout.pageVariant,
       handle: this.website.handle,
+      menus: this.menuService.mapToMenusDto(this.layout.menus),
       // headerPrimaryMenu: menus.headerPrimary
     };
 
     return this;
   }
 
-  buildMenus() {
-    this.webpageDto.menus = this.menuService.mapToMenusDto(this.layout.menus);
-    return this;
-  }
-
   buildPage(): WebpageDtoBuilder {
-    this.webpageDto.page = {
-      slug: this.webpage.slug,
-      title: this.webpage.title,
-      type: this.webpage.pageType,
-      variant: this.webpage.pageVariant,
-    };
-
+    this.webpageDto.page = this.mapper.map(this.webpage, Webpage, PageDto);
     return this;
   }
 }

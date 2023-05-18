@@ -2,6 +2,7 @@ import { Website } from 'src/websites/entities/website.entity';
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
 import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
+import { AutoMap } from '@automapper/classes';
 import { Menu } from 'src/menu/entities/menu.entity';
 import {
   LayoutConfigDto,
@@ -29,9 +30,11 @@ export class Webpage extends BaseEntity {
   menus: Menu[];
 
   @Column({ length: 100, nullable: true })
+  @AutoMap()
   title?: string;
 
   @Column({ length: 100, nullable: true })
+  @AutoMap()
   slug?: string;
 
   @Column({
@@ -39,9 +42,13 @@ export class Webpage extends BaseEntity {
     enum: PageTypes,
     name: 'page_type',
   })
+  @AutoMap()
   pageType: PageTypes;
+
   @Column({ length: 50, name: 'page_variant' })
+  @AutoMap()
   pageVariant: string;
+
   @Column({ type: 'json', default: {}, name: 'page_overrides' })
   pageOverrides?: PageConfigDto;
 

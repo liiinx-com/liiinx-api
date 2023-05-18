@@ -6,6 +6,8 @@ import { WebpageBuilder } from './webpage-builder';
 import { WebpageSettingsModule } from 'src/webpage-settings/webpage-settings.module';
 import { MenuModule } from 'src/menu/menu.module';
 import { WebpageFactory } from './webpage-factory';
+import { WebpageMappingProfile } from './webpage.mapping-profile';
+import { WebpageDtoBuilder } from './dto/webpage.dto-builder';
 
 @Module({
   imports: [
@@ -13,7 +15,13 @@ import { WebpageFactory } from './webpage-factory';
     WebpageSettingsModule,
     MenuModule,
   ],
-  providers: [WebpagesService, WebpageBuilder, WebpageFactory],
-  exports: [WebpagesService, WebpageBuilder],
+  providers: [
+    WebpagesService,
+    WebpageBuilder,
+    WebpageFactory,
+    WebpageMappingProfile,
+    WebpageDtoBuilder,
+  ],
+  exports: [WebpagesService, WebpageBuilder, WebpageDtoBuilder],
 })
 export class WebpagesModule {}

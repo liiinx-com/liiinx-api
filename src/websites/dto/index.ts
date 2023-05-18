@@ -1,2 +1,2 @@
-export * from './webpage.dto-builder';
-export * from './webpage.dto';
+export * from './sections.dto';
+export * from './website.dto';

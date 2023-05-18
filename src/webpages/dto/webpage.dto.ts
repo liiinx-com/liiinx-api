@@ -1,25 +1,27 @@
-import { IsNotEmpty } from 'class-validator';
-import { MenusDto } from './menu.dto';
+import { AutoMap } from '@automapper/classes';
+import { MenusDto } from '../../menu/dto/menu.dto';
 import { PageTypes } from 'src/webpages/entities/webpage.entity';
-
-export class CreateWebsiteDto {
-  @IsNotEmpty()
-  handle: string;
-}
 
 export class LayoutDto {
   handle: string;
+
+  @AutoMap()
   variant: string;
-  // topBar?: TopBar;
-  // header?: Header;
-  // hero?: Hero;
-  // footer?: Footer;
+
+  menus: MenusDto;
 }
 export class PageDto {
-  type: PageTypes;
+  @AutoMap()
+  pageType: PageTypes;
+
+  @AutoMap()
   slug: string;
+
+  @AutoMap()
   title: string;
-  variant: string;
+
+  @AutoMap()
+  pageVariant: string;
 }
 
 export class WebpageDto {
@@ -29,7 +31,7 @@ export class WebpageDto {
   }
 
   layout: LayoutDto;
-  menus: MenusDto;
+
   page: PageDto;
   // theme: {};
 }

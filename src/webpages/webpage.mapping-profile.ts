@@ -2,13 +2,13 @@ import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import type { Mapper } from '@automapper/core';
 import { createMap, forMember, mapFrom } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
-import { Menu } from './entities/menu.entity';
-import { MenuDto, MenuItemDto } from 'src/websites/dto/menu.dto';
 import { BaseEntityDto } from '../shared/base.dto';
 import { BaseEntity } from 'src/shared/base.entity';
+import { Webpage } from './entities/webpage.entity';
+import { PageDto } from './dto/webpage.dto';
 
 @Injectable()
-export class MenuMappingProfile extends AutomapperProfile {
+export class WebpageMappingProfile extends AutomapperProfile {
   constructor(@InjectMapper() mapper: Mapper) {
     super(mapper);
   }
@@ -18,14 +18,13 @@ export class MenuMappingProfile extends AutomapperProfile {
       createMap(mapper, BaseEntity, BaseEntityDto);
       createMap(
         mapper,
-        Menu,
-        MenuItemDto,
-        forMember(
-          (d) => d.props,
-          mapFrom((source) => source.uiProps),
-        ),
+        Webpage,
+        PageDto,
+        // forMember(
+        //   (d) => d.variant,
+        //   mapFrom((source) => source.pageVariant),
+        // ),
       );
-      createMap(mapper, Menu, MenuDto);
     };
   }
 }

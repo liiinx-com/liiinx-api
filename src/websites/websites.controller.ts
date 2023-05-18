@@ -8,8 +8,8 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { CreateWebsiteDto } from './dto';
 import { WebsitesFacadeService } from './websites.facade';
+import { CreateWebsiteDto } from './dto/website.dto';
 
 @Controller('websites')
 export class WebsitesController {

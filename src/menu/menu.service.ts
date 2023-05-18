@@ -4,7 +4,7 @@ import { DataSource, InsertResult, Repository } from 'typeorm';
 import { MenuBuilder } from './menu-builder';
 import MenuTypes from './menu-keys';
 import { Mapper } from '@automapper/core';
-import { MenuDto, MenuItemDto, MenusDto } from 'src/websites/dto/menu.dto';
+import { MenuDto, MenuItemDto, MenusDto } from 'src/menu/dto/menu.dto';
 import { InjectMapper } from '@automapper/nestjs';
 
 @Injectable()
@@ -42,7 +42,7 @@ export class MenuService {
     });
   }
 
-  // TODO: toMapper
+  // TODO: toMapper?
   mapToMenusDto(menus: Menu[]): MenusDto {
     return menus.reduce((result, item) => {
       const menu = this.mapper.map(item, Menu, MenuDto);
