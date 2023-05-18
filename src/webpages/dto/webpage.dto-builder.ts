@@ -61,6 +61,14 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
 
   async buildPage() {
     this.webpageDto.page = this.mapper.map(this.webpage, Webpage, PageDto);
+
+    if (this.webpage.settings.length) {
+      this.webpageDto.page.config =
+        await this.settingsService.addDynamicSettings(
+          this.webpage.pageType,
+          this.webpage.settings,
+        );
+    }
     return this;
   }
 }

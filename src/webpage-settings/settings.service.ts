@@ -11,13 +11,15 @@ export class WebpageSettingsService {
     type: PageTypes,
     settings: WebpageSetting[] = [],
   ): Promise<PageSettingsDto> {
-    if (type === PageTypes.LAYOUT)
-      return this.mapToPageSettingsDto([
-        ...(await this.getLayoutDefaultSettings()),
-        ...settings,
-      ]);
+    let dynamicSettings: WebpageSetting[] = [];
 
-    return null;
+    if (type === PageTypes.LAYOUT)
+      dynamicSettings = [
+        ...dynamicSettings,
+        ...(await this.getLayoutDynamicSettings()),
+      ];
+
+    return this.mapToPageSettingsDto([...dynamicSettings, ...settings]);
   }
 
   mapToPageSettingsDto(settings: WebpageSetting[]): PageSettingsDto {
@@ -27,7 +29,7 @@ export class WebpageSettingsService {
     }, {}) as PageSettingsDto;
   }
 
-  private async getLayoutDefaultSettings(): Promise<WebpageSetting[]> {
+  private async getLayoutDynamicSettings(): Promise<WebpageSetting[]> {
     return Promise.all([
       new WebPageSettingBuilder()
         .create()
