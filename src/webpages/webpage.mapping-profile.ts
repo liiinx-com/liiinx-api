@@ -1,6 +1,6 @@
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import type { Mapper } from '@automapper/core';
-import { createMap, forMember, mapFrom } from '@automapper/core';
+import { createMap } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { BaseEntityDto } from '../shared/base.dto';
 import { BaseEntity } from 'src/shared/base.entity';
