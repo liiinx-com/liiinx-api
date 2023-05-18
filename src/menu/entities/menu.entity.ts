@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
+import { AutoMap } from '@automapper/classes';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
 
 @Entity({ name: 'menu' })
@@ -18,7 +19,7 @@ export class Menu extends BaseEntity {
   @Column({ nullable: true })
   webpageId?: string;
 
-  @Column({ default: 'ITEM' }) // TOP_BAR, HEADER_PRIMARY, HEADER_SECONDARY, SIDEBAR, FOOTER_PRIMARY, FOOTER_SECONDARY
+  @Column({ default: 'ITEM' }) // visit ./menu-keys.ts
   menuType: string;
 
   @Column({ default: false })
@@ -28,23 +29,30 @@ export class Menu extends BaseEntity {
   parent?: Menu;
 
   @Column({ default: 0 })
+  @AutoMap()
   order?: number;
 
   @Column({ length: 50, nullable: true })
+  @AutoMap()
   title?: string;
 
   @Column({ length: 100, nullable: true })
+  @AutoMap()
   url?: string;
 
   @Column({ length: 10, nullable: true })
+  @AutoMap()
   target?: string;
 
   @Column({ default: false })
+  @AutoMap()
   isFeatured?: boolean;
 
   @Column({ type: 'json', default: {}, name: 'ui_props' })
+  @AutoMap()
   uiProps?: object;
 
   @Column({ length: 100, nullable: true })
+  @AutoMap()
   icon?: string;
 }

@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Webpage } from './entities/webpage.entity';
-import { PageTypes } from './types';
+import { PageTypes, Webpage } from './entities/webpage.entity';
 import { WebpageBuilder } from './webpage-builder';
 import { MenuService } from 'src/menu/menu.service';
 import { WebpageSettingsService } from 'src/webpage-settings/webpage-settings.service';

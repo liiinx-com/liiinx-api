@@ -1,8 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { Webpage as Webpage } from './entities/webpage.entity';
-import { LayoutConfig, PageConfig, PageTypes, SeoMetadata } from './types';
+import { PageTypes, Webpage as Webpage } from './entities/webpage.entity';
 import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
 import { Menu } from 'src/menu/entities/menu.entity';
+import {
+  LayoutConfigDto,
+  PageConfigDto,
+  SeoMetadataDto,
+} from 'src/websites/dto/sections.dto';
 
 interface IWebpageBuilder {
   getPage: () => Promise<Webpage>;
@@ -13,10 +17,10 @@ interface IWebpageBuilder {
   ) => Promise<IWebpageBuilder>;
   withSettings: (settings: WebpageSetting[]) => Promise<IWebpageBuilder>;
   withTitle: (title: string, slug: string) => Promise<IWebpageBuilder>;
-  withPageOverride: (overrideConfig: PageConfig) => Promise<IWebpageBuilder>;
-  withSeoMetadata: (metadata: SeoMetadata) => Promise<IWebpageBuilder>;
+  withPageOverride: (overrideConfig: PageConfigDto) => Promise<IWebpageBuilder>;
+  withSeoMetadata: (metadata: SeoMetadataDto) => Promise<IWebpageBuilder>;
   withLayout: (code: string) => Promise<IWebpageBuilder>;
-  withLayoutConfig: (config: LayoutConfig) => Promise<IWebpageBuilder>;
+  withLayoutConfig: (config: LayoutConfigDto) => Promise<IWebpageBuilder>;
   withMenu: (menus: Menu[]) => Promise<IWebpageBuilder>;
   withWebsiteId: (websiteId: string) => Promise<IWebpageBuilder>;
   // withHeader: (header: Header) => Promise<IWebPageBuilder>;
@@ -50,7 +54,7 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this;
   }
 
-  async withPageOverride(config: PageConfig) {
+  async withPageOverride(config: PageConfigDto) {
     this.webpage.pageOverrides = config;
     return this;
   }
@@ -60,7 +64,7 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this;
   }
 
-  async withSeoMetadata(metadata: SeoMetadata) {
+  async withSeoMetadata(metadata: SeoMetadataDto) {
     this.webpage.seoMetadata = metadata;
     return this;
   }
@@ -70,7 +74,7 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this;
   }
 
-  async withLayoutConfig(config: LayoutConfig) {
+  async withLayoutConfig(config: LayoutConfigDto) {
     this.webpage.customLayoutOverrides = config;
     return this;
   }

@@ -1,3 +1,4 @@
+import { AutoMap } from '@automapper/classes';
 import {
   PrimaryGeneratedColumn,
   Column,
@@ -5,14 +6,17 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 
-export abstract class BaseEntity {
+export class BaseEntity {
   @PrimaryGeneratedColumn('uuid')
+  @AutoMap()
   id: string;
 
   @Column({ type: 'boolean', default: true })
+  @AutoMap()
   isActive: boolean;
 
   @Column({ type: 'boolean', default: false })
+  @AutoMap()
   isArchived: boolean; // visible to user
 
   @Column({ type: 'boolean', default: false })

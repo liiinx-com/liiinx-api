@@ -1,5 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
-import { Header, MenuItem, PageTypes } from 'src/webpages/types';
+import { MenusDto } from './menu.dto';
+import { PageTypes } from 'src/webpages/entities/webpage.entity';
 
 export class CreateWebsiteDto {
   @IsNotEmpty()
@@ -9,7 +10,6 @@ export class CreateWebsiteDto {
 export class LayoutDto {
   handle: string;
   variant: string;
-  headerPrimaryMenu?: MenuItem[];
   // topBar?: TopBar;
   // header?: Header;
   // hero?: Hero;
@@ -29,6 +29,7 @@ export class WebpageDto {
   }
 
   layout: LayoutDto;
+  menus: MenusDto;
   page: PageDto;
   // theme: {};
 }

@@ -7,10 +7,16 @@ import { WebsiteBuilder } from './website-builder';
 import { WebsitesFacadeService } from './websites.facade';
 import { WebpagesModule } from 'src/webpages/webpages.module';
 import { MenuModule } from 'src/menu/menu.module';
+import { WebpageDtoBuilder } from './dto/webpage.dto-builder';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Website]), WebpagesModule, MenuModule],
-  providers: [WebsitesService, WebsiteBuilder, WebsitesFacadeService],
+  providers: [
+    WebsitesService,
+    WebsiteBuilder,
+    WebsitesFacadeService,
+    WebpageDtoBuilder,
+  ],
   controllers: [WebsitesController],
 })
 export class WebsitesModule {}

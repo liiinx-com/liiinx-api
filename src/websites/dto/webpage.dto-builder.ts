@@ -1,25 +1,35 @@
 import { Webpage } from 'src/webpages/entities/webpage.entity';
 import { Website } from '../entities/website.entity';
 import { WebpageDto } from './webpage.dto';
+import { Injectable } from '@nestjs/common';
+import { MenuService } from 'src/menu/menu.service';
 
 interface IWebpageDtoBuilder {
-  create: () => WebpageDtoBuilder;
+  create: (
+    website: Website,
+    layout: Webpage,
+    webpage: Webpage,
+  ) => WebpageDtoBuilder;
   getDto: () => WebpageDto;
   buildLayout: () => WebpageDtoBuilder;
+  buildMenus: () => WebpageDtoBuilder;
   buildPage: () => WebpageDtoBuilder;
 }
 
+@Injectable()
 export class WebpageDtoBuilder implements IWebpageDtoBuilder {
-  webpageDto: WebpageDto;
+  private webpageDto: WebpageDto;
+  private website: Website;
+  private layout: Webpage;
+  private webpage: Webpage;
 
-  constructor(
-    public website: Website,
-    public layout: Webpage,
-    public webpage: Webpage,
-  ) {}
+  constructor(private menuService: MenuService) {}
 
-  create() {
+  create(website: Website, layout: Webpage, webpage: Webpage) {
     this.webpageDto = new WebpageDto();
+    this.website = website;
+    this.layout = layout;
+    this.webpage = webpage;
     return this;
   }
 
@@ -29,18 +39,17 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
 
   // TODO: clean the arch and design
   buildLayout(): WebpageDtoBuilder {
-    const menus = this.layout.menus.reduce((result, item) => {
-      result[item.menuType] = item;
-      return result;
-    }, {});
-
     this.webpageDto.layout = {
       variant: this.layout.pageVariant,
       handle: this.website.handle,
-      ...(menus['HEADER_PRIMARY']
-        ? { headerPrimaryMenu: menus['HEADER_PRIMARY'] }
-        : {}),
+      // headerPrimaryMenu: menus.headerPrimary
     };
+
+    return this;
+  }
+
+  buildMenus() {
+    this.webpageDto.menus = this.menuService.mapToMenusDto(this.layout.menus);
     return this;
   }
 

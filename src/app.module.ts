@@ -11,10 +11,15 @@ import { WebpagesModule } from './webpages/webpages.module';
 import { MenuModule } from './menu/menu.module';
 import { WebpageSettingsModule } from './webpage-settings/webpage-settings.module';
 import { ThemesModule } from './themes/themes.module';
+import { AutomapperModule } from '@automapper/nestjs';
+import { classes } from '@automapper/classes';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    AutomapperModule.forRoot({
+      strategyInitializer: classes(),
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigurationModule],
       inject: [ConfigurationService],

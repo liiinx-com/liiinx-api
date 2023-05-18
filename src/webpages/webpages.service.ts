@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Webpage } from './entities/webpage.entity';
+import { PageTypes, Webpage } from './entities/webpage.entity';
 import { Repository, DataSource, InsertResult } from 'typeorm';
-import { PageTypes } from './types';
-
 import { WebpageFactory } from './webpage-factory';
 
 @Injectable()

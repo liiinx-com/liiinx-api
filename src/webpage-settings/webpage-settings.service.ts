@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { WebpageSetting } from './entities/webpage-setting.entity';
 import { WebPageSettingBuilder } from './webpage-setting-builder';
-import { PageTypes } from 'src/webpages/types';
 import SettingKeys from './setting-keys';
+import { PageTypes } from 'src/webpages/entities/webpage.entity';
 
 @Injectable()
 export class WebpageSettingsService {
