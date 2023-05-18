@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { WebpageSettingsService } from './webpage-settings.service';
+import { WebpageSettingsService } from './settings.service';
 import { WebpageSetting as WebpageSetting } from './entities/webpage-setting.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 

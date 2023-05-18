@@ -1,5 +1,6 @@
 export default {
   DIR: 'dir',
   LANG: 'en',
-  GOOGLE_ADSENSE_KEY: 'google_adsense_key',
+  FAVICON_URL: 'faviconUrl',
+  GOOGLE_ADSENSE_KEY: 'googleAdsenseKey',
 };

@@ -1,27 +1,18 @@
-export class LayoutConfigDto {}
+// export class SectionDto {
+//   sectionType: string;
+//   sectionVariant: string;
+//   sectionProps?: object;
 
-export class PageConfigDto {
-  isRtl?: boolean;
-  faviconUrl?: string;
-}
+//   constructor() {
+//     this.sectionProps = {};
+//   }
+// }
 
-export class SectionDto {
-  sectionType: string;
-  sectionVariant: string;
-  sectionProps?: object;
+// export class TopBarDto {}
 
-  constructor() {
-    this.sectionProps = {};
-  }
-}
-
-export class SeoMetadataDto {}
-
-export class TopBarDto {}
-
-export class HeaderDto extends SectionDto {
-  constructor() {
-    super();
-    this.sectionType = 'HEADER';
-  }
-}
+// export class HeaderDto extends SectionDto {
+//   constructor() {
+//     super();
+//     this.sectionType = 'HEADER';
+//   }
+// }

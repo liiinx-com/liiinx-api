@@ -1,20 +1,21 @@
-import { Webpage } from 'src/webpages/entities/webpage.entity';
+import { PageTypes, Webpage } from 'src/webpages/entities/webpage.entity';
 import { Website } from 'src/websites/entities/website.entity';
 import { PageDto, WebpageDto } from './webpage.dto';
 import { Injectable } from '@nestjs/common';
 import { MenuService } from 'src/menu/menu.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
+import { WebpageSettingsService } from 'src/webpage-settings/settings.service';
 
 interface IWebpageDtoBuilder {
   create: (
     website: Website,
     layout: Webpage,
     webpage: Webpage,
-  ) => WebpageDtoBuilder;
-  getDto: () => WebpageDto;
-  buildLayout: () => WebpageDtoBuilder;
-  buildPage: () => WebpageDtoBuilder;
+  ) => Promise<WebpageDtoBuilder>;
+  getDto: () => Promise<WebpageDto>;
+  buildLayout: () => Promise<WebpageDtoBuilder>;
+  buildPage: () => Promise<WebpageDtoBuilder>;
 }
 
 @Injectable()
@@ -26,11 +27,12 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
 
   constructor(
     private menuService: MenuService,
+    private settingsService: WebpageSettingsService,
     @InjectMapper()
     private readonly mapper: Mapper,
   ) {}
 
-  create(website: Website, layout: Webpage, webpage: Webpage) {
+  async create(website: Website, layout: Webpage, webpage: Webpage) {
     this.webpageDto = new WebpageDto();
     this.website = website;
     this.layout = layout;
@@ -38,22 +40,26 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
     return this;
   }
 
-  getDto(): WebpageDto {
+  async getDto() {
     return this.webpageDto;
   }
 
   // TODO: clean the arch and design
-  buildLayout(): WebpageDtoBuilder {
+  async buildLayout() {
     this.webpageDto.layout = {
       variant: this.layout.pageVariant,
       handle: this.website.handle,
       menus: this.menuService.mapToMenusDto(this.layout.menus),
+      config: await this.settingsService.addDynamicSettings(
+        PageTypes.LAYOUT,
+        this.layout.settings,
+      ),
     };
 
     return this;
   }
 
-  buildPage(): WebpageDtoBuilder {
+  async buildPage() {
     this.webpageDto.page = this.mapper.map(this.webpage, Webpage, PageDto);
     return this;
   }

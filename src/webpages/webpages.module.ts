@@ -3,7 +3,7 @@ import { WebpagesService } from './webpages.service';
 import { Webpage } from './entities/webpage.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WebpageBuilder } from './webpage-builder';
-import { WebpageSettingsModule } from 'src/webpage-settings/webpage-settings.module';
+import { WebpageSettingsModule } from 'src/webpage-settings/settings.module';
 import { MenuModule } from 'src/menu/menu.module';
 import { WebpageFactory } from './webpage-factory';
 import { WebpageMappingProfile } from './webpage.mapping-profile';

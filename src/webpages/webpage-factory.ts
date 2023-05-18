@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PageTypes, Webpage } from './entities/webpage.entity';
 import { WebpageBuilder } from './webpage-builder';
 import { MenuService } from 'src/menu/menu.service';
-import { WebpageSettingsService } from 'src/webpage-settings/webpage-settings.service';
+import { WebpageSettingsService } from 'src/webpage-settings/settings.service';
 
 interface IWebpageFactory {
   buildLayoutPage: (templateName: string) => Promise<Webpage>;
@@ -20,11 +20,6 @@ export class WebpageFactory implements IWebpageFactory {
     return new WebpageBuilder()
       .create(PageTypes.LAYOUT, 'LAYOUT1')
       .then(async (builder) =>
-        builder.withSettings(
-          await this.settingService.getWebpageDefaultSettings(PageTypes.LAYOUT),
-        ),
-      )
-      .then(async (builder) =>
         builder.withMenu(
           await this.menuService.getMenusByTemplate(templateName),
         ),
@@ -36,11 +31,6 @@ export class WebpageFactory implements IWebpageFactory {
     return new WebpageBuilder()
       .create(PageTypes.HOME, 'HOME1')
       .then((builder) => builder.withTitle('Home', 'home'))
-      .then(async (builder) =>
-        builder.withSettings(
-          await this.settingService.getWebpageDefaultSettings(PageTypes.HOME),
-        ),
-      )
       .then((builder) => builder.getPage());
   }
 }

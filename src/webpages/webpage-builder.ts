@@ -1,12 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { PageTypes, Webpage as Webpage } from './entities/webpage.entity';
-import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
 import { Menu } from 'src/menu/entities/menu.entity';
-import {
-  LayoutConfigDto,
-  PageConfigDto,
-  SeoMetadataDto,
-} from './dto/sections.dto';
+import { PageSettingsDto } from 'src/webpage-settings/dto';
+import { SeoMetadataDto } from './dto';
 
 interface IWebpageBuilder {
   getPage: () => Promise<Webpage>;
@@ -15,12 +11,14 @@ interface IWebpageBuilder {
     type: PageTypes,
     variant: string,
   ) => Promise<IWebpageBuilder>;
-  withSettings: (settings: WebpageSetting[]) => Promise<IWebpageBuilder>;
+  // withSettings: (settings: WebpageSetting[]) => Promise<IWebpageBuilder>;
   withTitle: (title: string, slug: string) => Promise<IWebpageBuilder>;
-  withPageOverride: (overrideConfig: PageConfigDto) => Promise<IWebpageBuilder>;
+  withPageOverride: (
+    overrideConfig: PageSettingsDto,
+  ) => Promise<IWebpageBuilder>;
   withSeoMetadata: (metadata: SeoMetadataDto) => Promise<IWebpageBuilder>;
   withLayout: (code: string) => Promise<IWebpageBuilder>;
-  withLayoutConfig: (config: LayoutConfigDto) => Promise<IWebpageBuilder>;
+  withLayoutConfig: (config: PageSettingsDto) => Promise<IWebpageBuilder>;
   withMenu: (menus: Menu[]) => Promise<IWebpageBuilder>;
   withWebsiteId: (websiteId: string) => Promise<IWebpageBuilder>;
   // withHeader: (header: Header) => Promise<IWebPageBuilder>;
@@ -54,7 +52,7 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this;
   }
 
-  async withPageOverride(config: PageConfigDto) {
+  async withPageOverride(config: PageSettingsDto) {
     this.webpage.pageOverrides = config;
     return this;
   }
@@ -74,13 +72,14 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this;
   }
 
-  async withLayoutConfig(config: LayoutConfigDto) {
+  async withLayoutConfig(config: PageSettingsDto) {
     this.webpage.customLayoutOverrides = config;
     return this;
   }
 
-  async withSettings(settings: WebpageSetting[]) {
-    this.webpage.settings = settings;
-    return this;
-  }
+  // all settings are dynamic for now and will be injected in WebpageDtoBuilder
+  // async withSettings(settings: WebpageSetting[]) {
+  //   this.webpage.settings = settings;
+  //   return this;
+  // }
 }

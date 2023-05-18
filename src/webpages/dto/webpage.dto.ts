@@ -1,12 +1,17 @@
 import { AutoMap } from '@automapper/classes';
 import { MenusDto } from '../../menu/dto/menu.dto';
 import { PageTypes } from 'src/webpages/entities/webpage.entity';
+import { PageSettingsDto } from 'src/webpage-settings/dto';
+
+export class SeoMetadataDto {}
 
 export class LayoutDto {
   handle: string;
 
   @AutoMap()
   variant: string;
+
+  config: PageSettingsDto;
 
   menus: MenusDto;
 }
@@ -16,6 +21,8 @@ export class PageDto {
 
   @AutoMap()
   slug: string;
+
+  config?: Partial<PageSettingsDto>;
 
   @AutoMap()
   title: string;

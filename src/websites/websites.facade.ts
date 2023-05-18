@@ -52,6 +52,7 @@ export class WebsitesFacadeService {
       handle,
       PageTypes.LAYOUT,
     );
+
     if (!layout)
       throw new HttpException('LAYOUT_NOT_FOUND', HttpStatus.NOT_FOUND);
 
@@ -61,8 +62,8 @@ export class WebsitesFacadeService {
 
     return this.webpageDtoBuilder
       .create(website, layout, webpage)
-      .buildLayout()
-      .buildPage()
-      .getDto();
+      .then((builder) => builder.buildLayout())
+      .then((builder) => builder.buildPage())
+      .then((builder) => builder.getDto());
   }
 }
