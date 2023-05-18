@@ -20,6 +20,7 @@ interface IWebpageDtoBuilder {
 
 @Injectable()
 export class WebpageDtoBuilder implements IWebpageDtoBuilder {
+  private templateName = 'SIMPLE_WEBSITE';
   private webpageDto: WebpageDto;
   private website: Website;
   private layout: Webpage;
@@ -49,7 +50,10 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
     this.webpageDto.layout = {
       variant: this.layout.pageVariant,
       handle: this.website.handle,
-      menus: this.menuService.mapToMenusDto(this.layout.menus),
+      menus: await this.menuService.addDynamicMenus(
+        this.templateName,
+        this.layout.menus,
+      ),
       config: await this.settingsService.addDynamicSettings(
         PageTypes.LAYOUT,
         this.layout.settings,

@@ -22,7 +22,7 @@ export class WebpageSettingsService {
     return this.mapToPageSettingsDto([...dynamicSettings, ...settings]);
   }
 
-  mapToPageSettingsDto(settings: WebpageSetting[]): PageSettingsDto {
+  private mapToPageSettingsDto(settings: WebpageSetting[]): PageSettingsDto {
     return settings.reduce((result, item) => {
       result[item.key] = item.getValue();
       return result;

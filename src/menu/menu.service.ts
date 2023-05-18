@@ -42,8 +42,20 @@ export class MenuService {
     });
   }
 
+  async addDynamicMenus(
+    templateName: string,
+    menus: Menu[],
+  ): Promise<MenusDto> {
+    let dynamicMenus: Menu[] = [];
+    dynamicMenus = [
+      ...dynamicMenus,
+      ...(await this.getMenusByTemplate(templateName)),
+    ];
+    return this.mapToMenusDto([...dynamicMenus, ...menus]);
+  }
+
   // TODO: toMapper?
-  mapToMenusDto(menus: Menu[]): MenusDto {
+  private mapToMenusDto(menus: Menu[]): MenusDto {
     return menus.reduce((result, item) => {
       const menu = this.mapper.map(item, Menu, MenuDto);
       menu.items = this.mapper.mapArray(item.items, Menu, MenuItemDto);
