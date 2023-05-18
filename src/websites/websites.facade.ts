@@ -1,9 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateWebsiteDto, WebpageDto, WebpageDtoBuilder } from './dto';
 import { WebsitesService } from './websites.service';
 import { WebpagesService } from 'src/webpages/webpages.service';
-import { PageTypes } from 'src/webpages/types';
 import { WebsiteBuilder } from './website-builder';
+import { PageTypes } from 'src/webpages/entities/webpage.entity';
+import { CreateWebsiteDto } from './dto/website.dto';
+import { WebpageDtoBuilder } from 'src/webpages/dto/webpage.dto-builder';
+import { WebpageDto } from 'src/webpages/dto/webpage.dto';
 
 @Injectable()
 export class WebsitesFacadeService {
@@ -11,6 +13,7 @@ export class WebsitesFacadeService {
     private websiteService: WebsitesService,
     private webpageService: WebpagesService,
     private websiteBuilder: WebsiteBuilder,
+    private webpageDtoBuilder: WebpageDtoBuilder,
   ) {}
 
   async createNewWebsite(ownerId: string, websiteDto: CreateWebsiteDto) {
@@ -49,6 +52,7 @@ export class WebsitesFacadeService {
       handle,
       PageTypes.LAYOUT,
     );
+
     if (!layout)
       throw new HttpException('LAYOUT_NOT_FOUND', HttpStatus.NOT_FOUND);
 
@@ -56,9 +60,11 @@ export class WebsitesFacadeService {
     if (!webpage)
       throw new HttpException('WEBPAGE_NOT_FOUND', HttpStatus.NOT_FOUND);
 
-    return new WebpageDtoBuilder(website, layout, webpage)
-      .buildLayout()
-      .buildPage()
-      .getDto();
+    return this.webpageDtoBuilder
+      .create(website, layout, webpage)
+      .then((builder) => builder.buildLayout())
+      .then((builder) => builder.buildPage())
+      .then((builder) => builder.buildTheme())
+      .then((builder) => builder.getDto());
   }
 }

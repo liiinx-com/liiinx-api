@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { Webpage as Webpage } from './entities/webpage.entity';
-import { LayoutConfig, PageConfig, PageTypes, SeoMetadata } from './types';
-import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
+import { PageTypes, Webpage as Webpage } from './entities/webpage.entity';
 import { Menu } from 'src/menu/entities/menu.entity';
+import { PageSettingsDto } from 'src/webpage-settings/dto';
+import { SeoMetadataDto } from './dto';
 
 interface IWebpageBuilder {
   getPage: () => Promise<Webpage>;
@@ -11,14 +11,17 @@ interface IWebpageBuilder {
     type: PageTypes,
     variant: string,
   ) => Promise<IWebpageBuilder>;
-  withSettings: (settings: WebpageSetting[]) => Promise<IWebpageBuilder>;
+  // withSettings: (settings: WebpageSetting[]) => Promise<IWebpageBuilder>;
   withTitle: (title: string, slug: string) => Promise<IWebpageBuilder>;
-  withPageOverride: (overrideConfig: PageConfig) => Promise<IWebpageBuilder>;
-  withSeoMetadata: (metadata: SeoMetadata) => Promise<IWebpageBuilder>;
+  withPageOverride: (
+    overrideConfig: PageSettingsDto,
+  ) => Promise<IWebpageBuilder>;
+  withSeoMetadata: (metadata: SeoMetadataDto) => Promise<IWebpageBuilder>;
   withLayout: (code: string) => Promise<IWebpageBuilder>;
-  withLayoutConfig: (config: LayoutConfig) => Promise<IWebpageBuilder>;
+  withLayoutConfig: (config: PageSettingsDto) => Promise<IWebpageBuilder>;
   withMenu: (menus: Menu[]) => Promise<IWebpageBuilder>;
   withWebsiteId: (websiteId: string) => Promise<IWebpageBuilder>;
+  withThemeCode: (themeCode: string) => Promise<IWebpageBuilder>;
   // withHeader: (header: Header) => Promise<IWebPageBuilder>;
   // withFooter: (footer: Footer) => Promise<IWebPageBuilder>;
 }
@@ -44,13 +47,18 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this;
   }
 
+  async withThemeCode(themeCode: string) {
+    this.webpage.themeCode = themeCode;
+    return this;
+  }
+
   async withTitle(title: string, slug: string) {
     this.webpage.title = title;
     this.webpage.slug = slug;
     return this;
   }
 
-  async withPageOverride(config: PageConfig) {
+  async withPageOverride(config: PageSettingsDto) {
     this.webpage.pageOverrides = config;
     return this;
   }
@@ -60,7 +68,7 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this;
   }
 
-  async withSeoMetadata(metadata: SeoMetadata) {
+  async withSeoMetadata(metadata: SeoMetadataDto) {
     this.webpage.seoMetadata = metadata;
     return this;
   }
@@ -70,13 +78,14 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this;
   }
 
-  async withLayoutConfig(config: LayoutConfig) {
+  async withLayoutConfig(config: PageSettingsDto) {
     this.webpage.customLayoutOverrides = config;
     return this;
   }
 
-  async withSettings(settings: WebpageSetting[]) {
-    this.webpage.settings = settings;
-    return this;
-  }
+  // all settings are dynamic for now and will be injected in WebpageDtoBuilder
+  // async withSettings(settings: WebpageSetting[]) {
+  //   this.webpage.settings = settings;
+  //   return this;
+  // }
 }

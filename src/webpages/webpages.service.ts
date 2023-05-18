@@ -1,10 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Webpage } from './entities/webpage.entity';
+import { PageTypes, Webpage } from './entities/webpage.entity';
 import { Repository, DataSource, InsertResult } from 'typeorm';
-import { PageTypes } from './types';
-import { WebpageBuilder } from './webpage-builder';
-import { MenuService } from 'src/menu/menu.service';
-import { WebPageSettingBuilder } from 'src/webpage-settings/webpage-setting-builder';
+import { WebpageFactory } from './webpage-factory';
 
 @Injectable()
 export class WebpagesService {
@@ -12,7 +9,7 @@ export class WebpagesService {
 
   constructor(
     private dataSource: DataSource,
-    private menuService: MenuService,
+    private webpageFactory: WebpageFactory,
   ) {
     this.webpagesRepository = this.dataSource.getRepository(Webpage);
   }
@@ -66,29 +63,10 @@ export class WebpagesService {
   }
 
   async getPagesByTemplate(templateName: string): Promise<Webpage[]> {
-    const layout: Webpage = await new WebpageBuilder()
-      .create(PageTypes.LAYOUT, 'LAYOUT1')
-      .then(async (builder) =>
-        builder.withSettings([
-          await new WebPageSettingBuilder()
-            .create()
-            .then((builder) => builder.withValue('dir', 'ltr'))
-            .then((builder) => builder.getSetting()),
-        ]),
-      )
-      .then(async (builder) =>
-        builder.withMenu(
-          await this.menuService.getMenusByTemplate(templateName),
-        ),
-      )
-      .then((builder) => builder.getPage());
-
-    const homePage: Webpage = await new WebpageBuilder()
-      .create(PageTypes.HOME, 'HOME1')
-      .then((builder) => builder.withTitle('Home', 'home'))
-      .then((builder) => builder.getPage());
-
-    return [layout, homePage];
+    return Promise.all([
+      this.webpageFactory.buildLayoutPage(templateName),
+      this.webpageFactory.buildHomePage(templateName),
+    ]);
   }
 
   async saveBulk(webpages: Webpage[]): Promise<InsertResult> {

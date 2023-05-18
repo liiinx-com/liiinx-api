@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateWebsiteDto } from './dto';
 import { Website } from './entities/website.entity';
 import { WebpagesService } from 'src/webpages/webpages.service';
 import { MenuService } from 'src/menu/menu.service';
+import { CreateWebsiteDto } from './dto/website.dto';
 
 interface IWebsiteBuilder {
   withTemplate: (

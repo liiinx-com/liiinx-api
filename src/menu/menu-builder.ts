@@ -22,7 +22,7 @@ export class MenuBuilder implements IMenuBuilder {
     return this.menu;
   }
 
-  create(type = 'ITEM', target = '_blank') {
+  create(type = 'item', target = '_blank') {
     this.menu = new Menu();
     this.menu.isFeatured = false;
     this.menu.target = target;

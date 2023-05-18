@@ -2,12 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { Menu } from './entities/menu.entity';
 import { DataSource, InsertResult, Repository } from 'typeorm';
 import { MenuBuilder } from './menu-builder';
+import MenuTypes from './menu-keys';
+import { Mapper } from '@automapper/core';
+import { MenuDto, MenuItemDto, MenusDto } from 'src/menu/dto/menu.dto';
+import { InjectMapper } from '@automapper/nestjs';
 
 @Injectable()
 export class MenuService {
   menuRepository: Repository<Menu>;
 
-  constructor(private dataSource: DataSource) {
+  constructor(
+    private dataSource: DataSource,
+    @InjectMapper()
+    private readonly mapper: Mapper,
+  ) {
     this.menuRepository = this.dataSource.getRepository(Menu);
   }
 
@@ -34,9 +42,31 @@ export class MenuService {
     });
   }
 
+  async addDynamicMenus(
+    templateName: string,
+    menus: Menu[],
+  ): Promise<MenusDto> {
+    let dynamicMenus: Menu[] = [];
+    dynamicMenus = [
+      ...dynamicMenus,
+      ...(await this.getMenusByTemplate(templateName)),
+    ];
+    return this.mapToMenusDto([...dynamicMenus, ...menus]);
+  }
+
+  // TODO: toMapper?
+  private mapToMenusDto(menus: Menu[]): MenusDto {
+    return menus.reduce((result, item) => {
+      const menu = this.mapper.map(item, Menu, MenuDto);
+      menu.items = this.mapper.mapArray(item.items, Menu, MenuItemDto);
+      result[item.menuType] = menu;
+      return result;
+    }, {});
+  }
+
   async getMenusByTemplate(templateName: string): Promise<Menu[]> {
     const headerPrimaryMenu = new MenuBuilder()
-      .create('HEADER_PRIMARY', null)
+      .create(MenuTypes.HEADER_PRIMARY, null)
       .makeParent()
       .withTitle('Header Primary Menu')
       .withChild(
@@ -82,7 +112,7 @@ export class MenuService {
       .getMenu();
 
     const footerPrimaryMenu = new MenuBuilder()
-      .create('FOOTER_PRIMARY', null)
+      .create(MenuTypes.FOOTER_PRIMARY, null)
       .makeParent()
       .withTitle('Footer Primary Menu')
       .withChild(
