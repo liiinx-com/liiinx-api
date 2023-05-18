@@ -1,2 +1,2 @@
-export * from './sections.dto';
+export * from '../../webpages/dto/sections.dto';
 export * from './website.dto';

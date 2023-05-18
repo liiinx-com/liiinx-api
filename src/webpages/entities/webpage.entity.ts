@@ -8,7 +8,7 @@ import {
   LayoutConfigDto,
   PageConfigDto,
   SeoMetadataDto,
-} from 'src/websites/dto/sections.dto';
+} from '../dto/sections.dto';
 
 export enum PageTypes {
   LAYOUT = 'LAYOUT',

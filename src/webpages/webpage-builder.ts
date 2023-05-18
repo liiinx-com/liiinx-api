@@ -6,7 +6,7 @@ import {
   LayoutConfigDto,
   PageConfigDto,
   SeoMetadataDto,
-} from 'src/websites/dto/sections.dto';
+} from './dto/sections.dto';
 
 interface IWebpageBuilder {
   getPage: () => Promise<Webpage>;

@@ -48,7 +48,6 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
       variant: this.layout.pageVariant,
       handle: this.website.handle,
       menus: this.menuService.mapToMenusDto(this.layout.menus),
-      // headerPrimaryMenu: menus.headerPrimary
     };
 
     return this;

@@ -1,9 +1,8 @@
-export class WebsiteConfigDto {}
 export class LayoutConfigDto {}
 
 export class PageConfigDto {
-  icon: string;
-  isRtl: boolean;
+  isRtl?: boolean;
+  faviconUrl?: string;
 }
 
 export class SectionDto {

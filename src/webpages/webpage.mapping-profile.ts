@@ -16,15 +16,7 @@ export class WebpageMappingProfile extends AutomapperProfile {
   override get profile() {
     return (mapper) => {
       createMap(mapper, BaseEntity, BaseEntityDto);
-      createMap(
-        mapper,
-        Webpage,
-        PageDto,
-        // forMember(
-        //   (d) => d.variant,
-        //   mapFrom((source) => source.pageVariant),
-        // ),
-      );
+      createMap(mapper, Webpage, PageDto);
     };
   }
 }
