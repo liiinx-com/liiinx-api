@@ -61,10 +61,10 @@ export class WebsitesFacadeService {
       throw new HttpException('WEBPAGE_NOT_FOUND', HttpStatus.NOT_FOUND);
 
     return this.webpageDtoBuilder
-      .create(website, layout, webpage)
-      .then((builder) => builder.buildLayout())
-      .then((builder) => builder.buildPage())
-      .then((builder) => builder.buildTheme())
+      .createDto(website, layout, webpage)
+      .then((builder) => builder.buildLayoutDto())
+      .then((builder) => builder.buildPageDto())
+      .then((builder) => builder.buildThemeDto())
       .then((builder) => builder.getDto());
   }
 }

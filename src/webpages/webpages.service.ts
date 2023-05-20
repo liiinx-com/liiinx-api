@@ -23,6 +23,7 @@ export class WebpagesService {
       relations: {
         website: true,
         settings: true,
+        sections: true,
         menus: {
           parent: true,
         },

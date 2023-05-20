@@ -5,19 +5,20 @@ import { Injectable } from '@nestjs/common';
 import { MenuService } from 'src/menu/menu.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { SettingsService } from 'src/webpage-settings/settings.service';
-import { ThemesService } from 'src/themes/themes.service';
+import { SettingService } from 'src/webpage-settings/settings.service';
+import { ThemeService } from 'src/themes/themes.service';
+import { PageSectionService } from 'src/webpage-sections/sections.service';
 
 interface IWebpageDtoBuilder {
-  create: (
+  createDto: (
     website: Website,
     layout: Webpage,
     webpage: Webpage,
   ) => Promise<WebpageDtoBuilder>;
   getDto: () => Promise<WebpageDto>;
-  buildLayout: () => Promise<WebpageDtoBuilder>;
-  buildPage: () => Promise<WebpageDtoBuilder>;
-  buildTheme: () => Promise<WebpageDtoBuilder>;
+  buildLayoutDto: () => Promise<WebpageDtoBuilder>;
+  buildPageDto: () => Promise<WebpageDtoBuilder>;
+  buildThemeDto: () => Promise<WebpageDtoBuilder>;
 }
 
 @Injectable()
@@ -30,13 +31,14 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
 
   constructor(
     private menuService: MenuService,
-    private settingsService: SettingsService,
-    private themesService: ThemesService,
+    private settingService: SettingService,
+    private themeService: ThemeService,
+    private sectionService: PageSectionService,
     @InjectMapper()
     private readonly mapper: Mapper,
   ) {}
 
-  async create(website: Website, layout: Webpage, webpage: Webpage) {
+  async createDto(website: Website, layout: Webpage, webpage: Webpage) {
     this.webpageDto = new WebpageDto();
     this.website = website;
     this.layout = layout;
@@ -44,8 +46,8 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
     return this;
   }
 
-  async buildTheme() {
-    this.webpageDto.theme = await this.themesService.getThemeByCode(
+  async buildThemeDto() {
+    this.webpageDto.theme = await this.themeService.getThemeByCode(
       this.layout.themeCode,
     );
     return this;
@@ -55,8 +57,7 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
     return this.webpageDto;
   }
 
-  // TODO: clean the arch and design
-  async buildLayout() {
+  async buildLayoutDto() {
     this.webpageDto.layout = {
       variant: this.layout.pageVariant,
       handle: this.website.handle,
@@ -64,25 +65,34 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
         this.templateName,
         this.layout.menus,
       ),
-      config: await this.settingsService.addDynamicSettings(
+      settings: await this.settingService.addDynamicSettings(
         PageTypes.LAYOUT,
         this.layout.settings,
       ),
+      sections: [
+        ...this.sectionService.mapToPageSectionsDto(this.layout.sections),
+        ...(await this.sectionService.addDynamicLayoutSections()),
+      ],
     };
 
     return this;
   }
 
-  async buildPage() {
+  async buildPageDto() {
     this.webpageDto.page = this.mapper.map(this.webpage, Webpage, PageDto);
 
-    if (this.webpage.settings.length) {
-      this.webpageDto.page.config =
-        await this.settingsService.addDynamicSettings(
+    if (this.webpageDto.page.sections)
+      this.webpageDto.page.sections = this.sectionService.mapToPageSectionsDto(
+        this.webpage.sections,
+      );
+
+    if (this.webpageDto.page.settings)
+      this.webpageDto.page.settings =
+        await this.settingService.addDynamicSettings(
           this.webpage.pageType,
           this.webpage.settings,
         );
-    }
+
     return this;
   }
 }

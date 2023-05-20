@@ -9,13 +9,16 @@ import { WebpageFactory } from './webpage-factory';
 import { WebpageMappingProfile } from './webpage.mapping-profile';
 import { WebpageDtoBuilder } from './dto/webpage.dto-builder';
 import { ThemesModule } from 'src/themes/themes.module';
+import { WebpageSection } from '../webpage-sections/entities/webpage-section.entity';
+import { PageSectionModule } from 'src/webpage-sections/sections.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Webpage]),
+    TypeOrmModule.forFeature([Webpage, WebpageSection]),
     SettingsModule,
     MenuModule,
     ThemesModule,
+    PageSectionModule,
   ],
   providers: [
     WebpagesService,

@@ -13,6 +13,7 @@ import { SettingsModule } from './webpage-settings/settings.module';
 import { ThemesModule } from './themes/themes.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
+import { PageSectionModule } from './webpage-sections/sections.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { classes } from '@automapper/classes';
     MenuModule,
     SettingsModule,
     ThemesModule,
+    PageSectionModule,
   ],
   providers: [AppService],
   controllers: [AppController],

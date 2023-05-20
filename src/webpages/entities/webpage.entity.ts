@@ -6,6 +6,7 @@ import { AutoMap } from '@automapper/classes';
 import { Menu } from 'src/menu/entities/menu.entity';
 import { SeoMetadataDto } from '../dto';
 import { PageSettingsDto } from 'src/webpage-settings/dto';
+import { WebpageSection } from '../../webpage-sections/entities/webpage-section.entity';
 
 export enum PageTypes {
   LAYOUT = 'LAYOUT',
@@ -22,6 +23,9 @@ export class Webpage extends BaseEntity {
 
   @Column()
   websiteId: string;
+
+  @OneToMany(() => WebpageSection, (s) => s.webpage, { cascade: true })
+  sections?: WebpageSection[];
 
   @OneToMany(() => Menu, (m) => m.webpage, { cascade: true })
   menus: Menu[];
