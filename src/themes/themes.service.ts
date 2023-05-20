@@ -3,7 +3,7 @@ import { ThemeDto } from './dto/theme.dto';
 import { ThemeDtoBuilder } from './theme.dto-builder';
 
 @Injectable()
-export class ThemesService {
+export class ThemeService {
   constructor(private readonly themeDtoBuilder: ThemeDtoBuilder) {}
 
   async getThemeByCode(code = 'heem'): Promise<ThemeDto> {

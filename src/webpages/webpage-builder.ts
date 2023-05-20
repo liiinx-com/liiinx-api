@@ -3,6 +3,7 @@ import { PageTypes, Webpage as Webpage } from './entities/webpage.entity';
 import { Menu } from 'src/menu/entities/menu.entity';
 import { PageSettingsDto } from 'src/webpage-settings/dto';
 import { SeoMetadataDto } from './dto';
+import { WebpageSection } from 'src/webpage-sections/entities/webpage-section.entity';
 
 interface IWebpageBuilder {
   getPage: () => Promise<Webpage>;
@@ -22,6 +23,8 @@ interface IWebpageBuilder {
   withMenu: (menus: Menu[]) => Promise<IWebpageBuilder>;
   withWebsiteId: (websiteId: string) => Promise<IWebpageBuilder>;
   withThemeCode: (themeCode: string) => Promise<IWebpageBuilder>;
+  withSections: (sections: WebpageSection[]) => Promise<IWebpageBuilder>;
+
   // withHeader: (header: Header) => Promise<IWebPageBuilder>;
   // withFooter: (footer: Footer) => Promise<IWebPageBuilder>;
 }
@@ -49,6 +52,12 @@ export class WebpageBuilder implements IWebpageBuilder {
 
   async withThemeCode(themeCode: string) {
     this.webpage.themeCode = themeCode;
+    return this;
+  }
+
+  async withSections(sections: WebpageSection[]) {
+    if (!this.webpage.sections) this.webpage.sections = [];
+    this.webpage.sections = [...this.webpage.sections, ...sections];
     return this;
   }
 

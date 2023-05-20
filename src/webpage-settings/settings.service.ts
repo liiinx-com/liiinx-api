@@ -6,7 +6,7 @@ import { PageTypes } from 'src/webpages/entities/webpage.entity';
 import { PageSettingsDto } from './dto';
 
 @Injectable()
-export class SettingsService {
+export class SettingService {
   async addDynamicSettings(
     type: PageTypes,
     settings: Setting[] = [],
