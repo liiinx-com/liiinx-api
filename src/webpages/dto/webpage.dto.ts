@@ -17,7 +17,7 @@ export class LayoutDto extends PageBaseDto {
   @AutoMap()
   variant: string;
 
-  config: PageSettingsDto;
+  settings: PageSettingsDto;
 
   menus: MenusDto;
 }
@@ -28,7 +28,7 @@ export class PageDto extends PageBaseDto {
   @AutoMap()
   slug: string;
 
-  config?: Partial<PageSettingsDto>;
+  settings?: Partial<PageSettingsDto>;
 
   @AutoMap()
   title: string;

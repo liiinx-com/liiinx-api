@@ -65,7 +65,7 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
         this.templateName,
         this.layout.menus,
       ),
-      config: await this.settingService.addDynamicSettings(
+      settings: await this.settingService.addDynamicSettings(
         PageTypes.LAYOUT,
         this.layout.settings,
       ),
@@ -86,8 +86,8 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
         this.webpage.sections,
       );
 
-    if (this.webpageDto.page.config)
-      this.webpageDto.page.config =
+    if (this.webpageDto.page.settings)
+      this.webpageDto.page.settings =
         await this.settingService.addDynamicSettings(
           this.webpage.pageType,
           this.webpage.settings,
