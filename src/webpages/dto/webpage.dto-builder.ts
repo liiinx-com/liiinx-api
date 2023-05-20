@@ -8,6 +8,7 @@ import { Mapper } from '@automapper/core';
 import { SettingService } from 'src/webpage-settings/settings.service';
 import { ThemeService } from 'src/themes/themes.service';
 import { PageSectionService } from 'src/webpage-sections/sections.service';
+import { lodash } from 'src/utils';
 
 interface IWebpageDtoBuilder {
   createDto: (
@@ -69,10 +70,14 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
         PageTypes.LAYOUT,
         this.layout.settings,
       ),
-      sections: [
-        ...this.sectionService.mapToPageSectionsDto(this.layout.sections),
-        ...(await this.sectionService.addDynamicLayoutSections()),
-      ],
+      sections: lodash.orderBy(
+        [
+          ...this.sectionService.mapToPageSectionsDto(this.layout.sections),
+          ...(await this.sectionService.addDynamicLayoutSections()),
+        ],
+        ['order'],
+        ['asc'],
+      ),
     };
 
     return this;
