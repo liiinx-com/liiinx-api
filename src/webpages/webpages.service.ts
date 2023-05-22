@@ -63,10 +63,19 @@ export class WebpagesService {
     });
   }
 
-  async getPagesByTemplate(templateName: string): Promise<Webpage[]> {
+  async getLayoutForPage(handle: string, webpage: Webpage): Promise<Webpage> {
+    if (webpage.customLayoutVariant) {
+      return this.webpageFactory.buildEmptyLayoutPage(
+        webpage.customLayoutVariant,
+      );
+    }
+    return this.getByPageType(handle, PageTypes.LAYOUT);
+  }
+
+  async createPagesByTemplate(templateName: string): Promise<Webpage[]> {
     return Promise.all([
-      this.webpageFactory.buildLayoutPage(templateName),
-      this.webpageFactory.buildHomePage(templateName),
+      this.webpageFactory.buildLayoutPage(),
+      this.webpageFactory.buildHomePage(),
     ]);
   }
 

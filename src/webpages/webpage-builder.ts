@@ -4,6 +4,7 @@ import { Menu } from 'src/menu/entities/menu.entity';
 import { PageSettingsDto } from 'src/webpage-settings/dto';
 import { SeoMetadataDto } from './dto';
 import { WebpageSection } from 'src/webpage-sections/entities/webpage-section.entity';
+import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
 
 interface IWebpageBuilder {
   getPage: () => Promise<Webpage>;
@@ -24,7 +25,7 @@ interface IWebpageBuilder {
   withWebsiteId: (websiteId: string) => Promise<IWebpageBuilder>;
   withThemeCode: (themeCode: string) => Promise<IWebpageBuilder>;
   withSections: (sections: WebpageSection[]) => Promise<IWebpageBuilder>;
-
+  withSettings: (settings: WebpageSetting[]) => Promise<IWebpageBuilder>;
   // withHeader: (header: Header) => Promise<IWebPageBuilder>;
   // withFooter: (footer: Footer) => Promise<IWebPageBuilder>;
 }
@@ -41,12 +42,20 @@ export class WebpageBuilder implements IWebpageBuilder {
     this.webpage = new Webpage();
     this.webpage.pageType = type;
     this.webpage.pageVariant = variant;
+    this.webpage.menus = [];
+    this.webpage.sections = [];
 
     return this;
   }
 
   async withWebsiteId(websiteId: string) {
     this.webpage.websiteId = websiteId;
+    return this;
+  }
+
+  async withSettings(settings: WebpageSetting[]) {
+    if (!this.webpage.settings) this.webpage.settings = [];
+    this.webpage.settings = [...this.webpage.settings, ...settings];
     return this;
   }
 
@@ -83,7 +92,7 @@ export class WebpageBuilder implements IWebpageBuilder {
   }
 
   async withLayout(code: string) {
-    this.webpage.customLayoutCode = code;
+    this.webpage.customLayoutVariant = code;
     return this;
   }
 

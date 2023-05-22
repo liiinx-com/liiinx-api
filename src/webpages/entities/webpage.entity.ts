@@ -13,6 +13,7 @@ export enum PageTypes {
   HOME = 'HOME',
   ABOUT = 'ABOUT',
   CONTACT = 'CONTACT',
+  BIO = 'BIO',
 }
 
 @Entity({ name: 'website_pages' })
@@ -53,8 +54,8 @@ export class Webpage extends BaseEntity {
   @Column({ type: 'json', default: {}, name: 'page_overrides' })
   pageOverrides?: PageSettingsDto;
 
-  @Column({ length: 50, name: 'page_custom_layout_code', nullable: true })
-  customLayoutCode?: string; // custom layout for a website page (landing pages)
+  @Column({ length: 50, name: 'page_custom_layout_variant', nullable: true })
+  customLayoutVariant?: string; // custom layout for a website page (landing pages)
   @Column({ type: 'json', default: {}, name: 'page_custom_layout_overrides' })
   customLayoutOverrides?: PageSettingsDto;
 

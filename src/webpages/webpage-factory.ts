@@ -6,8 +6,8 @@ import { SettingService } from 'src/webpage-settings/settings.service';
 import { PageSectionService } from 'src/webpage-sections/sections.service';
 
 interface IWebpageFactory {
-  buildLayoutPage: (templateName: string) => Promise<Webpage>;
-  buildHomePage: (templateName: string) => Promise<Webpage>;
+  buildLayoutPage: (variant: string, themeCode: string) => Promise<Webpage>;
+  buildHomePage: (variant: string) => Promise<Webpage>;
 }
 
 @Injectable()
@@ -18,30 +18,42 @@ export class WebpageFactory implements IWebpageFactory {
     private sectionService: PageSectionService,
   ) {}
 
-  async buildLayoutPage(templateName: string): Promise<Webpage> {
-    return (
-      new WebpageBuilder()
-        .create(PageTypes.LAYOUT, 'LAYOUT1')
-        .then((builder) => builder.withThemeCode('heem'))
-        // TODO : Dynamic Sections for now
-        // .then(async (builder) =>
-        //   builder.withSections(
-        //     await this.sectionService.getDefaultLayoutSections(),
-        //   ),
-        // )
-        // TODO : Dynamic Menus for now
-        // .then(async (builder) =>
-        //   builder.withMenu(
-        //     await this.menuService.getMenusByTemplate(templateName),
-        //   ),
-        // )
-        .then((builder) => builder.getPage())
-    );
+  async buildEmptyLayoutPage(
+    variant: string,
+    themeCode = 'heem',
+  ): Promise<Webpage> {
+    return new WebpageBuilder()
+      .create(PageTypes.LAYOUT, variant)
+      .then((builder) => builder.withThemeCode(themeCode))
+      .then((builder) => builder.getPage());
   }
 
-  async buildHomePage(templateName: string): Promise<Webpage> {
+  async buildLayoutPage(
+    variant = 'heem1', // TODO: template code
+    themeCode = 'heem',
+  ): Promise<Webpage> {
     return new WebpageBuilder()
-      .create(PageTypes.HOME, 'HOME1')
+      .create(PageTypes.LAYOUT, variant)
+      .then((builder) => builder.withThemeCode(themeCode))
+      .then(async (builder) =>
+        builder.withSections(
+          await this.sectionService.getDefaultLayoutSections(),
+        ),
+      )
+      .then(async (builder) =>
+        builder.withSettings(
+          await this.settingService.getDefaultLayoutSettings(),
+        ),
+      )
+      .then(async (builder) =>
+        builder.withMenu(await this.menuService.getDefaultMenus()),
+      )
+      .then((builder) => builder.getPage());
+  }
+
+  async buildHomePage(variant = 'home1'): Promise<Webpage> {
+    return new WebpageBuilder()
+      .create(PageTypes.HOME, variant)
       .then((builder) => builder.withTitle('Home', 'home'))
       .then((builder) => builder.getPage());
   }

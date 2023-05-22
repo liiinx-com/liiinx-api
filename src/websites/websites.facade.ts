@@ -48,17 +48,15 @@ export class WebsitesFacadeService {
     if (!website)
       throw new HttpException('WEBSITE_NOT_FOUND', HttpStatus.NOT_FOUND);
 
-    const layout = await this.webpageService.getByPageType(
-      handle,
-      PageTypes.LAYOUT,
-    );
-
-    if (!layout)
-      throw new HttpException('LAYOUT_NOT_FOUND', HttpStatus.NOT_FOUND);
-
     const webpage = await this.webpageService.getBySlug(handle, pageSlug);
     if (!webpage)
       throw new HttpException('WEBPAGE_NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    const layout = await this.webpageService.getLayoutForPage(handle, webpage);
+    if (!layout)
+      throw new HttpException('LAYOUT_NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    console.log('layout :>> ', layout);
 
     return this.webpageDtoBuilder
       .createDto(website, layout, webpage)

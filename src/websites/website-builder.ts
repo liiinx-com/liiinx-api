@@ -39,7 +39,7 @@ export class WebsiteBuilder implements IWebsiteBuilder {
   }
 
   async addPages() {
-    this.website.pages = await this.webpagesService.getPagesByTemplate(
+    this.website.pages = await this.webpagesService.createPagesByTemplate(
       this.templateName,
     );
     return this;

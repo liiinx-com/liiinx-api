@@ -34,8 +34,7 @@ export class PageSectionService {
   // when creating webpage-dto
   async addDynamicLayoutSections(): Promise<GenericSectionDto[]> {
     // TODO: replace with needed dynamic sections
-    return this.mapToPageSectionsDto(await this.getDefaultLayoutSections());
-    //return [];
+    return [];
   }
 
   //when inserting new website

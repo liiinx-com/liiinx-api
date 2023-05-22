@@ -30,6 +30,10 @@ export class SettingService {
   }
 
   private async getLayoutDynamicSettings(): Promise<Setting[]> {
+    return [];
+  }
+
+  async getDefaultLayoutSettings(): Promise<Setting[]> {
     return Promise.all([
       new WebPageSettingBuilder()
         .create()
