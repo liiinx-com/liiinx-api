@@ -10,8 +10,8 @@ interface IWebpageBuilder {
   getPage: () => Promise<Webpage>;
   create: (
     websiteId: string,
-    type: PageTypes,
-    variant: string,
+    pageType: string,
+    pageVariant: string,
   ) => Promise<IWebpageBuilder>;
   // withSettings: (settings: WebpageSetting[]) => Promise<IWebpageBuilder>;
   withTitle: (title: string, slug: string) => Promise<IWebpageBuilder>;
@@ -22,7 +22,6 @@ interface IWebpageBuilder {
   withLayout: (code: string) => Promise<IWebpageBuilder>;
   withLayoutConfig: (config: PageSettingsDto) => Promise<IWebpageBuilder>;
   withMenu: (menus: Menu[]) => Promise<IWebpageBuilder>;
-  withWebsiteId: (websiteId: string) => Promise<IWebpageBuilder>;
   withThemeCode: (themeCode: string) => Promise<IWebpageBuilder>;
   withSections: (sections: WebpageSection[]) => Promise<IWebpageBuilder>;
   withSettings: (settings: WebpageSetting[]) => Promise<IWebpageBuilder>;
@@ -38,18 +37,13 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this.webpage;
   }
 
-  async create(type: PageTypes, variant: string) {
+  async create(pageType: PageTypes, pageVariant: string) {
     this.webpage = new Webpage();
-    this.webpage.pageType = type;
-    this.webpage.pageVariant = variant;
+    this.webpage.pageType = pageType;
+    this.webpage.pageVariant = pageVariant;
     this.webpage.menus = [];
     this.webpage.sections = [];
 
-    return this;
-  }
-
-  async withWebsiteId(websiteId: string) {
-    this.webpage.websiteId = websiteId;
     return this;
   }
 

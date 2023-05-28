@@ -1,16 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PageTypes, Webpage } from './entities/webpage.entity';
 import { Repository, DataSource, InsertResult } from 'typeorm';
-import { WebpageFactory } from './webpage-factory';
+import { CreateWebpageDto } from 'src/websites/dto';
+import { WebpageBuilder } from './webpage-builder';
 
 @Injectable()
 export class WebpagesService {
   webpagesRepository: Repository<Webpage>;
 
-  constructor(
-    private dataSource: DataSource,
-    private webpageFactory: WebpageFactory,
-  ) {
+  constructor(private dataSource: DataSource) {
     this.webpagesRepository = this.dataSource.getRepository(Webpage);
   }
 
@@ -63,20 +61,35 @@ export class WebpagesService {
     });
   }
 
-  async getLayoutForPage(handle: string, webpage: Webpage): Promise<Webpage> {
-    if (webpage.customLayoutVariant) {
-      return this.webpageFactory.buildEmptyLayoutPage(
-        webpage.customLayoutVariant,
-      );
-    }
-    return this.getByPageType(handle, PageTypes.LAYOUT);
-  }
+  // async getLayoutForPage(handle: string, webpage: Webpage): Promise<Webpage> {
+  //   if (webpage.customLayoutVariant) {
+  //     return this.webpageFactory.buildEmptyLayoutPage(
+  //       webpage.customLayoutVariant,
+  //     );
+  //   }
+  //   return this.getByPageType(handle, PageTypes.LAYOUT);
+  // }
 
-  async createPagesByTemplate(templateName: string): Promise<Webpage[]> {
-    return Promise.all([
-      this.webpageFactory.buildLayoutPage(),
-      this.webpageFactory.buildHomePage(),
-    ]);
+  // async createPagesByTemplate(templateName: string): Promise<Webpage[]> {
+  //   return Promise.all([
+  //     this.webpageFactory.buildLayoutPage(),
+  //     this.webpageFactory.buildHomePage(),
+  //   ]);
+  // }
+
+  async createPage({
+    pageType,
+    pageVariant,
+    title,
+    slug,
+    themeCode,
+  }: CreateWebpageDto): Promise<Webpage> {
+    const builder = await new WebpageBuilder().create(pageType, pageVariant);
+
+    if (title && slug) await builder.withTitle(title, slug);
+    if (themeCode) await builder.withThemeCode(themeCode);
+
+    return builder.getPage();
   }
 
   async saveBulk(webpages: Webpage[]): Promise<InsertResult> {

@@ -8,12 +8,12 @@ import { PageSettingsDto } from './dto';
 @Injectable()
 export class SettingService {
   async addDynamicSettings(
-    type: PageTypes,
+    pageType: PageTypes,
     settings: Setting[] = [],
   ): Promise<PageSettingsDto> {
     let dynamicSettings: Setting[] = [];
 
-    if (type === PageTypes.LAYOUT)
+    if (pageType === PageTypes.LAYOUT)
       dynamicSettings = [
         ...dynamicSettings,
         ...(await this.getLayoutDynamicSettings()),

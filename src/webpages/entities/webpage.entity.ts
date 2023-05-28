@@ -40,8 +40,6 @@ export class Webpage extends BaseEntity {
   slug?: string;
 
   @Column({
-    type: 'enum',
-    enum: PageTypes,
     name: 'page_type',
   })
   @AutoMap()

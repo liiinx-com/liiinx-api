@@ -1,7 +1,12 @@
 @handle=salamat-trading
-@page=home
+@home_page=home
+@bio_page=bio
 
-GET http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages/{{page}}
+GET http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages/{{home_page}}
+
+###
+
+GET http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages/{{bio_page}}
 
 ###
 
@@ -9,7 +14,33 @@ POST http://localhost:{{$dotenv PORT}}/websites
 Content-Type: application/json
 
 {
-  "handle": "salamat-trading"
+  "handle": "salamat-trading",
+  "themeCode": "heem"
+}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages
+Content-Type: application/json
+
+{
+  "pageType":"HOME",
+  "pageVariant": "home1",
+  "title": "Home",
+  "slug": "home"
+}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages
+Content-Type: application/json
+
+{
+  "pageType":"bio",
+  "pageVariant": "bio1",
+  "themeCode": "heem",
+  "title": "Bio",
+  "slug": "bio"
 }
 
 ###
