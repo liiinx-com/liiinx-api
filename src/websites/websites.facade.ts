@@ -2,10 +2,10 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { WebsitesService } from './websites.service';
 import { WebpagesService } from 'src/webpages/webpages.service';
 import { WebsiteBuilder } from './website-builder';
-import { PageTypes } from 'src/webpages/entities/webpage.entity';
 import { CreateWebsiteDto } from './dto/website.dto';
 import { WebpageDtoBuilder } from 'src/webpages/dto/webpage.dto-builder';
-import { WebpageDto } from 'src/webpages/dto/webpage.dto';
+import { CreateWebpageDto, WebpageDto } from 'src/webpages/dto/webpage.dto';
+import { PageType } from 'src/webpages/entities/page-type';
 
 @Injectable()
 export class WebsitesFacadeService {
@@ -16,18 +16,16 @@ export class WebsitesFacadeService {
     private webpageDtoBuilder: WebpageDtoBuilder,
   ) {}
 
-  async createNewWebsite(ownerId: string, websiteDto: CreateWebsiteDto) {
-    const templateName = 'simple-template';
-    const { handle } = websiteDto;
+  async newWebsite(ownerId: string, websiteDto: CreateWebsiteDto) {
+    const { handle, themeCode } = websiteDto;
     if (await this.websiteService.getByHandle(handle)) {
       throw new HttpException('ALREADY_EXIST', HttpStatus.CONFLICT);
     }
 
     const newWebsite = await this.websiteService.save(
       await this.websiteBuilder
-        .withTemplate(templateName, websiteDto)
-        .then((builder) => builder.create(ownerId))
-        .then((builder) => builder.addPages())
+        .create(ownerId, websiteDto)
+        .then((builder) => builder.addLayout(themeCode))
         .then((builder) => builder.getWebsite())
         .catch((error) => {
           console.error(error);
@@ -43,7 +41,23 @@ export class WebsitesFacadeService {
     return newWebsite;
   }
 
-  async getPage(handle: string, pageSlug: string): Promise<WebpageDto> {
+  async newWebpage(
+    handle: string,
+    webpageDto: CreateWebpageDto,
+  ): Promise<string> {
+    // TODO: move to a guard and other instances
+    const website = await this.websiteService.getByHandle(handle);
+    if (!website)
+      throw new HttpException('WEBSITE_NOT_FOUND', HttpStatus.NOT_FOUND);
+
+    const webpage = await this.webpageService.createPage(webpageDto);
+    webpage.website = website;
+    await this.webpageService.save(webpage);
+
+    return 'WEBPAGE_CREATED';
+  }
+
+  async getWebpage(handle: string, pageSlug: string): Promise<WebpageDto> {
     const website = await this.websiteService.getByHandle(handle);
     if (!website)
       throw new HttpException('WEBSITE_NOT_FOUND', HttpStatus.NOT_FOUND);
@@ -52,11 +66,16 @@ export class WebsitesFacadeService {
     if (!webpage)
       throw new HttpException('WEBPAGE_NOT_FOUND', HttpStatus.NOT_FOUND);
 
-    const layout = await this.webpageService.getLayoutForPage(handle, webpage);
+    const layout = await this.webpageService.getByPageType(
+      handle,
+      PageType.LAYOUT,
+    );
     if (!layout)
       throw new HttpException('LAYOUT_NOT_FOUND', HttpStatus.NOT_FOUND);
 
-    console.log('layout :>> ', layout);
+    // TODO: implement this
+    // 1. build page based on the pageType with all the dynamic settings
+    // 2. merge with the webpage and layout
 
     return this.webpageDtoBuilder
       .createDto(website, layout, webpage)

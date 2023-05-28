@@ -1,33 +1,25 @@
 import { Injectable } from '@nestjs/common';
-import { PageTypes, Webpage as Webpage } from './entities/webpage.entity';
+import { Webpage } from './entities/webpage.entity';
 import { Menu } from 'src/menu/entities/menu.entity';
 import { PageSettingsDto } from 'src/webpage-settings/dto';
-import { SeoMetadataDto } from './dto';
 import { WebpageSection } from 'src/webpage-sections/entities/webpage-section.entity';
 import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
+import { SeoMetadataDto } from './dto/webpage.dto';
+import { PageType } from './entities/page-type';
 
 interface IWebpageBuilder {
   getPage: () => Promise<Webpage>;
   create: (
     websiteId: string,
-    type: PageTypes,
-    variant: string,
+    pageType: string,
+    pageVariant: string,
   ) => Promise<IWebpageBuilder>;
-  // withSettings: (settings: WebpageSetting[]) => Promise<IWebpageBuilder>;
   withTitle: (title: string, slug: string) => Promise<IWebpageBuilder>;
-  withPageOverride: (
-    overrideConfig: PageSettingsDto,
-  ) => Promise<IWebpageBuilder>;
   withSeoMetadata: (metadata: SeoMetadataDto) => Promise<IWebpageBuilder>;
-  withLayout: (code: string) => Promise<IWebpageBuilder>;
-  withLayoutConfig: (config: PageSettingsDto) => Promise<IWebpageBuilder>;
   withMenu: (menus: Menu[]) => Promise<IWebpageBuilder>;
-  withWebsiteId: (websiteId: string) => Promise<IWebpageBuilder>;
   withThemeCode: (themeCode: string) => Promise<IWebpageBuilder>;
   withSections: (sections: WebpageSection[]) => Promise<IWebpageBuilder>;
   withSettings: (settings: WebpageSetting[]) => Promise<IWebpageBuilder>;
-  // withHeader: (header: Header) => Promise<IWebPageBuilder>;
-  // withFooter: (footer: Footer) => Promise<IWebPageBuilder>;
 }
 
 @Injectable()
@@ -38,18 +30,20 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this.webpage;
   }
 
-  async create(type: PageTypes, variant: string) {
+  async create(pageType: PageType, pageVariant: string) {
     this.webpage = new Webpage();
-    this.webpage.pageType = type;
-    this.webpage.pageVariant = variant;
+    this.webpage.pageType = pageType;
+    this.webpage.pageVariant = pageVariant;
     this.webpage.menus = [];
     this.webpage.sections = [];
 
     return this;
   }
 
-  async withWebsiteId(websiteId: string) {
-    this.webpage.websiteId = websiteId;
+  async withLayoutOverrides(
+    config: Partial<PageSettingsDto>,
+  ): Promise<IWebpageBuilder> {
+    this.webpage.layoutOverrides = config;
     return this;
   }
 
@@ -76,11 +70,6 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this;
   }
 
-  async withPageOverride(config: PageSettingsDto) {
-    this.webpage.pageOverrides = config;
-    return this;
-  }
-
   async withMenu(menus: Menu[]) {
     this.webpage.menus = menus;
     return this;
@@ -90,20 +79,4 @@ export class WebpageBuilder implements IWebpageBuilder {
     this.webpage.seoMetadata = metadata;
     return this;
   }
-
-  async withLayout(code: string) {
-    this.webpage.customLayoutVariant = code;
-    return this;
-  }
-
-  async withLayoutConfig(config: PageSettingsDto) {
-    this.webpage.customLayoutOverrides = config;
-    return this;
-  }
-
-  // all settings are dynamic for now and will be injected in WebpageDtoBuilder
-  // async withSettings(settings: WebpageSetting[]) {
-  //   this.webpage.settings = settings;
-  //   return this;
-  // }
 }
