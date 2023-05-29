@@ -1,35 +1,23 @@
 import { Injectable } from '@nestjs/common';
-import { WebpageSetting as Setting } from './entities/webpage-setting.entity';
+import { WebpageSetting } from './entities/webpage-setting.entity';
 import { WebPageSettingBuilder } from './setting-builder';
 import SettingKeys from './setting-keys';
-import { PageTypes } from 'src/webpages/entities/webpage.entity';
 import { PageSettingsDto } from './dto';
 
 @Injectable()
 export class SettingService {
-  async addDynamicSettings(
-    type: PageTypes,
-    settings: Setting[] = [],
-  ): Promise<PageSettingsDto> {
-    let dynamicSettings: Setting[] = [];
-
-    if (type === PageTypes.LAYOUT)
-      dynamicSettings = [
-        ...dynamicSettings,
-        ...(await this.getLayoutDynamicSettings()),
-      ];
-
-    return this.mapToPageSettingsDto([...dynamicSettings, ...settings]);
-  }
-
-  private mapToPageSettingsDto(settings: Setting[]): PageSettingsDto {
+  private mapToPageSettingsDto(settings: WebpageSetting[]): PageSettingsDto {
     return settings.reduce((result, item) => {
       result[item.key] = item.getValue();
       return result;
     }, {}) as PageSettingsDto;
   }
 
-  private async getLayoutDynamicSettings(): Promise<Setting[]> {
+  private async getLayoutDynamicSettings(): Promise<WebpageSetting[]> {
+    return [];
+  }
+
+  async getDefaultLayoutSettings(): Promise<WebpageSetting[]> {
     return Promise.all([
       new WebPageSettingBuilder()
         .create()

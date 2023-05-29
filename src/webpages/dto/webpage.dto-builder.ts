@@ -1,4 +1,4 @@
-import { PageTypes, Webpage } from 'src/webpages/entities/webpage.entity';
+import { Webpage } from 'src/webpages/entities/webpage.entity';
 import { Website } from 'src/websites/entities/website.entity';
 import { PageDto, WebpageDto } from './webpage.dto';
 import { Injectable } from '@nestjs/common';
@@ -9,6 +9,7 @@ import { SettingService } from 'src/webpage-settings/settings.service';
 import { ThemeService } from 'src/themes/themes.service';
 import { PageSectionService } from 'src/webpage-sections/sections.service';
 import { lodash } from 'src/utils';
+import { WebpagesService } from '../webpages.service';
 
 interface IWebpageDtoBuilder {
   createDto: (
@@ -32,8 +33,8 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
 
   constructor(
     private menuService: MenuService,
-    private settingService: SettingService,
     private themeService: ThemeService,
+    private webpageService: WebpagesService,
     private sectionService: PageSectionService,
     @InjectMapper()
     private readonly mapper: Mapper,
@@ -50,6 +51,8 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   async buildThemeDto() {
     this.webpageDto.theme = await this.themeService.getThemeByCode(
       this.layout.themeCode,
+      this.layout.themeOverrides,
+      this.webpage.themeOverrides,
     );
     return this;
   }
@@ -66,9 +69,8 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
         this.templateName,
         this.layout.menus,
       ),
-      settings: await this.settingService.addDynamicSettings(
-        PageTypes.LAYOUT,
-        this.layout.settings,
+      settings: this.webpageService.generatePageLayoutConfig(
+        lodash.merge(this.layout.layoutOverrides, this.webpage.layoutOverrides),
       ),
       sections: lodash.orderBy(
         [
@@ -91,12 +93,12 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
         this.webpage.sections,
       );
 
-    if (this.webpageDto.page.settings)
-      this.webpageDto.page.settings =
-        await this.settingService.addDynamicSettings(
-          this.webpage.pageType,
-          this.webpage.settings,
-        );
+    // if (this.webpageDto.page.settings)
+    //   this.webpageDto.page.settings =
+    //     await this.settingService.addDynamicSettings(
+    //       this.webpage.pageType,
+    //       this.webpage.settings,
+    //     );
 
     return this;
   }

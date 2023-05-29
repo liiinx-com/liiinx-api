@@ -46,11 +46,7 @@ export class MenuService {
     templateName: string,
     menus: Menu[],
   ): Promise<MenusDto> {
-    let dynamicMenus: Menu[] = [];
-    dynamicMenus = [
-      ...dynamicMenus,
-      ...(await this.getMenusByTemplate(templateName)),
-    ];
+    const dynamicMenus: Menu[] = [];
     return this.mapToMenusDto([...dynamicMenus, ...menus]);
   }
 
@@ -64,7 +60,7 @@ export class MenuService {
     }, {});
   }
 
-  async getMenusByTemplate(templateName: string): Promise<Menu[]> {
+  async getDefaultMenus(): Promise<Menu[]> {
     const headerPrimaryMenu = new MenuBuilder()
       .create(MenuTypes.HEADER_PRIMARY, null)
       .makeParent()

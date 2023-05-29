@@ -3,20 +3,19 @@ import { Website } from './entities/website.entity';
 import { WebpagesService } from 'src/webpages/webpages.service';
 import { MenuService } from 'src/menu/menu.service';
 import { CreateWebsiteDto } from './dto/website.dto';
+import { PageType } from 'src/webpages/entities/page-type';
 
 interface IWebsiteBuilder {
-  withTemplate: (
-    templateName: string,
+  create: (
+    ownerId: string,
     params: CreateWebsiteDto,
   ) => Promise<IWebsiteBuilder>;
-  create: (ownerId: string) => Promise<IWebsiteBuilder>;
-  addPages: () => Promise<IWebsiteBuilder>;
+  addLayout: (themeCode: string, variant: string) => Promise<IWebsiteBuilder>;
   getWebsite: () => Promise<Website>;
 }
 
 @Injectable()
 export class WebsiteBuilder implements IWebsiteBuilder {
-  private templateName: string;
   private params: CreateWebsiteDto;
   private website: Website;
 
@@ -25,23 +24,27 @@ export class WebsiteBuilder implements IWebsiteBuilder {
     private menuService: MenuService,
   ) {}
 
-  async withTemplate(name: string, params: CreateWebsiteDto) {
-    this.templateName = name;
+  async create(ownerId: string, params: CreateWebsiteDto) {
     this.params = params;
     this.website = new Website();
-    return this;
-  }
-
-  async create(ownerId: string) {
     this.website.handle = this.params.handle;
     this.website.ownerId = ownerId;
     return this;
   }
 
-  async addPages() {
-    this.website.pages = await this.webpagesService.getPagesByTemplate(
-      this.templateName,
-    );
+  async addLayout(themeCode: string, variant = 'heem1') {
+    const layout = await this.webpagesService.createPage({
+      pageType: PageType.LAYOUT,
+      themeCode,
+      title: null,
+      slug: null,
+      pageVariant: variant,
+    });
+
+    // add default settings by variant
+
+    if (!this.website.pages) this.website.pages = [];
+    this.website.pages.push(layout);
     return this;
   }
 
