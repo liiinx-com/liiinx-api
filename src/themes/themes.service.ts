@@ -19,12 +19,17 @@ export class ThemeService {
     pageOverrides: Partial<ThemeDto>,
   ): ThemeDto {
     const defaultSettings: ThemeDto = {
-      bodyBgColor: 'red',
-      headerHeight: '400px',
-      mainBorderColor: 'pink',
+      bodyBgColor: '#37474F',
+      headerHeight: '250px',
+      primaryBgColor: '#A5D6A7',
+
+      headerImageUrl:
+        'https://media.istockphoto.com/id/1410766826/photo/full-frame-of-green-leaves-pattern-background.jpg?b=1&s=170667a&w=0&k=20&c=YRUnHUZxhaDmZ2OoLEXlZ7CmdfQwdCDnytJVSuY4BiI=',
+
+      mainBorderColor: '#388E3C',
       primaryTextColor: 'red',
-      profileImageBorderColor: 'yellow',
-      profileImageBorderWidth: '10',
+      profileImageBorderColor: '#4CAF50',
+      profileImageBorderWidth: '2px',
       secondaryTextColor: 'aqua',
     };
 

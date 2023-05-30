@@ -64,9 +64,7 @@ export class WebpageDto {
     this.layout = new LayoutDto();
     this.page = new PageDto();
   }
-
   layout: LayoutDto;
-
   page: PageDto;
   theme: ThemeDto;
 }
