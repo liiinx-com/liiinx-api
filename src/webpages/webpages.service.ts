@@ -64,6 +64,15 @@ export class WebpagesService {
     });
   }
 
+  async getById(id: string): Promise<Webpage> {
+    return this.webpagesRepository.findOne({
+      where: {
+        id,
+        isDeleted: false,
+      },
+    });
+  }
+
   // async getLayoutForPage(handle: string, webpage: Webpage): Promise<Webpage> {
   //   if (webpage.customLayoutVariant) {
   //     return this.webpageFactory.buildEmptyLayoutPage(
@@ -106,17 +115,48 @@ export class WebpagesService {
     const defaultSettings: PageSettingsDto = {
       dir: 'ltr',
       faviconUrl: 'favicon.png',
-      sidebar: { isActive: false },
-      topBar: { isActive: false },
-      main: {
-        leftBar: { isActive: false },
-        rightBar: { isActive: false },
-      },
-      footer: {
-        isActive: true,
+
+      topBar: {
+        contained: true,
+        isActive: false,
+        wrapper: {
+          contained: false,
+        },
       },
       header: {
+        contained: true,
         isActive: true,
+        wrapper: {
+          contained: false,
+        },
+      },
+      hero: {
+        contained: false,
+        isActive: true,
+        wrapper: {
+          contained: false,
+        },
+      },
+      content: {
+        contained: true,
+        isActive: true,
+        wrapper: {
+          contained: false,
+        },
+      },
+      footer: {
+        contained: true,
+        isActive: true,
+        wrapper: {
+          contained: false,
+        },
+      },
+      footerBar: {
+        contained: true,
+        isActive: false,
+        wrapper: {
+          contained: false,
+        },
       },
     };
 

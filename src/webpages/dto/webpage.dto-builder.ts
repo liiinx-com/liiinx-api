@@ -5,11 +5,11 @@ import { Injectable } from '@nestjs/common';
 import { MenuService } from 'src/menu/menu.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
-import { SettingService } from 'src/webpage-settings/settings.service';
 import { ThemeService } from 'src/themes/themes.service';
 import { PageSectionService } from 'src/webpage-sections/sections.service';
 import { lodash } from 'src/utils';
 import { WebpagesService } from '../webpages.service';
+import { MenusDto } from 'src/menu/dto/menu.dto';
 
 interface IWebpageDtoBuilder {
   createDto: (
@@ -21,18 +21,18 @@ interface IWebpageDtoBuilder {
   buildLayoutDto: () => Promise<WebpageDtoBuilder>;
   buildPageDto: () => Promise<WebpageDtoBuilder>;
   buildThemeDto: () => Promise<WebpageDtoBuilder>;
+  withMenusDto: (menus: MenusDto) => Promise<WebpageDtoBuilder>;
 }
 
 @Injectable()
 export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   private templateName = 'SIMPLE_WEBSITE';
-  private webpageDto: WebpageDto;
+  private resultPageDto: WebpageDto;
   private website: Website;
   private layout: Webpage;
   private webpage: Webpage;
 
   constructor(
-    private menuService: MenuService,
     private themeService: ThemeService,
     private webpageService: WebpagesService,
     private sectionService: PageSectionService,
@@ -41,15 +41,20 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   ) {}
 
   async createDto(website: Website, layout: Webpage, webpage: Webpage) {
-    this.webpageDto = new WebpageDto();
+    this.resultPageDto = new WebpageDto();
     this.website = website;
     this.layout = layout;
     this.webpage = webpage;
     return this;
   }
 
+  async withMenusDto(menus: MenusDto) {
+    this.resultPageDto.layout.menus = menus;
+    return this;
+  }
+
   async buildThemeDto() {
-    this.webpageDto.theme = await this.themeService.getThemeByCode(
+    this.resultPageDto.theme = await this.themeService.getThemeByCode(
       this.layout.themeCode,
       this.layout.themeOverrides,
       this.webpage.themeOverrides,
@@ -58,17 +63,18 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   }
 
   async getDto() {
-    return this.webpageDto;
+    return this.resultPageDto;
   }
 
   async buildLayoutDto() {
-    this.webpageDto.layout = {
+    this.resultPageDto.layout = {
       variant: this.layout.pageVariant,
       handle: this.website.handle,
-      menus: await this.menuService.addDynamicMenus(
-        this.templateName,
-        this.layout.menus,
-      ),
+      menus: {},
+      // menus: await this.menuService.addDynamicMenus(
+      //   this.templateName,
+      //   this.layout.menus,
+      // ),
       settings: this.webpageService.generatePageLayoutConfig(
         lodash.merge(this.layout.layoutOverrides, this.webpage.layoutOverrides),
       ),
@@ -86,12 +92,11 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   }
 
   async buildPageDto() {
-    this.webpageDto.page = this.mapper.map(this.webpage, Webpage, PageDto);
+    this.resultPageDto.page = this.mapper.map(this.webpage, Webpage, PageDto);
 
-    if (this.webpageDto.page.sections)
-      this.webpageDto.page.sections = this.sectionService.mapToPageSectionsDto(
-        this.webpage.sections,
-      );
+    if (this.resultPageDto.page.sections)
+      this.resultPageDto.page.sections =
+        this.sectionService.mapToPageSectionsDto(this.webpage.sections);
 
     // if (this.webpageDto.page.settings)
     //   this.webpageDto.page.settings =

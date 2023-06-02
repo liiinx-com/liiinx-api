@@ -7,8 +7,9 @@ interface IMenuBuilder {
   withUrl: (url: string) => IMenuBuilder;
   withTitle: (title: string) => IMenuBuilder;
   withIcon: (icon: string) => IMenuBuilder;
+  withWebpageId: (webpageId: string) => IMenuBuilder;
   makeParent: () => IMenuBuilder;
-  withChild: (child: Menu) => IMenuBuilder;
+  withChildren: (children: Menu[]) => IMenuBuilder;
   makeFeatured: () => IMenuBuilder;
   withUiProps: (props: object) => IMenuBuilder;
   withOrder: (order: number) => IMenuBuilder;
@@ -32,9 +33,14 @@ export class MenuBuilder implements IMenuBuilder {
     return this;
   }
 
-  withChild(child: Menu) {
+  withWebpageId(webpageId: string): IMenuBuilder {
+    this.menu.webpageId = webpageId;
+    return this;
+  }
+
+  withChildren(children: Menu[]) {
     if (!this.menu.items) this.menu.items = [];
-    this.menu.items.push(child);
+    this.menu.items = [...this.menu.items, ...children];
     return this;
   }
 

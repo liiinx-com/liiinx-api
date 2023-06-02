@@ -8,7 +8,6 @@ export class Menu extends BaseEntity {
   @OneToMany(() => Menu, (m) => m.parent, {
     cascade: true,
     nullable: true,
-    eager: true,
   })
   @JoinColumn()
   items?: Menu[];

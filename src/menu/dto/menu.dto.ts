@@ -1,4 +1,14 @@
 import { AutoMap } from '@automapper/classes';
+import { Type } from 'class-transformer';
+import {
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
+  IsNotEmpty,
+  IsString,
+  IsUUID,
+  ValidateNested,
+} from 'class-validator';
 import { BaseEntityDto } from 'src/shared/base.dto';
 
 export class MenusDto {
@@ -12,9 +22,6 @@ export class MenusDto {
 
 export class MenuDto extends BaseEntityDto {
   @AutoMap()
-  id: string;
-
-  @AutoMap()
   title: string;
 
   @AutoMap()
@@ -23,10 +30,10 @@ export class MenuDto extends BaseEntityDto {
 
 export class MenuItemDto {
   @AutoMap()
-  id: string;
+  id?: string;
 
   @AutoMap()
-  title: string;
+  title?: string;
 
   @AutoMap()
   icon?: string;
@@ -35,7 +42,7 @@ export class MenuItemDto {
   url: string;
 
   @AutoMap()
-  target: string;
+  target?: string;
 
   @AutoMap()
   order: number;
@@ -45,4 +52,20 @@ export class MenuItemDto {
 
   @AutoMap()
   props?: object;
+}
+
+export class CreateMenuDto extends MenuDto {
+  @IsUUID()
+  webpageId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  menuType: string;
+
+  @IsArray()
+  @ValidateNested({ each: true })
+  @ArrayMinSize(1)
+  @ArrayMaxSize(5)
+  @Type(() => MenuItemDto)
+  items: MenuItemDto[];
 }

@@ -6,12 +6,14 @@ import { CreateWebsiteDto } from './dto/website.dto';
 import { WebpageDtoBuilder } from 'src/webpages/dto/webpage.dto-builder';
 import { CreateWebpageDto, WebpageDto } from 'src/webpages/dto/webpage.dto';
 import { PageType } from 'src/webpages/entities/page-type';
+import { MenuService } from 'src/menu/menu.service';
 
 @Injectable()
 export class WebsitesFacadeService {
   constructor(
     private websiteService: WebsitesService,
     private webpageService: WebpagesService,
+    private menuService: MenuService,
     private websiteBuilder: WebsiteBuilder,
     private webpageDtoBuilder: WebpageDtoBuilder,
   ) {}
@@ -73,6 +75,8 @@ export class WebsitesFacadeService {
     if (!layout)
       throw new HttpException('LAYOUT_NOT_FOUND', HttpStatus.NOT_FOUND);
 
+    const menusDto = await this.menuService.getPageMenusDto(layout.id);
+
     // TODO: implement this
     // 1. build page based on the pageType with all the dynamic settings
     // 2. merge with the webpage and layout
@@ -82,6 +86,7 @@ export class WebsitesFacadeService {
       .then((builder) => builder.buildLayoutDto())
       .then((builder) => builder.buildPageDto())
       .then((builder) => builder.buildThemeDto())
+      .then((builder) => builder.withMenusDto(menusDto))
       .then((builder) => builder.getDto());
   }
 }
