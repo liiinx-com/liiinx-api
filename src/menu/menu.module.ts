@@ -4,9 +4,12 @@ import { Menu } from './entities/menu.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MenuBuilder } from './menu-builder';
 import { MenuMappingProfile } from './menu.mapping-profile';
+import { MenuController } from './menu.controller';
+import { WebpagesModule } from 'src/webpages/webpages.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Menu])],
+  imports: [TypeOrmModule.forFeature([Menu]), WebpagesModule],
+  controllers: [MenuController],
   providers: [MenuService, MenuBuilder, MenuMappingProfile],
   exports: [MenuService],
 })

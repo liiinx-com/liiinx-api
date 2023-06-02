@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Website } from './entities/website.entity';
 import { WebpagesService } from 'src/webpages/webpages.service';
-import { MenuService } from 'src/menu/menu.service';
 import { CreateWebsiteDto } from './dto/website.dto';
 import { PageType } from 'src/webpages/entities/page-type';
 
@@ -19,10 +18,7 @@ export class WebsiteBuilder implements IWebsiteBuilder {
   private params: CreateWebsiteDto;
   private website: Website;
 
-  constructor(
-    private webpagesService: WebpagesService,
-    private menuService: MenuService,
-  ) {}
+  constructor(private webpagesService: WebpagesService) {}
 
   async create(ownerId: string, params: CreateWebsiteDto) {
     this.params = params;

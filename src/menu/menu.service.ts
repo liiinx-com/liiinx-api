@@ -1,11 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import { Menu } from './entities/menu.entity';
-import { DataSource, InsertResult, Repository } from 'typeorm';
+import { DataSource, In, InsertResult, Repository } from 'typeorm';
 import { MenuBuilder } from './menu-builder';
 import MenuTypes from './menu-keys';
+import { lodash } from 'src/utils';
 import { Mapper } from '@automapper/core';
-import { MenuDto, MenuItemDto, MenusDto } from 'src/menu/dto/menu.dto';
+import {
+  CreateMenuDto,
+  MenuDto,
+  MenuItemDto,
+  MenusDto,
+} from 'src/menu/dto/menu.dto';
 import { InjectMapper } from '@automapper/nestjs';
+import menuKeys from './menu-keys';
 
 @Injectable()
 export class MenuService {
@@ -32,14 +39,46 @@ export class MenuService {
       .execute();
   }
 
-  getMenu(id: string): Promise<Menu> {
-    return this.menuRepository.findOne({
+  async mapToMenu(menuDto: CreateMenuDto): Promise<Menu> {
+    const builder = new MenuBuilder()
+      .create(MenuTypes[menuDto.menuType], null)
+      .makeParent()
+      .withWebpageId(menuDto.webpageId)
+      .withTitle(menuDto.title);
+
+    if (menuDto.items) {
+      builder.withChildren(
+        lodash.orderBy(menuDto.items, ['order']).map((i, indx) => {
+          const builder = new MenuBuilder().create().withOrder(indx);
+          if (i.icon) builder.withIcon(i.icon);
+          if (i.isFeatured) builder.makeFeatured();
+          if (i.props) builder.withUiProps(i.props);
+          if (i.title) builder.withTitle(i.title);
+          if (i.url) builder.withUrl(i.url);
+
+          return builder.getMenu();
+        }),
+      );
+    }
+
+    return builder.getMenu();
+  }
+
+  getMenu(webpageId: string, menuTypes = ['HEADER_PRIMARY']): Promise<Menu[]> {
+    return this.menuRepository.find({
       relations: { items: true },
       where: {
-        id,
+        webpageId,
+        menuType: In(menuTypes.map((t) => menuKeys[t])),
         isDeleted: false,
       },
     });
+  }
+
+  async getPageMenusDto(webpageId: string): Promise<MenusDto> {
+    return this.mapToMenusDto(
+      await this.getMenu(webpageId, ['HEADER_PRIMARY', 'FOOTER_PRIMARY']),
+    );
   }
 
   async addDynamicMenus(
@@ -50,7 +89,6 @@ export class MenuService {
     return this.mapToMenusDto([...dynamicMenus, ...menus]);
   }
 
-  // TODO: toMapper?
   private mapToMenusDto(menus: Menu[]): MenusDto {
     return menus.reduce((result, item) => {
       const menu = this.mapper.map(item, Menu, MenuDto);
@@ -58,101 +96,5 @@ export class MenuService {
       result[item.menuType] = menu;
       return result;
     }, {});
-  }
-
-  async getDefaultMenus(): Promise<Menu[]> {
-    const headerPrimaryMenu = new MenuBuilder()
-      .create(MenuTypes.HEADER_PRIMARY, null)
-      .makeParent()
-      .withTitle('Header Primary Menu')
-      .withChild(
-        new MenuBuilder()
-          .create()
-          .withOrder(1)
-          .withTitle('Home')
-          .withUrl('/home')
-          .getMenu(),
-      )
-      .withChild(
-        new MenuBuilder()
-          .create()
-          .withOrder(2)
-          .withTitle('About')
-          .withUrl('/about')
-          .getMenu(),
-      )
-      .withChild(
-        new MenuBuilder()
-          .create()
-          .withOrder(3)
-          .withTitle('Videos')
-          .withUrl('/videos')
-          .getMenu(),
-      )
-      .withChild(
-        new MenuBuilder()
-          .create()
-          .withOrder(4)
-          .withTitle('Blog')
-          .withUrl('/blog')
-          .getMenu(),
-      )
-      .withChild(
-        new MenuBuilder()
-          .create()
-          .withOrder(4)
-          .withTitle('Contact')
-          .withUrl('/contact')
-          .getMenu(),
-      )
-      .getMenu();
-
-    const footerPrimaryMenu = new MenuBuilder()
-      .create(MenuTypes.FOOTER_PRIMARY, null)
-      .makeParent()
-      .withTitle('Footer Primary Menu')
-      .withChild(
-        new MenuBuilder()
-          .create()
-          .withOrder(1)
-          .withTitle('Home')
-          .withUrl('/home')
-          .getMenu(),
-      )
-      .withChild(
-        new MenuBuilder()
-          .create()
-          .withOrder(2)
-          .withTitle('About')
-          .withUrl('/about')
-          .getMenu(),
-      )
-      .withChild(
-        new MenuBuilder()
-          .create()
-          .withOrder(3)
-          .withTitle('Videos')
-          .withUrl('/videos')
-          .getMenu(),
-      )
-      .withChild(
-        new MenuBuilder()
-          .create()
-          .withOrder(4)
-          .withTitle('Blog')
-          .withUrl('/blog')
-          .getMenu(),
-      )
-      .withChild(
-        new MenuBuilder()
-          .create()
-          .withOrder(4)
-          .withTitle('Contact')
-          .withUrl('/contact')
-          .getMenu(),
-      )
-      .getMenu();
-
-    return [headerPrimaryMenu, footerPrimaryMenu];
   }
 }

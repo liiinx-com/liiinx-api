@@ -3,8 +3,6 @@ import { WebpagesService } from './webpages.service';
 import { Webpage } from './entities/webpage.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SettingsModule } from 'src/webpage-settings/settings.module';
-import { MenuModule } from 'src/menu/menu.module';
-
 import { WebpageMappingProfile } from './webpage.mapping-profile';
 import { WebpageDtoBuilder } from './dto/webpage.dto-builder';
 import { ThemesModule } from 'src/themes/themes.module';
@@ -15,7 +13,6 @@ import { PageSectionModule } from 'src/webpage-sections/sections.module';
   imports: [
     TypeOrmModule.forFeature([Webpage, WebpageSection]),
     SettingsModule,
-    MenuModule,
     ThemesModule,
     PageSectionModule,
   ],

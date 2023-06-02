@@ -2,7 +2,7 @@ import { AutoMap } from '@automapper/classes';
 
 export class BaseEntityDto {
   @AutoMap()
-  id: string;
+  id?: string;
 
   @AutoMap()
   isActive: boolean;
