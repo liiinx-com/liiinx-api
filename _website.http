@@ -1,0 +1,10 @@
+@handle=salamat-trading
+
+POST http://localhost:{{$dotenv PORT}}/websites
+Content-Type: application/json
+
+{
+  "handle": "salamat-trading",
+  "themeCode": "heem"
+}
+

@@ -2,16 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { WebpageSetting } from './entities/webpage-setting.entity';
 import { WebPageSettingBuilder } from './setting-builder';
 import SettingKeys from './setting-keys';
-import { PageSettingsDto } from './dto';
 
 @Injectable()
 export class SettingService {
-  private mapToPageSettingsDto(settings: WebpageSetting[]): PageSettingsDto {
-    return settings.reduce((result, item) => {
-      result[item.key] = item.getValue();
-      return result;
-    }, {}) as PageSettingsDto;
-  }
+  // private mapToPageSettingsDto(settings: WebpageSetting[]): PageSettingsDto {
+  //   return settings.reduce((result, item) => {
+  //     result[item.key] = item.getValue();
+  //     return result;
+  //   }, {}) as PageSettingsDto;
+  // }
 
   private async getLayoutDynamicSettings(): Promise<WebpageSetting[]> {
     return [];

@@ -4,7 +4,13 @@ interface Element {
   contained: boolean;
 }
 
-interface LayoutSection extends Element {
+interface Block extends Element {
+  blockType: string;
+  blockVariant: string;
+  blockProps: object;
+}
+
+interface LayoutBlock extends Block {
   wrapper: Element;
   isActive: boolean;
 }
@@ -12,13 +18,13 @@ interface LayoutSection extends Element {
 export interface PageSettingsDto {
   dir: 'ltr' | 'rtl';
   faviconUrl: string;
-  topBar?: LayoutSection;
-  header?: LayoutSection;
-  hero?: LayoutSection;
-  sidebar?: LayoutSection;
-  content?: LayoutSection;
-  footer?: LayoutSection;
-  footerBar?: LayoutSection;
+  topBar?: LayoutBlock;
+  header?: LayoutBlock;
+  hero?: LayoutBlock;
+  sidebar?: LayoutBlock;
+  content?: LayoutBlock;
+  footer?: LayoutBlock;
+  footerBar?: LayoutBlock;
 }
 
 export interface PageSettingsDto2 {

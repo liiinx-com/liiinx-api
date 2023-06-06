@@ -14,6 +14,7 @@ import { ThemesModule } from './themes/themes.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { PageSectionModule } from './webpage-sections/sections.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { PageSectionModule } from './webpage-sections/sections.module';
     SettingsModule,
     ThemesModule,
     PageSectionModule,
+    ProfileModule,
   ],
   providers: [AppService],
   controllers: [AppController],

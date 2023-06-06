@@ -1,0 +1,48 @@
+
+@layout_page_id=8bf871ca-539e-4d13-96bd-0c41a0b8a4dc
+
+GET http://localhost:{{$dotenv PORT}}/menu/{{layout_page_id}}/HEADER_PRIMARY
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/menu
+Content-Type: application/json
+
+{
+  "webpageId": "{{layout_page_id}}",
+  "menuType":"HEADER_PRIMARY",
+  "title": "Header Menu",
+  "items": [
+    {
+      "title": "Home",
+      "url": "/home",
+      "isFeatured": false
+    },
+    {
+      "title": "About",
+      "url": "/about"
+    }
+  ]
+}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/menu
+Content-Type: application/json
+
+{
+  "webpageId": "{{layout_page_id}}",
+  "menuType":"FOOTER_PRIMARY",
+  "title": "Footer Menu",
+  "items": [
+    {
+      "title": "Home",
+      "url": "/home",
+      "isFeatured": false
+    },
+    {
+      "title": "About",
+      "url": "/about"
+    }
+  ]
+}
