@@ -1,0 +1,42 @@
+@layout_page_id=03f7a954-f928-4a06-8949-fc7bea222ab9
+@home_page_id=650e7134-61af-42d4-a953-e3eb30cb26ca
+
+
+GET http://localhost:{{$dotenv PORT}}/blocks/page/{{layout_page_id}}
+Webpage-Id: {{layout_page_id}}
+
+###
+
+GET http://localhost:{{$dotenv PORT}}/blocks/page/{{layout_page_id}}/header
+Webpage-Id: {{layout_page_id}}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/blocks
+Content-Type: application/json
+
+{
+  "webpageId": "{{layout_page_id}}",
+  "blocks": [
+    {
+      "blockType": "header",
+      "blockVariant": "header1",
+      "isActive": true,
+      "wrapperContained": true,
+      "blockContained": true,
+      "blockProps": {
+        "dir": "rtl"
+      },
+      "order": 1,
+      "sag": 2
+    },
+     {
+      "blockType": "footer",
+      "blockVariant": "footer1",
+      "isActive": true,
+      "wrapperContained": true,
+      "blockContained": true,
+      "order": 2
+    }
+  ]
+}

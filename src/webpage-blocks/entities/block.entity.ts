@@ -2,11 +2,11 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
 import { AutoMap } from '@automapper/classes';
-import { SectionProps } from '../dto';
+import { BlockProps } from '../dto';
 
-@Entity({ name: 'webpage_sections' })
-export class WebpageSection extends BaseEntity {
-  @ManyToOne(() => Webpage, (wp) => wp.sections)
+@Entity({ name: 'webpage_blocks' })
+export class WebpageBlock extends BaseEntity {
+  @ManyToOne(() => Webpage, (wp) => wp.blocks)
   @JoinColumn()
   webpage: Webpage;
 
@@ -15,15 +15,15 @@ export class WebpageSection extends BaseEntity {
 
   @Column()
   @AutoMap()
-  sectionType: string;
+  blockType: string;
 
   @Column()
   @AutoMap()
-  sectionVariant: string;
+  blockVariant: string;
 
-  @Column({ type: 'json', default: {}, name: 'section_props' })
+  @Column({ type: 'json', default: {}, name: 'block_props' })
   @AutoMap()
-  sectionProps: SectionProps;
+  blockProps: BlockProps;
 
   @Column()
   @AutoMap()

@@ -2,11 +2,10 @@ import { Webpage } from 'src/webpages/entities/webpage.entity';
 import { Website } from 'src/websites/entities/website.entity';
 import { PageDto, WebpageDto } from './webpage.dto';
 import { Injectable } from '@nestjs/common';
-import { MenuService } from 'src/menu/menu.service';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { ThemeService } from 'src/themes/themes.service';
-import { PageSectionService } from 'src/webpage-sections/sections.service';
+import { BlockService } from 'src/webpage-blocks/blocks.service';
 import { lodash } from 'src/utils';
 import { WebpagesService } from '../webpages.service';
 import { MenusDto } from 'src/menu/dto/menu.dto';
@@ -36,7 +35,8 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   constructor(
     private themeService: ThemeService,
     private webpageService: WebpagesService,
-    private sectionService: PageSectionService,
+    private blockService: BlockService,
+
     @InjectMapper()
     private readonly mapper: Mapper,
   ) {}
@@ -81,9 +81,12 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
       //   this.templateName,
       //   this.layout.menus,
       // ),
-      settings: this.webpageService.generatePageLayoutConfig(
-        lodash.merge(this.layout.layoutOverrides, this.webpage.layoutOverrides),
-      ),
+
+      layoutConfig: this.blockService.generatePageLayoutConfig([
+        ...this.layout.blocks,
+        ...this.webpage.blocks,
+      ]),
+
       // sections: lodash.orderBy(
       //   [
       //     ...this.sectionService.mapToPageSectionsDto(this.layout.sections),
@@ -100,9 +103,9 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   async buildPageDto() {
     this.resultPageDto.page = this.mapper.map(this.webpage, Webpage, PageDto);
 
-    if (this.resultPageDto.page.sections)
-      this.resultPageDto.page.sections =
-        this.sectionService.mapToPageSectionsDto(this.webpage.sections);
+    // if (this.resultPageDto.page.sections)
+    //   this.resultPageDto.page.sections =
+    //     this.sectionService.mapToPageSectionsDto(this.webpage.sections);
 
     // if (this.webpageDto.page.settings)
     //   this.webpageDto.page.settings =

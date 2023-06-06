@@ -6,15 +6,15 @@ import { SettingsModule } from 'src/webpage-settings/settings.module';
 import { WebpageMappingProfile } from './webpage.mapping-profile';
 import { WebpageDtoBuilder } from './dto/webpage.dto-builder';
 import { ThemesModule } from 'src/themes/themes.module';
-import { WebpageSection } from '../webpage-sections/entities/webpage-section.entity';
-import { PageSectionModule } from 'src/webpage-sections/sections.module';
+import { WebpageBlock } from '../webpage-blocks/entities/block.entity';
+import { BlockModule } from 'src/webpage-blocks/blocks.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Webpage, WebpageSection]),
+    TypeOrmModule.forFeature([Webpage, WebpageBlock]),
     SettingsModule,
     ThemesModule,
-    PageSectionModule,
+    BlockModule,
   ],
   providers: [WebpagesService, WebpageMappingProfile, WebpageDtoBuilder],
   exports: [WebpagesService, WebpageDtoBuilder],

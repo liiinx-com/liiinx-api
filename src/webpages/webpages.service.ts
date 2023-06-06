@@ -4,8 +4,6 @@ import { PageType } from 'src/webpages/entities/page-type';
 import { Repository, DataSource, InsertResult } from 'typeorm';
 import { WebpageBuilder } from './webpage-builder';
 import { CreateWebpageDto } from './dto/webpage.dto';
-import { PageSettingsDto } from 'src/webpage-settings/dto';
-import { lodash } from 'src/utils';
 
 @Injectable()
 export class WebpagesService {
@@ -24,7 +22,7 @@ export class WebpagesService {
       relations: {
         website: true,
         settings: true,
-        sections: true,
+        blocks: true,
         menus: {
           parent: true,
         },
@@ -106,83 +104,6 @@ export class WebpagesService {
     }
 
     return builder.getPage();
-  }
-
-  // used in dto builder to merge default layout settings with page overrides
-  generatePageLayoutConfig(
-    overrides: Partial<PageSettingsDto>,
-  ): PageSettingsDto {
-    const defaultSettings: PageSettingsDto = {
-      dir: 'ltr',
-      faviconUrl: 'favicon.png',
-
-      topBar: {
-        contained: true,
-        isActive: false,
-        blockProps: {},
-        blockType: 'topbar',
-        blockVariant: 'topbar1',
-        wrapper: {
-          contained: false,
-        },
-      },
-      header: {
-        contained: true,
-        isActive: true,
-        blockProps: {
-          style: {
-            backgroundColor: 'transparent',
-          },
-        },
-        blockType: 'header',
-        blockVariant: 'header1',
-        wrapper: {
-          contained: false,
-        },
-      },
-      hero: {
-        contained: false,
-        isActive: true,
-        blockProps: {},
-        blockType: 'hero',
-        blockVariant: 'hero1',
-        wrapper: {
-          contained: false,
-        },
-      },
-      content: {
-        contained: true,
-        isActive: true,
-        blockType: 'content',
-        blockProps: {},
-        blockVariant: 'content1',
-        wrapper: {
-          contained: false,
-        },
-      },
-      footer: {
-        contained: true,
-        isActive: true,
-        blockType: 'footer',
-        blockProps: {},
-        blockVariant: 'footer1',
-        wrapper: {
-          contained: false,
-        },
-      },
-      footerBar: {
-        contained: true,
-        blockType: 'footerBar',
-        blockVariant: 'footerBar1',
-        isActive: false,
-        blockProps: {},
-        wrapper: {
-          contained: false,
-        },
-      },
-    };
-
-    return lodash.merge(defaultSettings, overrides);
   }
 
   async saveBulk(webpages: Webpage[]): Promise<InsertResult> {
