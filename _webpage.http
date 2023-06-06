@@ -1,0 +1,40 @@
+@handle=salamat-trading
+@home_page=home
+@bio_page=bio
+
+@layout_page_id=8bf871ca-539e-4d13-96bd-0c41a0b8a4dc
+
+GET http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages/{{home_page}}
+
+###
+
+GET http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages/{{bio_page}}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages
+Content-Type: application/json
+
+{
+  "pageType":"HOME",
+  "pageVariant": "home1",
+  "title": "Home",
+  "slug": "home"
+}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages
+Content-Type: application/json
+
+{
+  "pageType":"BIO",
+  "pageVariant": "bio1",
+  "title": "Bio",
+  "slug": "bio",
+  "layoutOverrides": {
+    "dir": "rtl",
+    "header": {"isActive": false},
+    "footer": {"isActive": false}
+  }
+}

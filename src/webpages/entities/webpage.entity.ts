@@ -45,7 +45,7 @@ export class Webpage extends BaseEntity {
   @AutoMap()
   pageVariant: string;
 
-  @Column({ type: 'json', default: {}, name: 'page_overrides' })
+  @Column({ type: 'json', default: {}, name: 'layout_overrides' })
   layoutOverrides?: Partial<PageSettingsDto>;
 
   // @Column({ length: 50, name: 'page_custom_layout_variant', nullable: true })

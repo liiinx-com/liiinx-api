@@ -5,6 +5,7 @@ import { PageType } from 'src/webpages/entities/page-type';
 import { PageSettingsDto } from 'src/webpage-settings/dto';
 import { ThemeDto } from 'src/themes/dto/theme.dto';
 import { GenericSectionDto } from 'src/webpage-sections/dto';
+import { ProfileDto } from 'src/profile/dto';
 
 export class SeoMetadataDto {}
 
@@ -65,6 +66,7 @@ export class WebpageDto {
     this.page = new PageDto();
   }
   layout: LayoutDto;
+  profile: ProfileDto;
   page: PageDto;
   theme: ThemeDto;
 }

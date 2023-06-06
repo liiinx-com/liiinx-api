@@ -1,0 +1,20 @@
+@layout_page_id=8bf871ca-539e-4d13-96bd-0c41a0b8a4dc
+
+
+GET http://localhost:{{$dotenv PORT}}/profile/{{layout_page_id}}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/profile
+Content-Type: application/json
+
+{
+  "webpageId": "{{layout_page_id}}",
+  "headerLogo": {
+    "imageLogoUrl": "stringinggmsifj",
+    "slogan": "stringasdasdf"
+  },
+  "footerLogo": {
+    "textLogo": "stringasfev"
+  }
+}

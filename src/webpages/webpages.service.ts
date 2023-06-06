@@ -119,6 +119,9 @@ export class WebpagesService {
       topBar: {
         contained: true,
         isActive: false,
+        blockProps: {},
+        blockType: 'topbar',
+        blockVariant: 'topbar1',
         wrapper: {
           contained: false,
         },
@@ -126,6 +129,13 @@ export class WebpagesService {
       header: {
         contained: true,
         isActive: true,
+        blockProps: {
+          style: {
+            backgroundColor: 'transparent',
+          },
+        },
+        blockType: 'header',
+        blockVariant: 'header1',
         wrapper: {
           contained: false,
         },
@@ -133,6 +143,9 @@ export class WebpagesService {
       hero: {
         contained: false,
         isActive: true,
+        blockProps: {},
+        blockType: 'hero',
+        blockVariant: 'hero1',
         wrapper: {
           contained: false,
         },
@@ -140,6 +153,9 @@ export class WebpagesService {
       content: {
         contained: true,
         isActive: true,
+        blockType: 'content',
+        blockProps: {},
+        blockVariant: 'content1',
         wrapper: {
           contained: false,
         },
@@ -147,13 +163,19 @@ export class WebpagesService {
       footer: {
         contained: true,
         isActive: true,
+        blockType: 'footer',
+        blockProps: {},
+        blockVariant: 'footer1',
         wrapper: {
           contained: false,
         },
       },
       footerBar: {
         contained: true,
+        blockType: 'footerBar',
+        blockVariant: 'footerBar1',
         isActive: false,
+        blockProps: {},
         wrapper: {
           contained: false,
         },

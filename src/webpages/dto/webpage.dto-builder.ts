@@ -10,6 +10,7 @@ import { PageSectionService } from 'src/webpage-sections/sections.service';
 import { lodash } from 'src/utils';
 import { WebpagesService } from '../webpages.service';
 import { MenusDto } from 'src/menu/dto/menu.dto';
+import { ProfileDto } from 'src/profile/dto';
 
 interface IWebpageDtoBuilder {
   createDto: (
@@ -21,12 +22,12 @@ interface IWebpageDtoBuilder {
   buildLayoutDto: () => Promise<WebpageDtoBuilder>;
   buildPageDto: () => Promise<WebpageDtoBuilder>;
   buildThemeDto: () => Promise<WebpageDtoBuilder>;
+  withProfileDto: (profile: ProfileDto) => Promise<WebpageDtoBuilder>;
   withMenusDto: (menus: MenusDto) => Promise<WebpageDtoBuilder>;
 }
 
 @Injectable()
 export class WebpageDtoBuilder implements IWebpageDtoBuilder {
-  private templateName = 'SIMPLE_WEBSITE';
   private resultPageDto: WebpageDto;
   private website: Website;
   private layout: Webpage;
@@ -45,6 +46,11 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
     this.website = website;
     this.layout = layout;
     this.webpage = webpage;
+    return this;
+  }
+
+  async withProfileDto(profile: ProfileDto) {
+    this.resultPageDto.profile = profile;
     return this;
   }
 
@@ -78,14 +84,14 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
       settings: this.webpageService.generatePageLayoutConfig(
         lodash.merge(this.layout.layoutOverrides, this.webpage.layoutOverrides),
       ),
-      sections: lodash.orderBy(
-        [
-          ...this.sectionService.mapToPageSectionsDto(this.layout.sections),
-          ...(await this.sectionService.addDynamicLayoutSections()),
-        ],
-        ['order'],
-        ['asc'],
-      ),
+      // sections: lodash.orderBy(
+      //   [
+      //     ...this.sectionService.mapToPageSectionsDto(this.layout.sections),
+      //     ...(await this.sectionService.addDynamicLayoutSections()),
+      //   ],
+      //   ['order'],
+      //   ['asc'],
+      // ),
     };
 
     return this;
