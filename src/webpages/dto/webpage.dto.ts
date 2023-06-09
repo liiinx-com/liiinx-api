@@ -2,16 +2,14 @@ import { AutoMap } from '@automapper/classes';
 import { IsNotEmpty, IsEnum, IsOptional } from 'class-validator';
 import { MenusDto } from 'src/menu/dto/menu.dto';
 import { PageType } from 'src/webpages/entities/page-type';
-import { PageSettingsDto } from 'src/webpage-settings/dto';
 import { ThemeDto } from 'src/themes/dto/theme.dto';
-import { GenericSectionDto } from 'src/webpage-sections/dto';
 import { ProfileDto } from 'src/profile/dto';
+import { PageLayoutDto } from 'src/webpage-blocks/dto';
+import { BaseEntityDto } from 'src/shared/base.dto';
 
 export class SeoMetadataDto {}
 
-class PageBaseDto {
-  sections?: GenericSectionDto[];
-}
+export class BasePageDto extends BaseEntityDto {}
 
 export class CreateWebpageDto {
   @IsEnum(PageType)
@@ -30,28 +28,28 @@ export class CreateWebpageDto {
   themeCode?: string;
 
   @IsOptional()
-  layoutOverrides?: Partial<PageSettingsDto>;
+  layoutOverrides?: Partial<PageLayoutDto>;
 }
 
-export class LayoutDto extends PageBaseDto {
+export class LayoutDto extends BasePageDto {
   handle: string;
 
   @AutoMap()
   variant: string;
 
-  settings: PageSettingsDto;
+  layoutConfig: PageLayoutDto;
 
   menus: MenusDto;
 }
 
-export class PageDto extends PageBaseDto {
+export class PageDto extends BasePageDto {
   @AutoMap()
   pageType: PageType;
 
   @AutoMap()
   slug: string;
 
-  settings?: Partial<PageSettingsDto>;
+  // layoutConfig?: Partial<PageLayoutDto>; // version 0.2
 
   @AutoMap()
   title: string;

@@ -5,10 +5,10 @@ import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.en
 import { AutoMap } from '@automapper/classes';
 import { Menu } from 'src/menu/entities/menu.entity';
 import { SeoMetadataDto } from '../dto/webpage.dto';
-import { PageSettingsDto } from 'src/webpage-settings/dto';
-import { WebpageSection } from '../../webpage-sections/entities/webpage-section.entity';
+import { WebpageBlock } from '../../webpage-blocks/entities/block.entity';
 import { PageType } from './page-type';
 import { ThemeDto } from 'src/themes/dto/theme.dto';
+import { PageLayoutDto } from 'src/webpage-blocks/dto';
 
 @Entity({ name: 'website_pages' })
 export class Webpage extends BaseEntity {
@@ -19,8 +19,8 @@ export class Webpage extends BaseEntity {
   @Column()
   websiteId: string;
 
-  @OneToMany(() => WebpageSection, (s) => s.webpage, { cascade: true })
-  sections?: WebpageSection[];
+  @OneToMany(() => WebpageBlock, (s) => s.webpage, { cascade: true })
+  blocks?: WebpageBlock[];
 
   @OneToMany(() => Menu, (m) => m.webpage, { cascade: true })
   menus: Menu[];
@@ -46,7 +46,7 @@ export class Webpage extends BaseEntity {
   pageVariant: string;
 
   @Column({ type: 'json', default: {}, name: 'layout_overrides' })
-  layoutOverrides?: Partial<PageSettingsDto>;
+  layoutOverrides?: Partial<PageLayoutDto>;
 
   // @Column({ length: 50, name: 'page_custom_layout_variant', nullable: true })
   // customLayoutVariant?: string; // custom layout for a website page (landing pages)

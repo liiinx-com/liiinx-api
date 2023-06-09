@@ -4,7 +4,11 @@ import {
   ArrayMaxSize,
   ArrayMinSize,
   IsArray,
+  IsBoolean,
+  IsInt,
   IsNotEmpty,
+  IsObject,
+  IsOptional,
   IsString,
   IsUUID,
   ValidateNested,
@@ -33,24 +37,37 @@ export class MenuItemDto {
   id?: string;
 
   @AutoMap()
+  @IsString()
+  @IsOptional()
   title?: string;
 
   @AutoMap()
+  @IsString()
+  @IsOptional()
   icon?: string;
 
   @AutoMap()
+  @IsString()
   url: string;
 
   @AutoMap()
+  @IsString()
+  @IsOptional()
   target?: string;
 
   @AutoMap()
-  order: number;
+  @IsInt()
+  @IsOptional()
+  order?: number;
 
   @AutoMap()
-  isFeatured: boolean;
+  @IsBoolean()
+  @IsOptional()
+  isFeatured?: boolean;
 
   @AutoMap()
+  @IsObject()
+  @IsOptional()
   props?: object;
 }
 
@@ -61,6 +78,10 @@ export class CreateMenuDto extends MenuDto {
   @IsString()
   @IsNotEmpty()
   menuType: string;
+
+  @IsString()
+  @IsNotEmpty()
+  title: string;
 
   @IsArray()
   @ValidateNested({ each: true })

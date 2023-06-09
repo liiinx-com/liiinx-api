@@ -1,4 +1,9 @@
-import { Module } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { ConfigurationModule } from './configuration/configuration.module';
@@ -13,7 +18,7 @@ import { SettingsModule } from './webpage-settings/settings.module';
 import { ThemesModule } from './themes/themes.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
-import { PageSectionModule } from './webpage-sections/sections.module';
+import { BlockModule } from './webpage-blocks/blocks.module';
 import { ProfileModule } from './profile/profile.module';
 
 @Module({
@@ -39,7 +44,7 @@ import { ProfileModule } from './profile/profile.module';
     MenuModule,
     SettingsModule,
     ThemesModule,
-    PageSectionModule,
+    BlockModule,
     ProfileModule,
   ],
   providers: [AppService],
