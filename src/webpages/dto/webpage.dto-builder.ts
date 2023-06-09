@@ -74,6 +74,8 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
 
   async buildLayoutDto() {
     this.resultPageDto.layout = {
+      id: this.layout.id,
+
       variant: this.layout.pageVariant,
       handle: this.website.handle,
       menus: {},

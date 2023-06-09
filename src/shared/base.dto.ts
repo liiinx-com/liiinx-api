@@ -5,8 +5,8 @@ export class BaseEntityDto {
   id?: string;
 
   @AutoMap()
-  isActive: boolean;
+  isActive?: boolean;
 
   @AutoMap()
-  isArchived: boolean; // visible to user
+  isArchived?: boolean; // visible to user
 }

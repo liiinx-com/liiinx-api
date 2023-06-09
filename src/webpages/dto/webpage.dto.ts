@@ -5,12 +5,11 @@ import { PageType } from 'src/webpages/entities/page-type';
 import { ThemeDto } from 'src/themes/dto/theme.dto';
 import { ProfileDto } from 'src/profile/dto';
 import { PageLayoutDto } from 'src/webpage-blocks/dto';
+import { BaseEntityDto } from 'src/shared/base.dto';
 
 export class SeoMetadataDto {}
 
-class PageBaseDto {
-  // sections?: GenericBlockDto[];
-}
+export class BasePageDto extends BaseEntityDto {}
 
 export class CreateWebpageDto {
   @IsEnum(PageType)
@@ -32,7 +31,7 @@ export class CreateWebpageDto {
   layoutOverrides?: Partial<PageLayoutDto>;
 }
 
-export class LayoutDto extends PageBaseDto {
+export class LayoutDto extends BasePageDto {
   handle: string;
 
   @AutoMap()
@@ -43,7 +42,7 @@ export class LayoutDto extends PageBaseDto {
   menus: MenusDto;
 }
 
-export class PageDto extends PageBaseDto {
+export class PageDto extends BasePageDto {
   @AutoMap()
   pageType: PageType;
 
