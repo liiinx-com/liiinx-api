@@ -12,7 +12,6 @@ import {
   MenusDto,
 } from 'src/menu/dto/menu.dto';
 import { InjectMapper } from '@automapper/nestjs';
-import menuKeys from './menu-keys';
 
 @Injectable()
 export class MenuService {
@@ -69,7 +68,7 @@ export class MenuService {
       relations: { items: true },
       where: {
         webpageId,
-        menuType: In(menuTypes.map((t) => menuKeys[t])),
+        menuType: In(menuTypes.map((t) => MenuTypes[t])),
         isDeleted: false,
       },
     });
@@ -77,7 +76,7 @@ export class MenuService {
 
   async getPageMenusDto(webpageId: string): Promise<MenusDto> {
     return this.mapToMenusDto(
-      await this.getMenu(webpageId, ['HEADER_PRIMARY', 'FOOTER_PRIMARY']),
+      await this.getMenu(webpageId, Object.keys(MenuTypes)),
     );
   }
 

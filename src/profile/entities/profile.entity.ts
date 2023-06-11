@@ -42,15 +42,19 @@ export class Profile extends BaseEntity {
   @AutoMap(() => Logo)
   footerLogo: Logo;
 
+  @Column()
   @AutoMap()
-  @Column({ nullable: true })
-  copyright?: string;
+  title: string;
 
   @AutoMap()
   @Column({ nullable: true })
-  terms?: string;
+  copyrightText?: string;
 
   @AutoMap()
   @Column({ nullable: true })
-  privacy?: string;
+  termsText?: string;
+
+  @AutoMap()
+  @Column({ nullable: true })
+  privacyText?: string;
 }

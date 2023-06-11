@@ -46,3 +46,24 @@ Content-Type: application/json
     }
   ]
 }
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/menu
+Content-Type: application/json
+
+{
+  "webpageId": "{{layout_page_id}}",
+  "menuType":"FOOTER_SECONDARY",
+  "title": "Footer Social Menu",
+  "items": [
+    {
+      "icon": "youtube",
+      "url": "https://www.youtube.com/@salamattrading"
+    },
+    {
+      "icon": "telegram",
+      "url": "https://t.me/g9giGirCfg5hZjg8"
+    }
+  ]
+}
