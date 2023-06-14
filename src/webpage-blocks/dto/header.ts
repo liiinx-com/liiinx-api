@@ -1,5 +1,4 @@
 import { AutoMap } from '@automapper/classes';
-
 import {
   IsNotEmpty,
   IsOptional,

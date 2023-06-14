@@ -1,0 +1,55 @@
+@layout_page_id=03f7a954-f928-4a06-8949-fc7bea222ab9
+
+
+POST http://localhost:{{$dotenv PORT}}/data-parts
+Content-Type: application/json
+
+{
+  "webpageId": "{{layout_page_id}}",
+  "dataParts": [
+    {
+      "dataPartType": "media",
+      "mediaProvider": "youtube",
+      "mediaType": "video",
+      "limit":10,
+      "offset":0
+    }
+  ]
+}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/data-parts/new
+Content-Type: application/json
+
+{
+  "webpageId": "{{layout_page_id}}",
+  "dataParts": [
+    {
+      "title": "ریپل (XRP) و اسرار  کارتون سیمپسون ها/ پیش بینی سیمپسون ها در مورد ریپل/ ریپل (XRP) 589 دلاری",
+      "thumbnails": {
+        "default": {
+          "url": "https://i.ytimg.com/vi/VBX2byp0U6Y/default.jpg",
+          "width": 120,
+          "height": 90
+        },
+        "medium": {
+          "url": "https://i.ytimg.com/vi/VBX2byp0U6Y/mqdefault.jpg",
+          "width": 320,
+          "height": 180
+        },
+        "high": {
+          "url": "https://i.ytimg.com/vi/VBX2byp0U6Y/hqdefault.jpg",
+          "width": 480,
+          "height": 360
+        }
+      },
+      "publishedAt": "2022-03-28T11:25:23Z",
+      "description": "ریپل (XRP) و اسرار کارتون سیمپسون ها/ پیش بینی سیمپسون ها در مورد ریپل/ ریپل (XRP) 589 دلاری دوستان و همراهان عزیز سلام.",
+      "mediaType": "video",
+      "dataPartType": "media",
+      "mediaProvider": "youtube",
+      "providerMediaId": "VBX2byp0U6Y"
+    }
+  ]
+}

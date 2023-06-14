@@ -47,7 +47,6 @@ export class BlockDto {
   @IsOptional()
   @ValidateNested()
   @AutoMap()
-  //   @Type(() => HeaderProps)
   @Type(() => BlockProps)
   blockProps?: BlockProps;
 

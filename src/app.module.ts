@@ -20,6 +20,7 @@ import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { BlockModule } from './webpage-blocks/blocks.module';
 import { ProfileModule } from './profile/profile.module';
+import { WebsiteDataModule } from './website-data/website-data.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { ProfileModule } from './profile/profile.module';
     ThemesModule,
     BlockModule,
     ProfileModule,
+    WebsiteDataModule,
   ],
   providers: [AppService],
   controllers: [AppController],

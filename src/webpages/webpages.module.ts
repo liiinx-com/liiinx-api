@@ -6,12 +6,12 @@ import { SettingsModule } from 'src/webpage-settings/settings.module';
 import { WebpageMappingProfile } from './webpage.mapping-profile';
 import { WebpageDtoBuilder } from './dto/webpage.dto-builder';
 import { ThemesModule } from 'src/themes/themes.module';
-import { WebpageBlock } from '../webpage-blocks/entities/block.entity';
+
 import { BlockModule } from 'src/webpage-blocks/blocks.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Webpage, WebpageBlock]),
+    TypeOrmModule.forFeature([Webpage]),
     SettingsModule,
     ThemesModule,
     BlockModule,

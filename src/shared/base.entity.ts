@@ -11,15 +11,15 @@ export class BaseEntity {
   @AutoMap()
   id: string;
 
-  @Column({ type: 'boolean', default: true })
+  @Column({ type: 'boolean', default: true, name: 'is_active' })
   @AutoMap()
   isActive: boolean;
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: 'boolean', default: false, name: 'is_archive' })
   @AutoMap()
   isArchived: boolean; // visible to user
 
-  @Column({ type: 'boolean', default: false })
+  @Column({ type: 'boolean', default: false, name: 'is_deleted' })
   isDeleted: boolean; // only visible to admin
 
   @CreateDateColumn({
@@ -37,6 +37,11 @@ export class BaseEntity {
   })
   public updatedAt: Date;
 
-  @Column({ type: 'varchar', length: 300, nullable: true })
+  @Column({
+    type: 'varchar',
+    length: 300,
+    nullable: true,
+    name: 'internal_comment',
+  })
   internalComment: string | null;
 }

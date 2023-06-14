@@ -12,7 +12,6 @@ export class CreateBlockDto {
   @IsUUID()
   webpageId: string;
 
-  @AutoMap()
   injectedWebpage: Webpage;
 
   @IsArray()

@@ -1,13 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { WebpageBlock } from './entities/block.entity';
 import { lodash } from 'src/utils';
-import {
-  BlockDto,
-  BlockProps,
-  CreateBlockDto,
-  HeaderBlockDto,
-  PageLayoutDto,
-} from './dto';
+import { BlockDto, BlockProps, CreateBlockDto, PageLayoutDto } from './dto';
 import { Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { DataSource, InsertResult, Repository } from 'typeorm';
