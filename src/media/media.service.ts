@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { CreateDataPartsReq, CreateMediaDataPart } from './dto';
+import { CreateMediaReq } from './dto';
 import { Media } from './entities/media.entity';
 import { DataSource, InsertResult, Repository } from 'typeorm';
 import { Mapper } from '@automapper/core';
@@ -48,12 +48,12 @@ export class MediaService {
     });
   }
 
-  mapToMediaDataParts(createDataPartDto: CreateDataPartsReq): Media[] {
-    return this.mapper
-      .mapArray(createDataPartDto.dataParts, CreateMediaDataPart, Media)
-      .map((m) => {
-        m.webpageId = createDataPartDto.webpageId;
-        return m;
-      });
-  }
+  // mapToMediaDataParts(createDataPartDto: NewMediaReq): Media[] {
+  //   return this.mapper
+  //     .mapArray(createDataPartDto.dataParts, CreateMediaDataPart, Media)
+  //     .map((m) => {
+  //       m.webpageId = createDataPartDto.webpageId;
+  //       return m;
+  //     });
+  // }
 }

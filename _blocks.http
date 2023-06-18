@@ -12,6 +12,11 @@ Webpage-Id: {{layout_page_id}}
 
 ###
 
+GET http://localhost:{{$dotenv PORT}}/blocks/page/{{home_page_id}}
+Webpage-Id: {{home_page_id}}
+
+###
+
 POST http://localhost:{{$dotenv PORT}}/blocks
 Content-Type: application/json
 
@@ -37,6 +42,25 @@ Content-Type: application/json
       "wrapperContained": true,
       "blockContained": true,
       "order": 2
+    }
+  ]
+}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/blocks
+Content-Type: application/json
+
+{
+  "webpageId": "{{home_page_id}}",
+  "blocks": [
+     {
+      "blockType": "youtubeVideos",
+      "blockVariant": "youtubeVideos1",
+      "isActive": true,
+      "wrapperContained": true,
+      "blockContained": true,
+      "order": 1
     }
   ]
 }

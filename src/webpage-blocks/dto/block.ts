@@ -23,6 +23,10 @@ export class BlockProps {
 export class BlockDto {
   @IsOptional()
   @AutoMap()
+  id?: string;
+
+  @IsOptional()
+  @AutoMap()
   blockClassName?: string;
 
   @IsOptional()

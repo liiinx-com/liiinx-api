@@ -107,7 +107,7 @@ export class BlockService {
 
   // used in dto builder to merge default layout settings with page overrides
   generatePageLayoutConfig(blocks: WebpageBlock[]): PageLayoutDto {
-    const defaultSettings: PageLayoutDto = {
+    const defaultLayoutBlocks: PageLayoutDto = {
       dir: 'ltr',
       faviconUrl: 'favicon.png',
 
@@ -168,19 +168,19 @@ export class BlockService {
       },
     };
 
-    const blockKeysToOverride = Object.keys(defaultSettings).filter((value) =>
-      blocks.map((b) => b.blockType).includes(value),
+    const blockKeysToOverride = Object.keys(defaultLayoutBlocks).filter(
+      (value) => blocks.map((b) => b.blockType).includes(value),
     );
 
     const result = {
-      ...defaultSettings,
+      ...defaultLayoutBlocks,
       ...blocks.reduce((acc: Partial<PageLayoutDto>, b: WebpageBlock) => {
         if (!blockKeysToOverride.includes(b.blockType)) return acc;
 
         // acc[b.blockType] = this.mapper.map(b, WebpageBlock, BlockDto);
         acc[b.blockType] = lodash.merge(
-          defaultSettings[
-            Object.keys(defaultSettings).find((k) => k === b.blockType)
+          defaultLayoutBlocks[
+            Object.keys(defaultLayoutBlocks).find((k) => k === b.blockType)
           ],
           this.mapper.map(b, WebpageBlock, BlockDto),
         );

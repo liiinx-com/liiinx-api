@@ -6,6 +6,7 @@ import { ThumbnailDto } from 'src/shared/thumbnail.dto';
 @Entity({ name: 'media' })
 export class Media extends BaseEntity {
   @Column({ name: 'webpage_id' })
+  @AutoMap()
   webpageId: string;
 
   @Column()

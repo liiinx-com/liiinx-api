@@ -1,30 +1,18 @@
 @layout_page_id=03f7a954-f928-4a06-8949-fc7bea222ab9
 
 
-POST http://localhost:{{$dotenv PORT}}/data-parts
-Content-Type: application/json
+GET http://localhost:{{$dotenv PORT}}/media/{{layout_page_id}}?provider=youtube&type=video
+Webpage-Id: {{layout_page_id}}
 
-{
-  "webpageId": "{{layout_page_id}}",
-  "dataParts": [
-    {
-      "dataPartType": "media",
-      "mediaProvider": "youtube",
-      "mediaType": "video",
-      "limit":10,
-      "offset":0
-    }
-  ]
-}
 
 ###
 
-POST http://localhost:{{$dotenv PORT}}/data-parts/new
+POST http://localhost:{{$dotenv PORT}}/media
 Content-Type: application/json
 
 {
   "webpageId": "{{layout_page_id}}",
-  "dataParts": [
+  "items": [
     {
       "title": "ریپل (XRP) و اسرار  کارتون سیمپسون ها/ پیش بینی سیمپسون ها در مورد ریپل/ ریپل (XRP) 589 دلاری",
       "thumbnails": {

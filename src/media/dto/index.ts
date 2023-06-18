@@ -1,39 +1,46 @@
 import { AutoMap } from '@automapper/classes';
+import { Webpage } from 'src/webpages/entities/webpage.entity';
 import {
   IsDateString,
   IsInt,
   IsNotEmptyObject,
   IsOptional,
   IsString,
-  IsUrl,
+  ArrayMaxSize,
+  ArrayMinSize,
+  IsArray,
+  IsUUID,
   ValidateNested,
 } from 'class-validator';
-import { GenericDataPartDto } from './generic-datapart';
+
 import { ThumbnailDto } from 'src/shared/thumbnail.dto';
 import { Type } from 'class-transformer';
-
-export class GetMediaDataPart extends GenericDataPartDto {
-  @AutoMap()
-  @IsString()
-  mediaType: string;
-
-  @AutoMap()
-  @IsString()
-  mediaProvider: string;
-}
-
-export class MediaDto {}
-export class MediaResponseDto {
+import { BaseEntityDto } from 'src/shared/base.dto';
+export class GetMediaResponse {
   @AutoMap()
   offset: number;
 
   @AutoMap()
   limit: number;
 
-  // items:
+  @AutoMap()
+  items: MediaItemResponse[];
 }
 
-export class CreateMediaDataPart extends GenericDataPartDto {
+export class CreateMediaReq {
+  @AutoMap()
+  @IsUUID()
+  webpageId: string;
+
+  injectedWebpage: Webpage;
+
+  @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(50)
+  items: CreateMediaItem[];
+}
+
+export class MediaItemDto extends BaseEntityDto {
   @AutoMap()
   @IsString()
   title: string;
@@ -64,8 +71,18 @@ export class CreateMediaDataPart extends GenericDataPartDto {
   @IsInt()
   @IsOptional()
   order?: number;
+}
 
+export class CreateMediaItem extends MediaItemDto {
   @AutoMap()
   @IsString()
   providerMediaId: string;
+
+  @AutoMap()
+  @IsUUID()
+  webpageId: string;
+}
+export class MediaItemResponse extends MediaItemDto {
+  @AutoMap()
+  url: string;
 }
