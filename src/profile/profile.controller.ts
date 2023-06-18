@@ -2,14 +2,15 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
-  Param,
   Post,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { ProfileDto } from './dto';
 import { WebpagesService } from 'src/webpages/webpages.service';
 import { ProfileService } from './profile.service';
+import { InjectWebpageGuard } from 'src/guards/inject-webpage.guard';
+import { Webpage } from 'src/webpages/entities/webpage.entity';
 
 @Controller('profile')
 export class ProfileController {
@@ -19,22 +20,18 @@ export class ProfileController {
   ) {}
 
   @Get(':webpageId')
-  async getPage(@Param('webpageId') webpageId: string) {
-    const webpage = await this.webpageService.getById(webpageId);
-    if (!webpage)
-      throw new HttpException('WEBPAGE_NOT_FOUND', HttpStatus.NOT_FOUND);
+  @UseGuards(InjectWebpageGuard)
+  async getPage(@Request() req: any) {
+    const webpage: Webpage = req.getWebpage();
 
     return this.profileService.mapToProfileDto(
-      await this.profileService.getBy(webpageId),
+      await this.profileService.getBy(webpage.id),
     );
   }
 
   @Post()
+  @UseGuards(InjectWebpageGuard)
   async newProfile(@Body() profileDto: ProfileDto) {
-    const webpage = await this.webpageService.getById(profileDto.webpageId);
-    if (!webpage)
-      throw new HttpException('WEBPAGE_NOT_FOUND', HttpStatus.NOT_FOUND);
-
     await this.profileService.save(
       this.profileService.mapToProfile(profileDto),
     );

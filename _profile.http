@@ -1,7 +1,8 @@
-@layout_page_id=8bf871ca-539e-4d13-96bd-0c41a0b8a4dc
+@layout_page_id=03f7a954-f928-4a06-8949-fc7bea222ab9
 
 
 GET http://localhost:{{$dotenv PORT}}/profile/{{layout_page_id}}
+Webpage-Id: {{layout_page_id}}
 
 ###
 
@@ -10,11 +11,11 @@ Content-Type: application/json
 
 {
   "webpageId": "{{layout_page_id}}",
+  "title": "Salamat Trading",
   "headerLogo": {
-    "imageLogoUrl": "stringinggmsifj",
-    "slogan": "stringasdasdf"
+    "imageLogoUrl": "https://yt3.ggpht.com/qd-3PVa5gu4Q8I4980JqdTIh2Di6P4aDi30dc2ZqQ1VzTXkdE6EG0rHST0ww8QkZiI8vwgDM=s176-c-k-c0x00ffffff-no-rj-mo"
   },
   "footerLogo": {
-    "textLogo": "stringasfev"
+    "textLogo": "Salamat Trading"
   }
 }

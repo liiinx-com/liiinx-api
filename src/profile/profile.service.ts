@@ -38,15 +38,14 @@ export class ProfileService {
 
   private generateProfile(pageProfile: Profile): Profile {
     const defaultProfile: Partial<Profile> = {
-      copyright:
-        'this is default copyright text. © Copyright 2021. All Rights Reserved.',
-      terms: 'default terms text',
-      privacy: 'default privacy text',
+      copyrightText: `© Copyright ${new Date().getFullYear()}. All Rights Reserved.`,
+      termsText: 'default terms text',
+      privacyText: 'default privacy text',
       headerLogo: {
-        textLogo: 'Default Logo',
+        textLogo: '',
       },
       footerLogo: {
-        textLogo: 'Default footer logo',
+        textLogo: ' ',
       },
     };
 

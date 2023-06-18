@@ -15,6 +15,7 @@ import { BlockService } from './blocks.service';
 import { lodash } from 'src/utils';
 import { InjectWebpageGuard } from 'src/guards/inject-webpage.guard';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
+import { YoutubeVideosBlockDto } from './dto/youtube-videos';
 
 @Controller('blocks')
 export class BlockController {
@@ -48,6 +49,7 @@ export class BlockController {
 
     const validators = {
       header: HeaderBlockDto,
+      youtubeVideos: YoutubeVideosBlockDto,
       generic: BlockDto,
     };
 

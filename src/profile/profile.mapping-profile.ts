@@ -4,8 +4,6 @@ import { createMap, extend } from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { ProfileDto, LogoDto } from './dto';
 import { Logo, Profile } from './entities/profile.entity';
-import { BaseEntity } from 'src/shared/base.entity';
-import { BaseEntityDto } from 'src/shared/base.dto';
 
 @Injectable()
 export class ProfileMappingProfile extends AutomapperProfile {

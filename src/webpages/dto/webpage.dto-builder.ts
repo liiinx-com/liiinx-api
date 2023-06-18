@@ -84,10 +84,9 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
       //   this.layout.menus,
       // ),
 
-      layoutConfig: this.blockService.generatePageLayoutConfig([
-        ...this.layout.blocks,
-        ...this.webpage.blocks,
-      ]),
+      layoutConfig: this.blockService.generatePageLayoutConfig(
+        this.layout.blocks,
+      ),
 
       // sections: lodash.orderBy(
       //   [
@@ -104,6 +103,10 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
 
   async buildPageDto() {
     this.resultPageDto.page = this.mapper.map(this.webpage, Webpage, PageDto);
+
+    this.resultPageDto.page.blocks = this.blockService.mapToBlockDto(
+      this.webpage.blocks,
+    );
 
     // if (this.resultPageDto.page.sections)
     //   this.resultPageDto.page.sections =

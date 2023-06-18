@@ -1,9 +1,4 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  RequestMethod,
-} from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { ConfigModule } from '@nestjs/config';
 import { ConfigurationModule } from './configuration/configuration.module';
@@ -20,6 +15,7 @@ import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { BlockModule } from './webpage-blocks/blocks.module';
 import { ProfileModule } from './profile/profile.module';
+import { MediaModule } from './media/media.module';
 
 @Module({
   imports: [
@@ -46,6 +42,7 @@ import { ProfileModule } from './profile/profile.module';
     ThemesModule,
     BlockModule,
     ProfileModule,
+    MediaModule,
   ],
   providers: [AppService],
   controllers: [AppController],
