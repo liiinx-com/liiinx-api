@@ -124,9 +124,6 @@ export class BlockService {
         isActive: true,
         blockProps: {
           dir: 'ltr',
-          style: {
-            backgroundColor: 'transparent',
-          },
         },
         blockType: 'header',
         blockVariant: 'header1',

@@ -2,6 +2,7 @@ import { Column, Entity } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
 import { AutoMap } from '@automapper/classes';
 import { ThumbnailDto } from 'src/shared/thumbnail.dto';
+import { MediaStatistics } from '../dto';
 
 @Entity({ name: 'media' })
 export class Media extends BaseEntity {
@@ -28,6 +29,14 @@ export class Media extends BaseEntity {
   @Column({ nullable: true, name: 'post_id' })
   @AutoMap()
   postId?: string;
+
+  @Column({ type: 'interval' })
+  @AutoMap()
+  duration: any;
+
+  @Column({ type: 'json', default: {} })
+  @AutoMap()
+  statistics: MediaStatistics;
 
   @Column({ name: 'media_provider' })
   @AutoMap()
