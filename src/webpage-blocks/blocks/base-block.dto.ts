@@ -1,4 +1,5 @@
 import { AutoMap } from '@automapper/classes';
+import { Webpage } from 'src/webpages/entities/webpage.entity';
 import {
   IsBoolean,
   IsNotEmpty,
@@ -7,10 +8,14 @@ import {
   IsString,
   ValidateNested,
   IsInt,
+  IsUUID,
+  IsArray,
+  ArrayMinSize,
+  ArrayMaxSize,
 } from 'class-validator';
 import { Type } from 'class-transformer';
 
-export class BlockProps {
+export class BaseBlockOptions {
   @IsObject()
   @IsOptional()
   style?: object;
@@ -20,7 +25,7 @@ export class BlockProps {
   className?: string;
 }
 
-export class BlockDto {
+export class BaseBlockDto {
   @IsOptional()
   @AutoMap()
   id?: string;
@@ -51,8 +56,8 @@ export class BlockDto {
   @IsOptional()
   @ValidateNested()
   @AutoMap()
-  @Type(() => BlockProps)
-  blockProps?: BlockProps;
+  @Type(() => BaseBlockOptions)
+  blockOptions?: BaseBlockOptions;
 
   @IsBoolean()
   @AutoMap()
@@ -75,4 +80,29 @@ export class BlockDto {
   @IsBoolean()
   @AutoMap()
   isActive: boolean;
+}
+
+export class CreateBlockDto {
+  @AutoMap()
+  @IsUUID()
+  webpageId: string;
+
+  injectedWebpage: Webpage;
+
+  @IsArray()
+  @ArrayMinSize(1)
+  @ArrayMaxSize(5)
+  blocks: BaseBlockDto[];
+}
+
+export class PageLayoutDto {
+  dir: 'ltr' | 'rtl';
+  faviconUrl: string;
+  topBar?: BaseBlockDto;
+  // header?: HeaderBlockDto;
+  // hero?: LayoutBlock;
+  sidebar?: BaseBlockDto;
+  content?: BaseBlockDto;
+  footer?: BaseBlockDto;
+  footerBar?: BaseBlockDto;
 }

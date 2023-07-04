@@ -29,7 +29,7 @@ Content-Type: application/json
       "isActive": true,
       "wrapperContained": true,
       "blockContained": true,
-      "blockProps": {
+      "blockOptions": {
         "dir": "rtl"
       },
       "order": 1,
@@ -61,6 +61,14 @@ Content-Type: application/json
       "wrapperContained": true,
       "blockContained": true,
       "order": 1
+    },
+    {
+      "blockType": "hero",
+      "blockVariant": "hero1",
+      "isActive": true,
+      "wrapperContained": false,
+      "blockContained": true,
+      "order": 2
     }
   ]
 }

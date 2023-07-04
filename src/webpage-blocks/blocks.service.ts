@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { WebpageBlock } from './entities/block.entity';
 import { lodash } from 'src/utils';
-import { BlockDto, BlockProps, CreateBlockDto, PageLayoutDto } from './dto';
+import {
+  BaseBlockDto,
+  BaseBlockOptions,
+  CreateBlockDto,
+  PageLayoutDto,
+} from './blocks/base-block.dto';
 import { Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
 import { DataSource, InsertResult, Repository } from 'typeorm';
@@ -44,19 +49,19 @@ export class BlockService {
     });
   }
 
-  async createBlock(
-    blockType: string,
-    blockVariant: string,
-    blockProps?: BlockProps,
-    order = 1,
-  ): Promise<WebpageBlock> {
-    const result = new WebpageBlock();
-    result.order = order;
-    result.blockType = blockType;
-    result.blockVariant = blockVariant;
-    result.blockProps = blockProps;
-    return result;
-  }
+  // async createBlock(
+  //   blockType: string,
+  //   blockVariant: string,
+  //   blockProps?: BaseBlockOptions,
+  //   order = 1,
+  // ): Promise<WebpageBlock> {
+  //   const result = new WebpageBlock();
+  //   result.order = order;
+  //   result.blockType = blockType;
+  //   result.blockVariant = blockVariant;
+  //   result.blockOptions = blockProps;
+  //   return result;
+  // }
 
   // when creating webpage-dto
   // async addDynamicLayoutSections(): Promise<GenericBlockDto[]> {
@@ -89,7 +94,7 @@ export class BlockService {
 
   mapToBlock(createBlockDto: CreateBlockDto): WebpageBlock[] {
     return this.mapper
-      .mapArray(createBlockDto.blocks, BlockDto, WebpageBlock)
+      .mapArray(createBlockDto.blocks, BaseBlockDto, WebpageBlock)
       .map((b) => {
         b.webpageId = createBlockDto.webpageId;
         return b;
@@ -101,8 +106,8 @@ export class BlockService {
     return null;
   }
 
-  mapToBlockDto(blocks: WebpageBlock[]): BlockDto[] {
-    return this.mapper.mapArray(blocks, WebpageBlock, BlockDto);
+  mapToBlockDto(blocks: WebpageBlock[]): BaseBlockDto[] {
+    return this.mapper.mapArray(blocks, WebpageBlock, BaseBlockDto);
   }
 
   // used in dto builder to merge default layout settings with page overrides
@@ -114,21 +119,21 @@ export class BlockService {
       topBar: {
         blockContained: true,
         isActive: false,
-        blockProps: {},
+        blockOptions: {},
         blockType: 'topbar',
         blockVariant: 'topbar1',
         wrapperContained: false,
       },
-      header: {
-        blockContained: true,
-        isActive: true,
-        blockProps: {
-          dir: 'ltr',
-        },
-        blockType: 'header',
-        blockVariant: 'header1',
-        wrapperContained: false,
-      },
+      // header: {
+      //   blockContained: true,
+      //   isActive: true,
+      //   blockOptions: {
+      //     dir: 'ltr',
+      //   },
+      //   blockType: 'header',
+      //   blockVariant: 'header1',
+      //   wrapperContained: false,
+      // },
       // hero: {
       //   contained: false,
       //   isActive: false,
@@ -143,7 +148,7 @@ export class BlockService {
         blockContained: true,
         isActive: true,
         blockType: 'content',
-        blockProps: {},
+        blockOptions: {},
         blockVariant: 'content1',
         wrapperContained: false,
       },
@@ -151,7 +156,7 @@ export class BlockService {
         blockContained: true,
         isActive: true,
         blockType: 'footer',
-        blockProps: {},
+        blockOptions: {},
         blockVariant: 'footer1',
         wrapperContained: false,
       },
@@ -160,7 +165,7 @@ export class BlockService {
         blockType: 'footerBar',
         blockVariant: 'footerBar1',
         isActive: false,
-        blockProps: {},
+        blockOptions: {},
         wrapperContained: false,
       },
     };
@@ -179,7 +184,7 @@ export class BlockService {
           defaultLayoutBlocks[
             Object.keys(defaultLayoutBlocks).find((k) => k === b.blockType)
           ],
-          this.mapper.map(b, WebpageBlock, BlockDto),
+          this.mapper.map(b, WebpageBlock, BaseBlockDto),
         );
         return acc;
       }, new PageLayoutDto()),

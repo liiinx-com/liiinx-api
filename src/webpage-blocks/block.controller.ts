@@ -9,17 +9,21 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { BlockDto, CreateBlockDto, HeaderBlockDto } from './dto';
 import { transformAndValidate } from 'class-transformer-validator';
 import { BlockService } from './blocks.service';
 import { lodash } from 'src/utils';
 import { InjectWebpageGuard } from 'src/guards/inject-webpage.guard';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
-import { YoutubeVideosBlockDto } from './dto/youtube-videos';
+import { BaseBlockDto, CreateBlockDto } from './blocks/base-block.dto';
+import { HeaderBlockOptions } from './blocks/header/header.dto';
+import { BaseBlockService } from './blocks/base-block.service';
 
 @Controller('blocks')
 export class BlockController {
-  constructor(private readonly blockService: BlockService) {}
+  constructor(
+    private readonly blockService: BlockService,
+    private readonly baseBlockService: BaseBlockService,
+  ) {}
 
   @Get('page/:webpageId')
   @UseGuards(InjectWebpageGuard)
@@ -42,19 +46,19 @@ export class BlockController {
     );
   }
 
-  @UseGuards(InjectWebpageGuard)
-  @Post()
-  async newBlocks(@Body() createBlockDto: CreateBlockDto) {
+  // @UseGuards(InjectWebpageGuard)
+  // @Post()
+  async newBlocks_original(@Body() createBlockDto: CreateBlockDto) {
     createBlockDto.blocks = lodash.orderBy(createBlockDto.blocks, ['order']);
 
     const validators = {
-      header: HeaderBlockDto,
-      youtubeVideos: YoutubeVideosBlockDto,
-      generic: BlockDto,
+      header: HeaderBlockOptions,
+      // youtubeVideos: YoutubeVideosBlockDto,
+      generic: BaseBlockDto,
     };
 
     try {
-      await Promise.all<Promise<BlockDto>>(
+      await Promise.all<Promise<BaseBlockDto>>(
         createBlockDto.blocks.map(async (blk) => {
           const val = await transformAndValidate(
             validators[blk.blockType] ?? validators['generic'],
@@ -63,13 +67,32 @@ export class BlockController {
               validator: { whitelist: true },
             },
           );
-          return val as BlockDto;
+          return val as BaseBlockDto;
         }),
       );
 
       await this.blockService.saveBulk(
         this.blockService.mapToBlock(createBlockDto),
       );
+    } catch (error) {
+      console.error(error);
+      throw new HttpException('INVALID_BLOCK_DATA', HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  @UseGuards(InjectWebpageGuard)
+  @Post()
+  async newBlocks(@Body() createBlockDto: CreateBlockDto) {
+    createBlockDto.blocks = lodash.orderBy(createBlockDto.blocks, ['order']);
+
+    try {
+      createBlockDto.blocks = await this.baseBlockService.validateBlocksOptions(
+        createBlockDto.blocks,
+      );
+
+      // await this.blockService.saveBulk(
+      //   this.blockService.mapToBlock(createBlockDto),
+      // );
     } catch (error) {
       console.error(error);
       throw new HttpException('INVALID_BLOCK_DATA', HttpStatus.BAD_REQUEST);
