@@ -1,10 +1,12 @@
 import { AutoMap } from '@automapper/classes';
-import { BaseEntity } from 'src/shared/base.entity';
-import { Column } from 'typeorm';
+import { Column, PrimaryGeneratedColumn } from 'typeorm';
 
-export class BaseBlockEntity extends BaseEntity {
-  // TODO: general block options, rtl, contained, containerStyles...
-  @Column({ default: false, name: 'is_rtl' })
+export class BaseBlockEntity {
+  @PrimaryGeneratedColumn('uuid')
   @AutoMap()
-  isRtl: boolean;
+  id: string;
+
+  @Column()
+  @AutoMap()
+  baseBlockId: string;
 }

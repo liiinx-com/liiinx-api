@@ -1,20 +1,18 @@
-import {
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  ValidateNested,
-} from 'class-validator';
+import { IsInt, IsOptional, ValidateNested } from 'class-validator';
 import { BaseBlockDto, BaseBlockOptions } from '../base-block.dto';
 import { AutoMap } from '@automapper/classes';
 import { Type } from 'class-transformer';
 
 export class HeaderBlockOptions extends BaseBlockOptions {
-  @IsString()
-  @IsNotEmpty()
-  dir: string;
+  @IsInt()
+  @AutoMap()
+  @IsOptional()
+  height?: number;
 }
 
-export class CreateHeaderBlockReq extends BaseBlockDto {
+export class HeaderBlockOptionsResponse extends HeaderBlockOptions {} // might have some dynamic options added by addDynamicOptions()
+
+export class HeaderBlockDto extends BaseBlockDto {
   @AutoMap()
   @ValidateNested()
   @Type(() => HeaderBlockOptions)

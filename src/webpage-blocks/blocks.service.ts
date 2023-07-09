@@ -7,33 +7,87 @@ import {
   CreateBlockDto,
   PageLayoutDto,
 } from './blocks/base-block.dto';
+import { transformAndValidate } from 'class-transformer-validator';
 import { Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
-import { DataSource, InsertResult, Repository } from 'typeorm';
+import { EntityManager, InsertResult, Repository } from 'typeorm';
+import { HeaderBlockDto } from './blocks/header/header.dto';
+import { InjectEntityManager } from '@nestjs/typeorm';
+import { BaseBlockEntity } from './blocks/base-block.entity';
+import { HeaderBlockService } from './blocks/header/header.service';
+import { IBlockService } from './blocks/iblock-service';
+
+const validators = {
+  header: HeaderBlockDto,
+  baseBlock: BaseBlockDto,
+};
 
 @Injectable()
 export class BlockService {
   blockRepository: Repository<WebpageBlock>;
 
   constructor(
-    private dataSource: DataSource,
+    @InjectEntityManager()
+    private entityManager: EntityManager,
     @InjectMapper()
     private readonly mapper: Mapper,
+    private readonly headerService: HeaderBlockService,
   ) {
-    this.blockRepository = this.dataSource.getRepository(WebpageBlock);
+    this.blockRepository = this.entityManager.getRepository(WebpageBlock);
   }
 
   async save(block: WebpageBlock): Promise<WebpageBlock> {
     return this.blockRepository.save(block);
   }
 
+  validateBlocksOptions(baseBlockDto: BaseBlockDto[]): Promise<BaseBlockDto[]> {
+    return Promise.all<Promise<BaseBlockDto>>(
+      baseBlockDto.map(async (blk) => {
+        const validationResult = await transformAndValidate(
+          validators[blk.blockType] ?? validators['baseBlock'],
+          blk,
+          {
+            validator: { whitelist: true },
+          },
+        );
+        return validationResult as BaseBlockDto;
+      }),
+    );
+  }
+
+  getBlockServiceByBlockType(
+    blockType: string,
+  ): IBlockService<BaseBlockEntity, BaseBlockOptions> {
+    if (blockType === 'header') return this.headerService;
+    throw new Error('INVALID_BLOCK');
+  }
+
   async saveBulk(blocks: WebpageBlock[]): Promise<InsertResult> {
-    return this.dataSource
-      .createQueryBuilder()
-      .insert()
-      .into(WebpageBlock)
-      .values(blocks)
-      .execute();
+    await this.entityManager.transaction(async (manager) => {
+      const savedBaseBlocks = await manager.save<WebpageBlock>(blocks);
+      return Promise.all(
+        savedBaseBlocks.map(async (blk) => {
+          blk.blockOptions.baseBlockId = blk.id;
+          const service = this.getBlockServiceByBlockType(blk.blockType);
+          return service.save(manager, blk.blockOptions);
+        }),
+      );
+    });
+    return null;
+  }
+
+  async addBlockData(blockEntities: WebpageBlock[]): Promise<BaseBlockDto[]> {
+    return Promise.all(
+      blockEntities.map(async (blk) => {
+        const result = this.mapper.map(blk, WebpageBlock, BaseBlockDto);
+
+        const blkService = this.getBlockServiceByBlockType(blk.blockType);
+        result.blockOptions = await blkService.getDto(
+          await blkService.getBlockByBaseBlockId(blk.id),
+        );
+        return result;
+      }),
+    );
   }
 
   async find(webpageId: string, blockType?: string): Promise<WebpageBlock[]> {
@@ -101,11 +155,6 @@ export class BlockService {
       });
   }
 
-  mapToPageLayoutDto(blocks: WebpageBlock[]): PageLayoutDto {
-    console.log('---`', blocks);
-    return null;
-  }
-
   mapToBlockDto(blocks: WebpageBlock[]): BaseBlockDto[] {
     return this.mapper.mapArray(blocks, WebpageBlock, BaseBlockDto);
   }
@@ -124,16 +173,15 @@ export class BlockService {
         blockVariant: 'topbar1',
         wrapperContained: false,
       },
-      // header: {
-      //   blockContained: true,
-      //   isActive: true,
-      //   blockOptions: {
-      //     dir: 'ltr',
-      //   },
-      //   blockType: 'header',
-      //   blockVariant: 'header1',
-      //   wrapperContained: false,
-      // },
+
+      header: {
+        blockContained: true,
+        isActive: true,
+        blockOptions: {},
+        blockType: 'header',
+        blockVariant: 'header2',
+        wrapperContained: false,
+      },
       // hero: {
       //   contained: false,
       //   isActive: false,

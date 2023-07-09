@@ -5,11 +5,11 @@ import { BlockController } from './block.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WebpageBlock } from './entities/block.entity';
 import { HeaderBlock } from './blocks/header/header.entity';
-import { BaseBlockService } from './blocks/base-block.service';
+import { HeaderBlockService } from './blocks/header/header.service';
 
 @Module({
   imports: [TypeOrmModule.forFeature([WebpageBlock, HeaderBlock])],
-  providers: [BlockService, PageBlockMappingProfile, BaseBlockService],
+  providers: [BlockService, PageBlockMappingProfile, HeaderBlockService],
   controllers: [BlockController],
   exports: [BlockService],
 })

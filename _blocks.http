@@ -27,22 +27,21 @@ Content-Type: application/json
       "blockType": "header",
       "blockVariant": "header1",
       "isActive": true,
-      "wrapperContained": true,
+      "wrapperContained": false,
       "blockContained": true,
-      "blockOptions": {
-        "dir": "rtl"
-      },
+      "blockOptions": {},
       "order": 1,
       "sag": 2
-    },
-     {
-      "blockType": "footer",
-      "blockVariant": "footer1",
-      "isActive": true,
-      "wrapperContained": true,
-      "blockContained": true,
-      "order": 2
     }
+    # ,
+    #  {
+    #   "blockType": "footer",
+    #   "blockVariant": "footer1",
+    #   "isActive": true,
+    #   "wrapperContained": true,
+    #   "blockContained": true,
+    #   "order": 2
+    # }
   ]
 }
 

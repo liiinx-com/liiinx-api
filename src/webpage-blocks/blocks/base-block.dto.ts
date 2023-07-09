@@ -14,15 +14,23 @@ import {
   ArrayMaxSize,
 } from 'class-validator';
 import { Type } from 'class-transformer';
+import { HeaderBlockDto } from './header/header.dto';
 
 export class BaseBlockOptions {
-  @IsObject()
-  @IsOptional()
-  style?: object;
+  // @IsObject()
+  // @AutoMap()
+  // @IsOptional()
+  // style?: object;
+
+  // @IsString()
+  // @IsOptional()
+  // @AutoMap()
+  // className?: string;
 
   @IsString()
   @IsOptional()
-  className?: string;
+  @AutoMap()
+  baseBlockId?: string;
 }
 
 export class BaseBlockDto {
@@ -99,7 +107,7 @@ export class PageLayoutDto {
   dir: 'ltr' | 'rtl';
   faviconUrl: string;
   topBar?: BaseBlockDto;
-  // header?: HeaderBlockDto;
+  header?: HeaderBlockDto;
   // hero?: LayoutBlock;
   sidebar?: BaseBlockDto;
   content?: BaseBlockDto;
