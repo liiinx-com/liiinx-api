@@ -11,6 +11,7 @@ import {
   IsArray,
   IsUUID,
   ValidateNested,
+  IsNumber,
 } from 'class-validator';
 
 import { ThumbnailDto } from 'src/shared/thumbnail.dto';
@@ -37,7 +38,27 @@ export class CreateMediaReq {
   @IsArray()
   @ArrayMinSize(1)
   @ArrayMaxSize(50)
+  @Type(() => CreateMediaItem)
+  @ValidateNested()
   items: CreateMediaItem[];
+}
+
+export class MediaStatistics {
+  @AutoMap()
+  @IsNumber()
+  viewCount: number;
+
+  @AutoMap()
+  @IsNumber()
+  likeCount: number;
+
+  @AutoMap()
+  @IsNumber()
+  favoriteCount: number;
+
+  @AutoMap()
+  @IsNumber()
+  commentCount: number;
 }
 
 export class MediaItemDto extends BaseEntityDto {
@@ -60,6 +81,12 @@ export class MediaItemDto extends BaseEntityDto {
   thumbnails: ThumbnailDto;
 
   @AutoMap()
+  @Type(() => MediaStatistics)
+  @ValidateNested()
+  @IsNotEmptyObject()
+  statistics: MediaStatistics;
+
+  @AutoMap()
   @IsString()
   mediaProvider: string;
 
@@ -79,10 +106,17 @@ export class CreateMediaItem extends MediaItemDto {
   providerMediaId: string;
 
   @AutoMap()
-  @IsUUID()
+  // mapped in controller by automapper from request
   webpageId: string;
+
+  @AutoMap()
+  @IsString()
+  duration: string;
 }
 export class MediaItemResponse extends MediaItemDto {
   @AutoMap()
   url: string;
+
+  @AutoMap()
+  duration: any;
 }

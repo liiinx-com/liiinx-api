@@ -123,6 +123,7 @@ export class MediaController {
       item.webpageId = createMediaDto.webpageId;
       return item;
     });
+
     await this.mediaService.saveBulk(
       this.mapper.mapArray(createMediaDto.items, CreateMediaItem, Media),
     );

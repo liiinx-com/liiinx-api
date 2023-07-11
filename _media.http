@@ -15,6 +15,7 @@ Content-Type: application/json
   "items": [
     {
       "title": "ریپل (XRP) و اسرار  کارتون سیمپسون ها/ پیش بینی سیمپسون ها در مورد ریپل/ ریپل (XRP) 589 دلاری",
+      "duration": "PT12M32S",
       "thumbnails": {
         "default": {
           "url": "https://i.ytimg.com/vi/VBX2byp0U6Y/default.jpg",
@@ -31,6 +32,12 @@ Content-Type: application/json
           "width": 480,
           "height": 360
         }
+      },
+      "statistics": {
+        "viewCount": 191984,
+        "likeCount": 6564,
+        "favoriteCount": 0,
+        "commentCount": 322
       },
       "publishedAt": "2022-03-28T11:25:23Z",
       "description": "ریپل (XRP) و اسرار کارتون سیمپسون ها/ پیش بینی سیمپسون ها در مورد ریپل/ ریپل (XRP) 589 دلاری دوستان و همراهان عزیز سلام.",

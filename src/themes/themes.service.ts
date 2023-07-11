@@ -20,13 +20,71 @@ export class ThemeService {
   ): ThemeDto {
     const defaultSettings: ThemeDto = {
       body: {
-        bgColor: '#9E9E9E',
+        style: {
+          backgroundColor: '#424242',
+        },
+      },
+
+      content: {
+        style: {
+          backgroundColor: 'white',
+        },
+        wrapper: {
+          style: {
+            backgroundColor: '#EEEEEE',
+          },
+        },
       },
       header: {
-        bgColor: 'red',
+        wrapper: {
+          style: {
+            backgroundColor: 'white',
+          },
+        },
       },
-      primaryTextColor: 'red',
-      secondaryTextColor: 'aqua',
+      footer: {
+        style: {
+          backgroundColor: '#424242',
+        },
+        wrapper: {
+          style: {
+            backgroundColor: '#424242',
+          },
+        },
+      },
+      typography: {
+        logo: {
+          style: { color: 'purple' },
+        },
+        primaryAccentText: {
+          style: { color: 'purple' },
+        },
+        primaryDarkAccentText: {
+          style: {
+            color: 'yellow',
+          },
+        },
+        primaryText: {
+          style: {
+            color: '#222',
+          },
+        },
+        secondaryText: {
+          style: {
+            color: 'pink',
+          },
+        },
+        primaryDarkText: {
+          style: {
+            color: 'blue',
+          },
+        },
+        secondaryDarkText: {
+          style: {
+            color: 'green',
+          },
+        },
+      },
     };
 
     return lodash.merge(defaultSettings, layoutOverrides, pageOverrides);

@@ -1,9 +1,16 @@
 import { AutomapperProfile, InjectMapper } from '@automapper/nestjs';
 import type { Mapper } from '@automapper/core';
-import { createMap } from '@automapper/core';
+import {
+  createMap,
+  forMember,
+  mapFrom,
+  nullSubstitution,
+} from '@automapper/core';
 import { Injectable } from '@nestjs/common';
 import { WebpageBlock } from './entities/block.entity';
-import { BlockDto, HeaderBlockDto } from './dto';
+import { BaseBlockDto } from './blocks/base-block.dto';
+import { HeaderBlockOptions } from './blocks/header/header.dto';
+import { HeaderBlock } from './blocks/header/header.entity';
 
 @Injectable()
 export class PageBlockMappingProfile extends AutomapperProfile {
@@ -13,8 +20,32 @@ export class PageBlockMappingProfile extends AutomapperProfile {
 
   override get profile() {
     return (mapper) => {
-      createMap(mapper, WebpageBlock, BlockDto);
-      createMap(mapper, BlockDto, WebpageBlock);
+      createMap(
+        mapper,
+        WebpageBlock,
+        BaseBlockDto,
+        forMember(
+          (destination) => destination.blockClassName,
+          nullSubstitution(''),
+        ),
+        forMember(
+          (destination) => destination.wrapperClassName,
+          nullSubstitution(''),
+        ),
+        forMember(
+          (m) => m.blockStyle,
+          mapFrom((s) => s.blockStyle),
+        ),
+        forMember(
+          (m) => m.wrapperStyle,
+          mapFrom((s) => s.wrapperStyle),
+        ),
+      );
+      createMap(mapper, BaseBlockDto, WebpageBlock);
+
+      // Header
+      createMap(mapper, HeaderBlockOptions, HeaderBlock);
+      createMap(mapper, HeaderBlock, HeaderBlockOptions);
     };
   }
 }

@@ -43,7 +43,7 @@ export class MediaService {
       take: limit,
       skip: offset * limit,
       order: {
-        order: 'ASC',
+        publishedAt: 'DESC',
       },
     });
   }

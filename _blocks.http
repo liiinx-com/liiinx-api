@@ -27,22 +27,21 @@ Content-Type: application/json
       "blockType": "header",
       "blockVariant": "header1",
       "isActive": true,
-      "wrapperContained": true,
+      "wrapperContained": false,
       "blockContained": true,
-      "blockProps": {
-        "dir": "rtl"
-      },
+      "blockOptions": {},
       "order": 1,
       "sag": 2
-    },
-     {
-      "blockType": "footer",
-      "blockVariant": "footer1",
-      "isActive": true,
-      "wrapperContained": true,
-      "blockContained": true,
-      "order": 2
     }
+    # ,
+    #  {
+    #   "blockType": "footer",
+    #   "blockVariant": "footer1",
+    #   "isActive": true,
+    #   "wrapperContained": true,
+    #   "blockContained": true,
+    #   "order": 2
+    # }
   ]
 }
 
@@ -61,6 +60,14 @@ Content-Type: application/json
       "wrapperContained": true,
       "blockContained": true,
       "order": 1
+    },
+    {
+      "blockType": "hero",
+      "blockVariant": "hero1",
+      "isActive": true,
+      "wrapperContained": false,
+      "blockContained": true,
+      "order": 2
     }
   ]
 }

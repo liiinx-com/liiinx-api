@@ -1,16 +1,27 @@
+interface BlockThemeDto {
+  style?: object;
+  className?: string;
+}
+
+interface BlockWithWrapperThemeDto extends BlockThemeDto {
+  wrapper?: BlockThemeDto;
+}
+
 export interface ThemeDto {
   code?: string;
 
-  body: {
-    bgColor: string;
-  };
-  header: {
-    bgColor: string;
-    height?: string;
-    imageUrl?: string;
-    imageStyle?: object;
-  };
+  body: BlockThemeDto;
+  header: BlockWithWrapperThemeDto;
+  content: BlockWithWrapperThemeDto;
+  footer: BlockWithWrapperThemeDto;
 
-  primaryTextColor: string;
-  secondaryTextColor: string;
+  typography: {
+    logo: BlockThemeDto;
+    primaryAccentText: BlockThemeDto;
+    primaryText: BlockThemeDto;
+    primaryDarkText: BlockThemeDto;
+    primaryDarkAccentText: BlockThemeDto;
+    secondaryText: BlockThemeDto;
+    secondaryDarkText: BlockThemeDto;
+  };
 }

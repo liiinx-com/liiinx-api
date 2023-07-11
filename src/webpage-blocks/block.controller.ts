@@ -9,13 +9,11 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { BlockDto, CreateBlockDto, HeaderBlockDto } from './dto';
-import { transformAndValidate } from 'class-transformer-validator';
 import { BlockService } from './blocks.service';
 import { lodash } from 'src/utils';
 import { InjectWebpageGuard } from 'src/guards/inject-webpage.guard';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
-import { YoutubeVideosBlockDto } from './dto/youtube-videos';
+import { CreateBlockDto } from './blocks/base-block.dto';
 
 @Controller('blocks')
 export class BlockController {
@@ -25,7 +23,7 @@ export class BlockController {
   @UseGuards(InjectWebpageGuard)
   async getPageBlocks(@Request() req: any) {
     const webpage: Webpage = req.getWebpage();
-    return this.blockService.mapToBlockDto(
+    return this.blockService.addBlockData(
       await this.blockService.find(webpage.id),
     );
   }
@@ -47,26 +45,10 @@ export class BlockController {
   async newBlocks(@Body() createBlockDto: CreateBlockDto) {
     createBlockDto.blocks = lodash.orderBy(createBlockDto.blocks, ['order']);
 
-    const validators = {
-      header: HeaderBlockDto,
-      youtubeVideos: YoutubeVideosBlockDto,
-      generic: BlockDto,
-    };
-
     try {
-      await Promise.all<Promise<BlockDto>>(
-        createBlockDto.blocks.map(async (blk) => {
-          const val = await transformAndValidate(
-            validators[blk.blockType] ?? validators['generic'],
-            blk,
-            {
-              validator: { whitelist: true },
-            },
-          );
-          return val as BlockDto;
-        }),
+      createBlockDto.blocks = await this.blockService.validateBlocksOptions(
+        createBlockDto.blocks,
       );
-
       await this.blockService.saveBulk(
         this.blockService.mapToBlock(createBlockDto),
       );

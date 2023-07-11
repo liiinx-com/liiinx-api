@@ -5,7 +5,7 @@ import { WebpageBlock } from 'src/webpage-blocks/entities/block.entity';
 import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
 import { SeoMetadataDto } from './dto/webpage.dto';
 import { PageType } from './entities/page-type';
-import { PageLayoutDto } from 'src/webpage-blocks/dto';
+import { PageLayoutDto } from 'src/webpage-blocks/blocks/base-block.dto';
 
 interface IWebpageBuilder {
   getPage: () => Promise<Webpage>;

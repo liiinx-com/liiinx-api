@@ -4,7 +4,10 @@ import { MenusDto } from 'src/menu/dto/menu.dto';
 import { PageType } from 'src/webpages/entities/page-type';
 import { ThemeDto } from 'src/themes/dto/theme.dto';
 import { ProfileDto } from 'src/profile/dto';
-import { BlockDto, PageLayoutDto } from 'src/webpage-blocks/dto';
+import {
+  BaseBlockDto,
+  PageLayoutDto,
+} from 'src/webpage-blocks/blocks/base-block.dto';
 import { BaseEntityDto } from 'src/shared/base.dto';
 
 export class SeoMetadataDto {}
@@ -49,7 +52,7 @@ export class PageDto extends BasePageDto {
   @AutoMap()
   slug: string;
 
-  blocks: BlockDto[];
+  blocks: BaseBlockDto[];
 
   // layoutConfig?: Partial<PageLayoutDto>; // version 0.2
 

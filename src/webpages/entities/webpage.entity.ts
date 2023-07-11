@@ -8,7 +8,7 @@ import { SeoMetadataDto } from '../dto/webpage.dto';
 import { WebpageBlock } from '../../webpage-blocks/entities/block.entity';
 import { PageType } from './page-type';
 import { ThemeDto } from 'src/themes/dto/theme.dto';
-import { PageLayoutDto } from 'src/webpage-blocks/dto';
+import { PageLayoutDto } from 'src/webpage-blocks/blocks/base-block.dto';
 
 @Entity({ name: 'website_pages' })
 export class Webpage extends BaseEntity {
