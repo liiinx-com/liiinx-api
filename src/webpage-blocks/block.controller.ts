@@ -23,7 +23,7 @@ export class BlockController {
   @UseGuards(InjectWebpageGuard)
   async getPageBlocks(@Request() req: any) {
     const webpage: Webpage = req.getWebpage();
-    return this.blockService.addBlockData(
+    return this.blockService.addBlockDataArray(
       await this.blockService.find(webpage.id),
     );
   }
@@ -35,7 +35,7 @@ export class BlockController {
     @Param('blockType') blockType: string,
   ) {
     const webpage: Webpage = req.getWebpage();
-    return this.blockService.mapToBlockDto(
+    return this.blockService.addBlockDataArray(
       await this.blockService.find(webpage.id, blockType),
     );
   }
@@ -52,9 +52,12 @@ export class BlockController {
       await this.blockService.saveBulk(
         this.blockService.mapToBlock(createBlockDto),
       );
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(error);
-      throw new HttpException('INVALID_BLOCK_DATA', HttpStatus.BAD_REQUEST);
+
+      const message =
+        error instanceof Error ? error.message : 'INVALID_BLOCK_DATA';
+      throw new HttpException(message, HttpStatus.BAD_REQUEST);
     }
   }
 }
