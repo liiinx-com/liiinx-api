@@ -83,7 +83,7 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
       //   this.layout.menus,
       // ),
 
-      layoutConfig: this.blockService.generatePageLayoutConfig(
+      layoutConfig: await this.blockService.generatePageLayoutConfig(
         this.layout.blocks,
       ),
 
@@ -103,7 +103,7 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   async buildPageDto() {
     this.resultPageDto.page = this.mapper.map(this.webpage, Webpage, PageDto);
 
-    this.resultPageDto.page.blocks = this.blockService.mapToBlockDto(
+    this.resultPageDto.page.blocks = this.blockService.mapToBaseBlockDto(
       this.webpage.blocks,
     );
 

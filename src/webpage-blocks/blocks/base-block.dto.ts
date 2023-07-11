@@ -108,7 +108,7 @@ export class PageLayoutDto {
   faviconUrl: string;
   topBar?: BaseBlockDto;
   header?: HeaderBlockDto;
-  // hero?: LayoutBlock;
+  hero?: BaseBlockDto;
   sidebar?: BaseBlockDto;
   content?: BaseBlockDto;
   footer?: BaseBlockDto;
