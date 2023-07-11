@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Webpage } from './entities/webpage.entity';
 import { Menu } from 'src/menu/entities/menu.entity';
-import { WebpageBlock } from 'src/webpage-blocks/entities/block.entity';
+import { WebpageBlock } from 'src/webpage-blocks/base-block/base-block.entity';
 import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
 import { SeoMetadataDto } from './dto/webpage.dto';
 import { PageType } from './entities/page-type';
-import { PageLayoutDto } from 'src/webpage-blocks/blocks/base-block.dto';
+import { PageLayoutDto } from 'src/webpage-blocks/base-block/base-block.dto';
 
 interface IWebpageBuilder {
   getPage: () => Promise<Webpage>;

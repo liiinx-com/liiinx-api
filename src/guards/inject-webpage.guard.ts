@@ -29,6 +29,7 @@ export class InjectWebpageGuard implements CanActivate {
     request.body['injectedWebpage'] = webpage;
     request['injectedWebpage'] = webpage;
     request.getWebpage = () => webpage;
+
     return true;
   }
 }

@@ -51,6 +51,36 @@ POST http://localhost:{{$dotenv PORT}}/blocks
 Content-Type: application/json
 
 {
+  "webpageId": "{{layout_page_id}}",
+  "blocks": [
+     {
+      "blockType": "hero",
+      "blockVariant": "hero1",
+      "isActive": true,
+      "wrapperContained": true,
+      "blockOptions": {
+        "intervalMilliseconds": 1000,
+        "showControls": true,
+        "transitionEffect": "fade",
+        "items":[
+          {
+            "mediaUrl": "https://www.youtube.com/watch?v=OGddvRxHQUE",
+            "mediaType": "video"
+          }
+        ]
+        },
+      "blockContained": true,
+      "order": 2
+    }
+  ]
+}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/blocks
+Content-Type: application/json
+
+{
   "webpageId": "{{home_page_id}}",
   "blocks": [
      {

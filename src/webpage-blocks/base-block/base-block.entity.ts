@@ -2,7 +2,6 @@ import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
 import { AutoMap } from '@automapper/classes';
-import { BaseBlockOptions } from '../blocks/base-block.dto';
 
 @Entity({ name: 'webpage_blocks' })
 export class WebpageBlock extends BaseEntity {
@@ -24,9 +23,6 @@ export class WebpageBlock extends BaseEntity {
   @Column({ nullable: true, name: 'is_ltr' })
   @AutoMap()
   isLtr?: boolean;
-
-  @AutoMap()
-  blockOptions: BaseBlockOptions;
 
   @Column()
   @AutoMap()
