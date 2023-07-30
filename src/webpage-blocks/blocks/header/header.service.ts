@@ -1,30 +1,74 @@
 import { Injectable } from '@nestjs/common';
-import { HeaderBlock } from './header.entity';
-import { HeaderBlockOptions } from './header.dto';
-import { BaseBlockService } from '../base-block.service';
-import { InjectMapper } from '@automapper/nestjs';
+import { ActionResult } from 'src/webpage-blocks/dto';
 import { Mapper } from '@automapper/core';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { InjectMapper } from '@automapper/nestjs';
+import { ExecuterFnParam } from 'src/webpage-blocks/blocks.service';
+import {
+  CreateHeaderBlockPayload,
+  DeleteHeaderBlockPayload,
+  HeaderBlockDto,
+  PatchHeaderBlockPayload,
+} from './header.dto';
 
 @Injectable()
-export class HeaderBlockService extends BaseBlockService<
-  HeaderBlock,
-  HeaderBlockOptions
-> {
+export class HeaderService {
   constructor(
-    @InjectRepository(HeaderBlock)
-    readonly repository: Repository<HeaderBlock>,
     @InjectMapper()
     readonly mapper: Mapper,
-  ) {
-    super(repository, mapper);
+  ) {}
+
+  //==============
+  async getByBlockId({
+    blockId,
+  }: {
+    blockId: string;
+  }): Promise<HeaderBlockDto> {
+    console.log('hererererer');
+    return null;
   }
 
-  async mapToDto(block: HeaderBlock): Promise<HeaderBlockOptions> {
-    return this.mapper.map(block, HeaderBlock, HeaderBlockOptions);
+  //==============
+  async createHeader({
+    resource,
+    action,
+    manager,
+    webpage,
+    payload,
+  }: ExecuterFnParam<CreateHeaderBlockPayload>): Promise<ActionResult> {
+    console.log('validatedPayload=', payload);
+    // console.log('webpage', webpage);
+
+    const result = new ActionResult(resource, action);
+    return result;
   }
-  async mapToEntity(blockOptions: HeaderBlockOptions): Promise<HeaderBlock> {
-    return this.mapper.map(blockOptions, HeaderBlockOptions, HeaderBlock);
+
+  async patchHeader({
+    resource,
+    action,
+    manager,
+    webpage,
+    payload,
+  }: ExecuterFnParam<PatchHeaderBlockPayload>): Promise<ActionResult> {
+    console.log('update ,validatedPayload=', payload);
+    // console.log('webpage', webpage);
+
+    const result = new ActionResult(resource, action);
+    return result;
+  }
+
+  async deleteHeader({
+    resource,
+    action,
+    manager,
+    webpage,
+    payload,
+  }: ExecuterFnParam<DeleteHeaderBlockPayload>): Promise<ActionResult> {
+    console.log('validatedPayload=', payload);
+    console.log('webpage', webpage);
+
+    console.log(payload.blockId);
+
+    const result = new ActionResult(resource, action);
+    return result;
   }
 }

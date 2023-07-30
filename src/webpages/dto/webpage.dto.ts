@@ -4,11 +4,11 @@ import { MenusDto } from 'src/menu/dto/menu.dto';
 import { PageType } from 'src/webpages/entities/page-type';
 import { ThemeDto } from 'src/themes/dto/theme.dto';
 import { ProfileDto } from 'src/profile/dto';
+import { BaseEntityDto } from 'src/shared/base.dto';
 import {
   BaseBlockDto,
   PageLayoutDto,
-} from 'src/webpage-blocks/blocks/base-block.dto';
-import { BaseEntityDto } from 'src/shared/base.dto';
+} from 'src/webpage-blocks/base-block/base-block.dto';
 
 export class SeoMetadataDto {}
 
