@@ -11,7 +11,7 @@ export interface PostgresConfig {
   url: string;
 }
 
-export interface JwtConfig {
+export interface JWTConfig {
   secret: string;
   expiresIn: string;
 }
@@ -21,6 +21,13 @@ export interface MailConfig {
   username: string;
   password: string;
   defaultSender: string;
+}
+
+export interface GoogleOAuthConfig {
+  clientID: string;
+  clientSecret: string;
+  callbackURL: string;
+  scope: Array<string>;
 }
 
 export interface WooCommerceConfig {

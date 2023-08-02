@@ -1,6 +1,5 @@
 export const API_VERSION = 'API_VERSION';
 export const API_NAME = 'API_NAME';
-export const JWT_SECRET = 'JWT_SECRET';
 
 export const POSTGRES_URL = 'POSTGRES_URL';
 export const REDIS_URL = 'REDIS_URL';
@@ -9,6 +8,11 @@ export const REDIS_QUEUE = {
   keys: {
     messageReceived: 'message-received',
   },
+};
+
+export const JWT_CONFIG = {
+  SECRET: 'JWT_SECRET',
+  EXPIRES_IN: 'JWT_EXPIRES_IN',
 };
 
 export const MAIL_CONFIG = {

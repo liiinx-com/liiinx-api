@@ -16,6 +16,7 @@ import { classes } from '@automapper/classes';
 import { BlockModule } from './webpage-blocks/blocks.module';
 import { ProfileModule } from './profile/profile.module';
 import { MediaModule } from './media/media.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -43,6 +44,7 @@ import { MediaModule } from './media/media.module';
     BlockModule,
     ProfileModule,
     MediaModule,
+    AuthModule,
   ],
   providers: [AppService],
   controllers: [AppController],
