@@ -2,7 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   ApiInfo,
-  JwtConfig,
+  GoogleOAuthConfig,
+  JWTConfig,
   MailConfig,
   PostgresConfig,
   RedisConfig,
@@ -13,7 +14,7 @@ import {
   API_VERSION,
   REDIS_URL,
   POSTGRES_URL,
-  JWT_SECRET,
+  JWT_CONFIG,
   MAIL_CONFIG,
   WOO_COMMERCE_CONFIG,
 } from './constants';
@@ -21,13 +22,6 @@ import {
 @Injectable()
 export class ConfigurationService {
   constructor(private readonly configService: ConfigService) {}
-
-  getJwtConfig(): JwtConfig {
-    return {
-      secret: this.configService.get<string>(JWT_SECRET),
-      expiresIn: '15m',
-    };
-  }
 
   getApiInfo(): ApiInfo {
     return {
@@ -42,6 +36,13 @@ export class ConfigurationService {
 
   getPostgresConfig(): PostgresConfig {
     return { url: this.configService.get<string>(POSTGRES_URL) };
+  }
+
+  getJWTConfig(): JWTConfig {
+    return {
+      secret: this.configService.get<string>(JWT_CONFIG.SECRET),
+      expiresIn: this.configService.get<string>(JWT_CONFIG.EXPIRES_IN),
+    };
   }
 
   getMailConfig(): MailConfig {

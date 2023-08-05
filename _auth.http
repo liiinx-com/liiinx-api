@@ -1,0 +1,24 @@
+@sample_jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFtMWhvc3NlaW56YWRlaEBnbWFpbC5jb20iLCJpYXQiOjE2OTExOTM0MjksImV4cCI6MTY5MTQ1MjYyOX0.1iJa3HPpMGLetUwLKnWy0twbGINP1wYV1AeVdueFqNI
+@auth_header=Bearer {{sample_jwt}}
+
+GET http://localhost:{{$dotenv PORT}}/auth
+Authorization: {{auth_header}}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/auth/login
+Content-Type: application/json
+
+{
+  "firstName": "Amir",
+  "lastName": "Zad",
+  "googleUserId": "114271677043575222162",
+  "displayName": "Amir Zad",
+  "email": "am1hosseinzadeh@gmail.com",
+  "photoUrl": "https://lh3.googleusercontent.com/a/AAcHTtcDWJENXN1a7uIcDW06fXPZ-lHVqWp8Mo3mr5ANKxFGCew=s96-c",
+  "emailVerified": true,
+  "googleAccessToken": "ya29.",
+  "googleIdToken": "eyJh",
+  "tokenType": "Bearer",
+  "expiresAt": 1691014590
+}
