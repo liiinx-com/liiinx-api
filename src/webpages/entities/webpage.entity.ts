@@ -19,8 +19,47 @@ export class Webpage extends BaseEntity {
   @Column()
   websiteId: string;
 
-  @OneToMany(() => WebpageBlock, (s) => s.webpage, { cascade: true })
-  blocks?: WebpageBlock[];
+  @Column({ length: 100, nullable: true })
+  @AutoMap()
+  title?: string;
+
+  @OneToMany(() => Menu, (m) => m.webpage, { cascade: true })
+  menus: Menu[];
+
+  @OneToMany(() => WebpageSetting, (setting) => setting.webpage, {
+    cascade: true,
+  })
+  settings: WebpageSetting[];
+
+  @Column({ length: 100, nullable: true })
+  @AutoMap()
+  slug?: string;
+
+  @Column({
+    type: 'enum',
+    enum: PageType,
+    name: 'page_type',
+  })
+  @AutoMap()
+  pageType: PageType;
+
+  @Column({ length: 50, name: 'page_variant' })
+  @AutoMap()
+  pageVariant: string;
+
+  @Column({ length: 50, name: 'theme_code', nullable: true })
+  themeCode?: string;
+}
+class Webpage2 extends BaseEntity {
+  @ManyToOne(() => Website, (ws) => ws.pages)
+  @JoinColumn()
+  website: Website;
+
+  @Column()
+  websiteId: string;
+
+  // @OneToMany(() => WebpageBlock, (s) => s.webpage, { cascade: true })
+  // blocks?: WebpageBlock[];
 
   @OneToMany(() => Menu, (m) => m.webpage, { cascade: true })
   menus: Menu[];

@@ -3,9 +3,7 @@ import { Webpage } from './entities/webpage.entity';
 import { Menu } from 'src/menu/entities/menu.entity';
 import { WebpageBlock } from 'src/webpage-blocks/base-block/base-block.entity';
 import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
-import { SeoMetadataDto } from './dto/webpage.dto';
 import { PageType } from './entities/page-type';
-import { PageLayoutDto } from 'src/webpage-blocks/base-block/base-block.dto';
 
 interface IWebpageBuilder {
   getPage: () => Promise<Webpage>;
@@ -15,10 +13,10 @@ interface IWebpageBuilder {
     pageVariant: string,
   ) => Promise<IWebpageBuilder>;
   withTitle: (title: string, slug: string) => Promise<IWebpageBuilder>;
-  withSeoMetadata: (metadata: SeoMetadataDto) => Promise<IWebpageBuilder>;
+  // withSeoMetadata: (metadata: SeoMetadataDto) => Promise<IWebpageBuilder>;
   withMenu: (menus: Menu[]) => Promise<IWebpageBuilder>;
   withThemeCode: (themeCode: string) => Promise<IWebpageBuilder>;
-  withSections: (sections: WebpageBlock[]) => Promise<IWebpageBuilder>;
+  // withSections: (sections: WebpageBlock[]) => Promise<IWebpageBuilder>;
   withSettings: (settings: WebpageSetting[]) => Promise<IWebpageBuilder>;
 }
 
@@ -30,20 +28,12 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this.webpage;
   }
 
-  async create(pageType: PageType, pageVariant: string) {
+  async create(websiteId: string, pageType: PageType, pageVariant: string) {
     this.webpage = new Webpage();
     this.webpage.pageType = pageType;
     this.webpage.pageVariant = pageVariant;
     this.webpage.menus = [];
-    this.webpage.blocks = [];
 
-    return this;
-  }
-
-  async withLayoutOverrides(
-    config: Partial<PageLayoutDto>,
-  ): Promise<IWebpageBuilder> {
-    this.webpage.layoutOverrides = config;
     return this;
   }
 
@@ -58,12 +48,6 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this;
   }
 
-  async withSections(sections: WebpageBlock[]) {
-    if (!this.webpage.blocks) this.webpage.blocks = [];
-    this.webpage.blocks = [...this.webpage.blocks, ...sections];
-    return this;
-  }
-
   async withTitle(title: string, slug: string) {
     this.webpage.title = title;
     this.webpage.slug = slug;
@@ -75,8 +59,8 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this;
   }
 
-  async withSeoMetadata(metadata: SeoMetadataDto) {
-    this.webpage.seoMetadata = metadata;
-    return this;
-  }
+  // async withSeoMetadata(metadata: SeoMetadataDto) {
+  //   this.webpage.seoMetadata = metadata;
+  //   return this;
+  // }
 }

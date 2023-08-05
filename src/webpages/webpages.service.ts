@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common';
 import { Webpage } from './entities/webpage.entity';
 import { PageType } from 'src/webpages/entities/page-type';
 import { Repository, DataSource, InsertResult } from 'typeorm';
-import { WebpageBuilder } from './webpage-builder';
+
 import { CreateWebpageDto } from './dto/webpage.dto';
+import { WebpageBuilder } from './webpage-builder';
 
 @Injectable()
 export class WebpagesService {
@@ -95,13 +96,15 @@ export class WebpagesService {
     slug,
     themeCode,
   }: CreateWebpageDto): Promise<Webpage> {
-    const builder = await new WebpageBuilder().create(pageType, pageVariant);
+    const websiteId = 'someId';
+    const builder = await new WebpageBuilder().create(
+      websiteId,
+      pageType,
+      pageVariant,
+    );
 
     if (title && slug) await builder.withTitle(title, slug);
     if (themeCode) await builder.withThemeCode(themeCode);
-    if (layoutOverrides) {
-      await builder.withLayoutOverrides(layoutOverrides);
-    }
 
     return builder.getPage();
   }

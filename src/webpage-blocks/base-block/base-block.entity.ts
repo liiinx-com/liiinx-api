@@ -5,9 +5,9 @@ import { AutoMap } from '@automapper/classes';
 
 @Entity({ name: 'webpage_blocks' })
 export class WebpageBlock extends BaseEntity {
-  @ManyToOne(() => Webpage, (wp) => wp.blocks)
-  @JoinColumn()
-  webpage: Webpage;
+  // @ManyToOne(() => Webpage, (wp) => wp.blocks)
+  // @JoinColumn()
+  // webpage: Webpage;
 
   @Column()
   webpageId: string;

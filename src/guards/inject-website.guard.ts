@@ -1,27 +1,26 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
-import { Website } from 'src/websites/entities/website.entity';
+import { Webpage } from 'src/webpages/entities/webpage.entity';
 import { DataSource, Repository } from 'typeorm';
 
 @Injectable()
 export class InjectWebpageGuard implements CanActivate {
-  websiteRepository: Repository<Website>;
+  webpagesRepository: Repository<Webpage>;
 
   constructor(private dataSource: DataSource) {
-    this.websiteRepository = this.dataSource.getRepository(Website);
+    this.webpagesRepository = this.dataSource.getRepository(Webpage);
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const { headers, method, body } = request;
 
-    const handle = method === 'GET' ? headers['webpage-id'] : body['webpageId'];
-    if (!handle) return false;
+    const webpageId =
+      method === 'GET' ? headers['webpage-id'] : body['webpageId'];
+    if (!webpageId) return false;
 
-    // check token sites if this is user's website
-
-    const webpage = await this.websiteRepository.findOne({
+    const webpage = await this.webpagesRepository.findOne({
       where: {
-        handle,
+        id: webpageId,
         isDeleted: false,
       },
     });

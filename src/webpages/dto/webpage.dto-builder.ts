@@ -61,8 +61,8 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   async buildThemeDto() {
     this.resultPageDto.theme = await this.themeService.getThemeByCode(
       this.layout.themeCode,
-      this.layout.themeOverrides,
-      this.webpage.themeOverrides,
+      {}, //this.layout.themeOverrides,
+      {}, //this.webpage.themeOverrides,
     );
     return this;
   }
@@ -83,9 +83,7 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
       //   this.layout.menus,
       // ),
 
-      layoutConfig: await this.blockService.generatePageLayoutConfig(
-        this.layout.blocks,
-      ),
+      layoutConfig: await this.blockService.generatePageLayoutConfig([]),
 
       // sections: lodash.orderBy(
       //   [
@@ -103,9 +101,9 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   async buildPageDto() {
     this.resultPageDto.page = this.mapper.map(this.webpage, Webpage, PageDto);
 
-    this.resultPageDto.page.blocks = this.blockService.mapToBaseBlockDto(
-      this.webpage.blocks,
-    );
+    // this.resultPageDto.page.blocks = this.blockService.mapToBaseBlockDto(
+    //   this.webpage.blocks,
+    // );
 
     // if (this.resultPageDto.page.sections)
     //   this.resultPageDto.page.sections =
