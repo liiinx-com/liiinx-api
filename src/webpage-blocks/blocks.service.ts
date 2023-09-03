@@ -15,6 +15,8 @@ import { transformAndValidate } from 'class-transformer-validator';
 import { ValidationError } from 'class-validator';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
 import { RESOURCE_OR_ACTION_NOT_SUPPORTED } from 'src/shared/error-codes';
+import { PageLayoutDto } from './base-block/base-block.dto';
+import { FooterService } from './blocks/footer/footer.service';
 
 export class ExecuterFnParam<Payload> {
   resource: string;
@@ -39,6 +41,7 @@ export class BlockService {
     private readonly mapper: Mapper,
     private entityManager: EntityManager,
     private readonly headerService: HeaderService,
+    private readonly footerService: FooterService,
   ) {}
 
   async validatePayload(
@@ -136,11 +139,26 @@ export class BlockService {
     return null;
   }
 
-  async generatePageLayoutConfig_original(blocks: WebpageBlock[]) {
-    return null;
-  }
+  async generatePageLayoutConfig(
+    webPageId: string,
+    // blocks: WebpageBlock[],
+  ): Promise<PageLayoutDto> {
+    return {
+      dir: 'rtl',
+      footer: this.footerService.getByPageId(webPageId),
 
-  async generatePageLayoutConfig(blocks: WebpageBlock[]) {
-    return null;
+      header: {
+        blockContained: true,
+        blockType: 'header',
+        blockVariant: 'header1',
+        isActive: true,
+        textLogo: 'test is here',
+        textLogoClassName: 'there is no class',
+        textLogoStyle: { color: 'red' },
+        wrapperContained: true,
+      },
+      faviconUrl:
+        'https://pbwebmedia.nl/wp-content/uploads/2021/08/cropped-logo-bars-32x32.png',
+    };
   }
 }

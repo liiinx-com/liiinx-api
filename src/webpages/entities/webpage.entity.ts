@@ -19,9 +19,9 @@ export class Webpage extends BaseEntity {
   @Column()
   websiteId: string;
 
-  @Column({ length: 100, nullable: true })
+  @Column({ length: 100 })
   @AutoMap()
-  title?: string;
+  title: string;
 
   @OneToMany(() => Menu, (m) => m.webpage, { cascade: true })
   menus: Menu[];
@@ -31,9 +31,9 @@ export class Webpage extends BaseEntity {
   })
   settings: WebpageSetting[];
 
-  @Column({ length: 100, nullable: true })
+  @Column({ length: 100 })
   @AutoMap()
-  slug?: string;
+  slug: string;
 
   @Column({
     type: 'enum',
@@ -46,6 +46,10 @@ export class Webpage extends BaseEntity {
   @Column({ length: 50, name: 'page_variant' })
   @AutoMap()
   pageVariant: string;
+
+  @Column({ name: 'is_home_page', default: false })
+  @AutoMap()
+  isHomePage: boolean;
 
   @Column({ length: 50, name: 'theme_code', nullable: true })
   themeCode?: string;

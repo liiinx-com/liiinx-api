@@ -44,7 +44,7 @@ export class ThemeService {
       },
       footer: {
         style: {
-          backgroundColor: '#424242',
+          backgroundColor: '#fff',
         },
         wrapper: {
           style: {

@@ -1,4 +1,4 @@
-@layout_page_id=03f7a954-f928-4a06-8949-fc7bea222ab9
+@layout_page_id=bff3ee33-31ca-40d2-953a-9dddf5764886
 @home_page_id=650e7134-61af-42d4-a953-e3eb30cb26ca
 
 POST http://localhost:{{$dotenv PORT}}/blocks
@@ -8,7 +8,7 @@ Content-Type: application/json
   "webpageId": "{{layout_page_id}}",
   "actions": [
     {
-      "resource": "hero",
+      "resource": "header",
       "action": "add",
       "payload": {
         "blockType": "header",
@@ -16,11 +16,15 @@ Content-Type: application/json
         "isActive": true,
         "wrapperContained": false,
         "blockContained": true,
-        "blockOptions": {},
+        "blockOptions": {
+        "textLogo": "test is here",
+        "textLogoClassName": "there is no class",
+        "textLogoStyle": { "color":"red" }
+      }
+        },
         "order": 1,
         "sag": 2
       }
-    }
   ]
 }
 

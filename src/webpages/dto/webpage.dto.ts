@@ -35,6 +35,7 @@ export class CreateWebpageDto {
 }
 
 export class LayoutDto extends BasePageDto {
+  @AutoMap()
   handle: string;
 
   @AutoMap()
@@ -52,12 +53,15 @@ export class PageDto extends BasePageDto {
   @AutoMap()
   slug: string;
 
-  blocks: BaseBlockDto[];
+  // blocks: BaseBlockDto[];
 
   // layoutConfig?: Partial<PageLayoutDto>; // version 0.2
 
   @AutoMap()
   title: string;
+
+  @AutoMap()
+  isHomePage: boolean;
 
   @AutoMap()
   pageVariant: string;

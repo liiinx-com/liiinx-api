@@ -38,7 +38,7 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
     UsersModule,
     WebsitesModule,
-    WebpagesModule,
+    // WebpagesModule,
     // MenuModule,
     // SettingsModule,
     // ThemesModule,

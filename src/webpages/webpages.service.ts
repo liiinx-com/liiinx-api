@@ -22,8 +22,6 @@ export class WebpagesService {
     return {
       relations: {
         website: true,
-        settings: true,
-        blocks: true,
         menus: {
           parent: true,
         },

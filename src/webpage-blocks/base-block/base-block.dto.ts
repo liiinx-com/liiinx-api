@@ -7,6 +7,8 @@ import {
   IsString,
   IsInt,
 } from 'class-validator';
+import { HeaderBlockDto } from '../blocks/header/header.dto';
+import { FooterBlockDto } from '../blocks/footer/footer.dto';
 
 export class BaseBlockDto {
   @IsOptional()
@@ -63,10 +65,10 @@ export class PageLayoutDto {
   dir: 'ltr' | 'rtl';
   faviconUrl: string;
   topBar?: BaseBlockDto;
-  // header?: HeaderBlockDto;
+  header?: HeaderBlockDto;
   hero?: BaseBlockDto;
   sidebar?: BaseBlockDto;
   content?: BaseBlockDto;
-  footer?: BaseBlockDto;
+  footer?: FooterBlockDto;
   footerBar?: BaseBlockDto;
 }

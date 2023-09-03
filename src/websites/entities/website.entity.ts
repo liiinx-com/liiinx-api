@@ -10,6 +10,12 @@ export class Website extends BaseEntity {
   @Column()
   ownerId: string;
 
+  @Column({ name: 'custom_url', nullable: true })
+  customUrl?: string;
+
+  @Column({ name: 'subscription_plan', default: 'FREE' })
+  subscriptionPlan: string;
+
   @OneToMany(() => Webpage, (page) => page.website, { cascade: true })
   pages: Webpage[];
 }

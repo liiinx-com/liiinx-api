@@ -6,16 +6,10 @@ import { WebsitesController } from './websites.controller';
 import { WebsiteBuilder } from './website-builder';
 import { WebsitesFacadeService } from './websites.facade';
 import { WebpagesModule } from 'src/webpages/webpages.module';
-import { MenuModule } from 'src/menu/menu.module';
 import { ProfileModule } from 'src/profile/profile.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Website]),
-    WebpagesModule,
-    MenuModule,
-    ProfileModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Website]), WebpagesModule, ProfileModule],
   providers: [WebsitesService, WebsiteBuilder, WebsitesFacadeService],
   controllers: [WebsitesController],
 })

@@ -6,7 +6,6 @@ import { CreateWebsiteDto } from './dto/website.dto';
 import { WebpageDtoBuilder } from 'src/webpages/dto/webpage.dto-builder';
 import { CreateWebpageDto, WebpageDto } from 'src/webpages/dto/webpage.dto';
 import { PageType } from 'src/webpages/entities/page-type';
-import { MenuService } from 'src/menu/menu.service';
 import { ProfileService } from 'src/profile/profile.service';
 
 @Injectable()
@@ -14,7 +13,6 @@ export class WebsitesFacadeService {
   constructor(
     private websiteService: WebsitesService,
     private webpageService: WebpagesService,
-    private menuService: MenuService,
     private websiteBuilder: WebsiteBuilder,
     private webpageDtoBuilder: WebpageDtoBuilder,
     private profileService: ProfileService,
@@ -26,21 +24,20 @@ export class WebsitesFacadeService {
       throw new HttpException('ALREADY_EXIST', HttpStatus.CONFLICT);
     }
 
-    const newWebsite = await this.websiteService.save(
-      await this.websiteBuilder
-        .create(ownerId, websiteDto)
-        .then((builder) => builder.addLayout(themeCode))
-        .then((builder) => builder.getWebsite())
-        .catch((error) => {
-          console.error(error);
-          throw new HttpException(
-            'SERVER_ERROR',
-            HttpStatus.INTERNAL_SERVER_ERROR,
-          );
-        }),
-    );
-
-    // add to sync-content queue
+    const newWebsite = await this.websiteService
+      .save(
+        await this.websiteBuilder
+          .create(ownerId, websiteDto)
+          .then((builder) => builder.addLayout(themeCode))
+          .then((builder) => builder.getWebsite()),
+      )
+      .catch((error) => {
+        console.error(error);
+        throw new HttpException(
+          'SERVER_ERROR',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      });
 
     return newWebsite;
   }
@@ -62,11 +59,8 @@ export class WebsitesFacadeService {
   }
 
   async getWebpage(handle: string, pageSlug: string): Promise<WebpageDto> {
-    const website = await this.websiteService.getByHandle(handle);
-    if (!website)
-      throw new HttpException('WEBSITE_NOT_FOUND', HttpStatus.NOT_FOUND);
-
     const webpage = await this.webpageService.getBySlug(handle, pageSlug);
+
     if (!webpage)
       throw new HttpException('WEBPAGE_NOT_FOUND', HttpStatus.NOT_FOUND);
 
@@ -77,7 +71,6 @@ export class WebsitesFacadeService {
     if (!layout)
       throw new HttpException('LAYOUT_NOT_FOUND', HttpStatus.NOT_FOUND);
 
-    const menusDto = await this.menuService.getPageMenusDto(layout.id);
     const profileDto = this.profileService.mapToProfileDto(
       await this.profileService.getBy(layout.id),
     );
@@ -87,11 +80,11 @@ export class WebsitesFacadeService {
     // 2. merge with the webpage and layout
 
     return this.webpageDtoBuilder
-      .createDto(website, layout, webpage)
+      .createDto(layout, webpage)
       .then((builder) => builder.buildLayoutDto())
       .then((builder) => builder.buildPageDto())
       .then((builder) => builder.buildThemeDto())
-      .then((builder) => builder.withMenusDto(menusDto))
+      .then((builder) => builder.withMenusDto())
       .then((builder) => builder.withProfileDto(profileDto))
       .then((builder) => builder.getDto());
   }

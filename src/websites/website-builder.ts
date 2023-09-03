@@ -32,8 +32,8 @@ export class WebsiteBuilder implements IWebsiteBuilder {
     const layout = await this.webpagesService.createPage({
       pageType: PageType.LAYOUT,
       themeCode,
-      title: null,
-      slug: null,
+      title: 'LAYOUT',
+      slug: 'LAYOUT',
       pageVariant: variant,
     });
 
