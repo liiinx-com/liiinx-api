@@ -16,10 +16,12 @@ export class UserService {
   }
 
   async getUserByEmail(email: string): Promise<User> {
-    return this.userRepository.findOneBy({
-      email,
-      isActive: true,
-      isDeleted: false,
+    return this.userRepository.findOne({
+      where: {
+        email,
+        isActive: true,
+        isDeleted: false,
+      },
     });
   }
 

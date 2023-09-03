@@ -7,10 +7,13 @@ import {
   Param,
   Post,
   Query,
+  Request,
+  UseGuards,
 } from '@nestjs/common';
 import { WebsitesFacadeService } from './websites.facade';
 import { CreateWebsiteDto } from './dto/website.dto';
 import { CreateWebpageDto } from 'src/webpages/dto/webpage.dto';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
 @Controller('websites')
 export class WebsitesController {
@@ -26,8 +29,10 @@ export class WebsitesController {
   }
 
   @Post()
-  async newWebsite(@Body() websiteDto: CreateWebsiteDto) {
+  @UseGuards(JwtAuthGuard)
+  async newWebsite(@Request() { user }, @Body() websiteDto: CreateWebsiteDto) {
     const ownerId = 'someuserid';
+
     const newWebsite = await this.websitesFacadeService.newWebsite(
       ownerId,
       websiteDto,
@@ -37,16 +42,16 @@ export class WebsitesController {
   }
 
   @Post(':handle/pages')
+  @UseGuards(JwtAuthGuard)
   async newWebpage(
+    @Request() { user },
     @Param('handle') handle: string,
     @Body() webpageDto: CreateWebpageDto,
   ) {
-    const ownerId = 'someuserid';
     const newPage = await this.websitesFacadeService.newWebpage(
       handle,
       webpageDto,
     );
-    console.log('newPage :>> ', newPage);
 
     // if (!newWebsite.id)
     //   throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);

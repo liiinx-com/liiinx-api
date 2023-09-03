@@ -14,6 +14,7 @@ GET http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages/{{bio_page}}
 
 POST http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages
 Content-Type: application/json
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
 
 {
   "pageType":"HOME",
