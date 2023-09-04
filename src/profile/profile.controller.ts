@@ -7,17 +7,13 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ProfileDto } from './dto';
-import { WebpagesService } from 'src/webpages/webpages.service';
 import { ProfileService } from './profile.service';
 import { InjectWebpageGuard } from 'src/guards/inject-webpage.guard';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
 
 @Controller('profile')
 export class ProfileController {
-  constructor(
-    private webpageService: WebpagesService,
-    private profileService: ProfileService,
-  ) {}
+  constructor(private profileService: ProfileService) {}
 
   @Get(':webpageId')
   @UseGuards(InjectWebpageGuard)

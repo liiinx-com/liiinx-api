@@ -7,9 +7,14 @@ import { WebpageDtoBuilder } from 'src/webpages/dto/webpage.dto-builder';
 import { CreateWebpageDto, WebpageDto } from 'src/webpages/dto/webpage.dto';
 import { PageType } from 'src/webpages/entities/page-type';
 import { ProfileService } from 'src/profile/profile.service';
+import {
+  LAYOUT_NOT_FOUND,
+  WEBPAGE_NOT_FOUND,
+  WEBSITE_NOT_FOUND,
+} from 'src/shared/error-codes';
 
 @Injectable()
-export class WebsitesFacadeService {
+export class WebsiteFacadeService {
   constructor(
     private websiteService: WebsitesService,
     private webpageService: WebpagesService,
@@ -19,10 +24,13 @@ export class WebsitesFacadeService {
   ) {}
 
   async newWebsite(ownerId: string, websiteDto: CreateWebsiteDto) {
-    const { handle, themeCode } = websiteDto;
+    const { handle } = websiteDto;
+
     if (await this.websiteService.getByHandle(handle)) {
       throw new HttpException('ALREADY_EXIST', HttpStatus.CONFLICT);
     }
+
+    const themeCode = 'heem';
 
     const newWebsite = await this.websiteService
       .save(
@@ -49,7 +57,7 @@ export class WebsitesFacadeService {
     // TODO: move to a guard and other instances
     const website = await this.websiteService.getByHandle(handle);
     if (!website)
-      throw new HttpException('WEBSITE_NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException(WEBSITE_NOT_FOUND, HttpStatus.NOT_FOUND);
 
     const webpage = await this.webpageService.createPage(webpageDto);
     webpage.website = website;
@@ -62,18 +70,14 @@ export class WebsitesFacadeService {
     const webpage = await this.webpageService.getBySlug(handle, pageSlug);
 
     if (!webpage)
-      throw new HttpException('WEBPAGE_NOT_FOUND', HttpStatus.NOT_FOUND);
+      throw new HttpException(WEBPAGE_NOT_FOUND, HttpStatus.NOT_FOUND);
 
     const layout = await this.webpageService.getByPageType(
       handle,
       PageType.LAYOUT,
     );
     if (!layout)
-      throw new HttpException('LAYOUT_NOT_FOUND', HttpStatus.NOT_FOUND);
-
-    const profileDto = this.profileService.mapToProfileDto(
-      await this.profileService.getBy(layout.id),
-    );
+      throw new HttpException(LAYOUT_NOT_FOUND, HttpStatus.NOT_FOUND);
 
     // TODO: implement this
     // 1. build page based on the pageType with all the dynamic settings
@@ -85,7 +89,7 @@ export class WebsitesFacadeService {
       .then((builder) => builder.buildPageDto())
       .then((builder) => builder.buildThemeDto())
       .then((builder) => builder.withMenusDto())
-      .then((builder) => builder.withProfileDto(profileDto))
+      .then((builder) => builder.withProfileDto())
       .then((builder) => builder.getDto());
   }
 }

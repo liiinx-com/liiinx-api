@@ -22,8 +22,12 @@ export class WebsiteBuilder implements IWebsiteBuilder {
 
   async create(ownerId: string, params: CreateWebsiteDto) {
     this.params = params;
+    const { customUrl, handle } = this.params;
+
     this.website = new Website();
-    this.website.handle = this.params.handle;
+    this.website.handle = handle;
+    this.website.customUrl = customUrl;
+    this.website.subscriptionPlan = 'FREE';
     this.website.ownerId = ownerId;
     return this;
   }

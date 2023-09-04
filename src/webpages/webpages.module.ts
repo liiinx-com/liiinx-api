@@ -9,6 +9,7 @@ import { ThemesModule } from 'src/themes/themes.module';
 
 import { BlockModule } from 'src/webpage-blocks/blocks.module';
 import { MenuModule } from 'src/menu/menu.module';
+import { ProfileModule } from 'src/profile/profile.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { MenuModule } from 'src/menu/menu.module';
     ThemesModule,
     MenuModule,
     BlockModule,
+    ProfileModule,
   ],
   providers: [WebpagesService, WebpageMappingProfile, WebpageDtoBuilder],
   exports: [WebpagesService, WebpageDtoBuilder],

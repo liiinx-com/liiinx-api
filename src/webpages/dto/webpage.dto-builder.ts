@@ -8,8 +8,8 @@ import { ThemeService } from 'src/themes/themes.service';
 import { BlockService } from 'src/webpage-blocks/blocks.service';
 import { WebpagesService } from '../webpages.service';
 import { MenusDto } from 'src/menu/dto/menu.dto';
-import { ProfileDto } from 'src/profile/dto';
 import { MenuService } from 'src/menu/menu.service';
+import { ProfileService } from 'src/profile/profile.service';
 
 interface IWebpageDtoBuilder {
   createDto: (layout: Webpage, webpage: Webpage) => Promise<WebpageDtoBuilder>;
@@ -18,7 +18,7 @@ interface IWebpageDtoBuilder {
   buildPageDto: () => Promise<WebpageDtoBuilder>;
   buildThemeDto: () => Promise<WebpageDtoBuilder>;
   withMenusDto: () => Promise<WebpageDtoBuilder>;
-  withProfileDto: (profile: ProfileDto) => Promise<WebpageDtoBuilder>;
+  withProfileDto: () => Promise<WebpageDtoBuilder>;
 }
 
 @Injectable()
@@ -33,6 +33,7 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
     private webpageService: WebpagesService,
     private blockService: BlockService,
     private menuService: MenuService,
+    private profileService: ProfileService,
 
     @InjectMapper()
     private readonly mapper: Mapper,
@@ -46,13 +47,15 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
     return this;
   }
 
-  async withProfileDto(profile: ProfileDto) {
-    this.resultPageDto.profile = profile;
+  async withProfileDto() {
+    this.resultPageDto.profile = this.profileService.mapToProfileDto(
+      await this.profileService.getBy(this.layout.id),
+    );
     return this;
   }
 
   async withMenusDto() {
-    this.resultPageDto.layout.menus = await this.menuService.getPageMenusDto(
+    this.resultPageDto.menus = await this.menuService.getPageMenusDto(
       this.layout.id,
     );
     return this;
@@ -76,7 +79,6 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
       id: this.layout.id,
       variant: this.layout.pageVariant,
       handle: this.website.handle,
-      menus: {},
       layoutConfig: await this.blockService.generatePageLayoutConfig(
         this.layout.id,
       ),

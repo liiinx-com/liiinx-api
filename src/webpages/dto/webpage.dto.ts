@@ -42,8 +42,6 @@ export class LayoutDto extends BasePageDto {
   variant: string;
 
   layoutConfig: PageLayoutDto;
-
-  menus: MenusDto;
 }
 
 export class PageDto extends BasePageDto {
@@ -73,6 +71,7 @@ export class WebpageDto {
     this.page = new PageDto();
   }
   layout: LayoutDto;
+  menus: MenusDto;
   profile: ProfileDto;
   page: PageDto;
   theme: ThemeDto;

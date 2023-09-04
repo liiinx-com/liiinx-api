@@ -14,6 +14,18 @@ export class WebsitesService {
     return this.websitesRepository.save(website);
   }
 
+  async findAllByUser(id: string): Promise<Website[]> {
+    return this.websitesRepository.find({
+      where: {
+        isDeleted: false,
+        ownerId: id,
+      },
+      order: {
+        updatedAt: 'DESC',
+      },
+    });
+  }
+
   async findAll(): Promise<Website[]> {
     return this.websitesRepository.find();
   }
