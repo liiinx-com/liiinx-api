@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Webpage } from './entities/webpage.entity';
 import { PageType } from 'src/webpages/entities/page-type';
-import { Repository, DataSource, InsertResult } from 'typeorm';
-
+import { Repository, DataSource, InsertResult, Not } from 'typeorm';
 import { CreateWebpageDto } from './dto/webpage.dto';
 import { WebpageBuilder } from './webpage-builder';
 
@@ -43,6 +42,19 @@ export class WebpagesService {
       where: {
         ...params.where,
         pageType,
+      },
+    });
+  }
+
+  async getWebsitePages(handle: string) {
+    const params = this.getActiveWebpageWhereParams(handle);
+    return this.webpagesRepository.find({
+      where: {
+        ...params.where,
+        slug: Not(PageType.LAYOUT),
+      },
+      order: {
+        slug: 'ASC',
       },
     });
   }

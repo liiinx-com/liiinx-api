@@ -48,9 +48,9 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   }
 
   async withProfileDto() {
-    this.resultPageDto.profile = this.profileService.mapToProfileDto(
-      await this.profileService.getBy(this.layout.id),
-    );
+    // TODO: THIS IS THE PATTERN
+    this.resultPageDto.profile =
+      await this.profileService.getProfileDtoByLayoutId(this.layout.id);
     return this;
   }
 

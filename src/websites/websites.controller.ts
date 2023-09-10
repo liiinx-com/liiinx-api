@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { WebsiteFacadeService } from './websites.facade';
 import { CreateWebsiteDto, WebsiteDto } from './dto/website.dto';
-import { CreateWebpageDto } from 'src/webpages/dto/webpage.dto';
+import { CreateWebpageDto, PageDto } from 'src/webpages/dto/webpage.dto';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { WebsitesService } from './websites.service';
 import { User } from 'src/users/entities/user.entity';
@@ -20,12 +20,15 @@ import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { Website } from './entities/website.entity';
 import { BAD_REQUEST } from 'src/shared/error-codes';
+import { WebpagesService } from 'src/webpages/webpages.service';
+import { Webpage } from 'src/webpages/entities/webpage.entity';
 
 @Controller('websites')
 export class WebsitesController {
   constructor(
     private readonly websiteFacadeService: WebsiteFacadeService,
     private readonly websiteService: WebsitesService,
+    private readonly webpageService: WebpagesService,
     @InjectMapper()
     private mapper: Mapper,
   ) {}
@@ -34,6 +37,7 @@ export class WebsitesController {
   @UseGuards(JwtAuthGuard)
   async getMyWebsites(@Request() req): Promise<WebsiteDto[]> {
     const user: User = req.user;
+
     return this.mapper.mapArray(
       await this.websiteService.findAllByUser(user.id),
       Website,
@@ -48,7 +52,11 @@ export class WebsitesController {
     @Param('handle') handle: string,
     @Query('lang') lang = 'EN',
   ) {
-    return 'shish'; //this.websiteFacadeService.getWebpage(handle, pageSlug);
+    return this.mapper.mapArray(
+      await this.webpageService.getWebsitePages(handle),
+      Webpage,
+      PageDto,
+    );
   }
 
   @Get(':handle/pages/:slug')
