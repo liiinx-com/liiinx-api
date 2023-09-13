@@ -4,22 +4,27 @@ import {
   ArrayMaxSize,
   ArrayMinSize,
   IsArray,
+  IsEnum,
+  IsNotEmpty,
   IsObject,
   IsString,
   IsUUID,
+  ValidateIf,
   ValidateNested,
 } from 'class-validator';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
-import {
-  BaseActionPayloadDto,
-  BaseUIBlockPayloadDto,
-} from './block-actions.dto';
+import { BaseActionPayloadDto } from './block-actions.dto';
 
-export class CreateBaseUIBlockPayloadDto extends BaseUIBlockPayloadDto {}
-export class PatchBaseUIBlockPayloadDto extends BaseUIBlockPayloadDto {
+export class FetchBaseUIBlockPayloadDto {
   @IsUUID()
   @AutoMap()
   blockId: string;
+}
+
+export enum PatchActionChangeTypes {
+  BASE_BLOCK_ONLY = 'BASE_BLOCK_ONLY',
+  BLOCK_ONLY = 'BLOCK_ONLY',
+  BOTH = 'BOTH',
 }
 
 export class DeleteBaseUIBlockPayloadDto {
@@ -28,13 +33,21 @@ export class DeleteBaseUIBlockPayloadDto {
   blockId: string;
 }
 
-export class BlockTargetAction {
+export class BlockAction {
   @AutoMap()
   @IsString()
+  @IsNotEmpty()
   resource: string;
 
   @AutoMap()
+  @IsEnum(PatchActionChangeTypes)
+  @ValidateIf((o) => o.action && o.action.toLowerCase() === 'patch')
+  // in case of "patch" action, indicates what the changes include
+  patchActionUpdates?: PatchActionChangeTypes;
+
+  @AutoMap()
   @IsString()
+  @IsNotEmpty()
   action: string;
 
   @AutoMap(() => BaseActionPayloadDto)
@@ -48,13 +61,14 @@ export class BlockActionsRequest {
   webpageId: string;
 
   @IsObject()
-  injectedWebpage: Webpage; // auto-injected by @UseGuards(InjectWebpageGuard)
+  // auto-injected by @UseGuards(InjectWebpageGuard)
+  injectedWebpage: Webpage;
 
-  @AutoMap(() => BlockTargetAction)
+  @AutoMap(() => BlockAction)
   @IsArray()
   @ArrayMinSize(1)
   @ArrayMaxSize(5)
   @ValidateNested({ each: true })
-  @Type(() => BlockTargetAction)
-  actions: BlockTargetAction[];
+  @Type(() => BlockAction)
+  actions: BlockAction[];
 }

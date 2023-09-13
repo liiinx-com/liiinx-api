@@ -1,20 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { Webpage } from './entities/webpage.entity';
-import { PageType } from 'src/webpages/entities/page-type';
-import { Repository, DataSource, InsertResult, Not } from 'typeorm';
-import { CreateWebpageDto } from './dto/webpage.dto';
+import { PageType, getPaySlugByType } from 'src/webpages/entities/page-type';
+import { Repository, DataSource, Not, EntityManager } from 'typeorm';
+import { CreateWebpageDto, PageBlockDto } from './dto/webpage.dto';
 import { WebpageBuilder } from './webpage-builder';
+
+const DEFAULT_FAVICON_URL = 'liiinx-favicon-url';
 
 @Injectable()
 export class WebpagesService {
   webpagesRepository: Repository<Webpage>;
 
-  constructor(private dataSource: DataSource) {
+  constructor(
+    private dataSource: DataSource,
+    private webpageBuilder: WebpageBuilder,
+  ) {
     this.webpagesRepository = this.dataSource.getRepository(Webpage);
   }
 
-  async save(webpage: Webpage): Promise<Webpage> {
-    return this.webpagesRepository.save(webpage);
+  async saveUsingManager(
+    manager: EntityManager,
+    webpage: Webpage,
+  ): Promise<Webpage> {
+    const webpageRepository = manager.getRepository(Webpage);
+    return webpageRepository.save(webpage);
   }
 
   private getActiveWebpageWhereParams(websiteHandle: string) {
@@ -82,49 +91,77 @@ export class WebpagesService {
     });
   }
 
-  // async getLayoutForPage(handle: string, webpage: Webpage): Promise<Webpage> {
-  //   if (webpage.customLayoutVariant) {
-  //     return this.webpageFactory.buildEmptyLayoutPage(
-  //       webpage.customLayoutVariant,
-  //     );
-  //   }
-  //   return this.getByPageType(handle, PageTypes.LAYOUT);
-  // }
-
-  // async createPagesByTemplate(templateName: string): Promise<Webpage[]> {
-  //   return Promise.all([
-  //     this.webpageFactory.buildLayoutPage(),
-  //     this.webpageFactory.buildHomePage(),
-  //   ]);
-  // }
-
-  async createPage({
-    pageType,
-    pageVariant,
-    title,
-    layoutOverrides,
-    slug,
-    themeCode,
-  }: CreateWebpageDto): Promise<Webpage> {
-    const websiteId = 'someId';
-    const builder = await new WebpageBuilder().create(
-      websiteId,
+  // TODO: implement this
+  private async mapToPageDto(pageEntity: Webpage): Promise<PageBlockDto> {
+    const { id, pageType, pageVariant } = pageEntity;
+    // this.mapper.map(this.webpage, Webpage, PageBlockDto);
+    return {
+      id,
+      blocks: [],
       pageType,
       pageVariant,
+    };
+  }
+
+  async getPageDtoFrom(pageEntity: Webpage): Promise<PageBlockDto> {
+    const pageDto = await this.mapToPageDto(pageEntity);
+    // override or inject settings/... here
+    return pageDto;
+  }
+
+  async createLayout(
+    manager: EntityManager,
+    websiteId: string,
+    params: CreateWebpageDto,
+  ): Promise<Webpage> {
+    params.pageType = PageType.LAYOUT;
+    params.slug = getPaySlugByType(params.pageType);
+
+    const layoutBuilder = await this.initPageBuilder(
+      manager,
+      websiteId,
+      params,
     );
 
-    if (title && slug) await builder.withTitle(title, slug);
-    if (themeCode) await builder.withThemeCode(themeCode);
-
-    return builder.getPage();
+    return layoutBuilder.getPage();
   }
 
-  async saveBulk(webpages: Webpage[]): Promise<InsertResult> {
-    return this.dataSource
-      .createQueryBuilder()
-      .insert()
-      .into(Webpage)
-      .values(webpages)
-      .execute();
+  async createPage(
+    manager: EntityManager,
+    websiteId: string,
+    params: CreateWebpageDto,
+  ): Promise<Webpage> {
+    const pageBuilder = await this.initPageBuilder(manager, websiteId, params);
+    return pageBuilder.getPage();
   }
+
+  private async initPageBuilder(
+    manager: EntityManager,
+    websiteId: string,
+    params: CreateWebpageDto,
+  ): Promise<WebpageBuilder> {
+    const { title, slug, themeCode } = params;
+
+    params.isRtl = !!params.isRtl;
+    params.faviconUrl = params.faviconUrl || DEFAULT_FAVICON_URL;
+
+    const builder = await this.webpageBuilder
+      .reset()
+      .then((builder) => builder.create(manager, websiteId, params))
+      .then((builder) => builder.withTitle(title, slug))
+      .then((builder) => builder.withThemeCode(themeCode));
+
+    await this.saveUsingManager(manager, await builder.getPage());
+
+    return builder;
+  }
+
+  // async saveBulk(webpages: Webpage[]): Promise<InsertResult> {
+  //   return this.dataSource
+  //     .createQueryBuilder()
+  //     .insert()
+  //     .into(Webpage)
+  //     .values(webpages)
+  //     .execute();
+  // }
 }

@@ -5,3 +5,5 @@ export enum PageType {
   CONTACT = 'CONTACT',
   BIO = 'BIO',
 }
+
+export const getPaySlugByType = (type: PageType) => type.toLowerCase();

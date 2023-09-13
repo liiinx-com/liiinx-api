@@ -12,5 +12,8 @@ Authorization: Bearer {{$dotenv JWT_TOKEN}}
 
 {
   "handle": "salamat-trading",
+  "title": "Salamat Trading Broker",
+  "description": "Your Trusted Crypto Broker",
+  "isRtl": true
 }
 

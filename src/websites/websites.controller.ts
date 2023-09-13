@@ -47,6 +47,7 @@ export class WebsitesController {
 
   @Get(':handle/pages/')
   @UseGuards(JwtAuthGuard)
+  // TODO: websiteExists(handle)Guard
   async getWebsitePages(
     @Request() { user },
     @Param('handle') handle: string,
@@ -60,16 +61,22 @@ export class WebsitesController {
   }
 
   @Get(':handle/pages/:slug')
+  // TODO: websiteExists(handle)Guard
+  // TODO: webpageExistsGuard
   async getPage(
     @Param('handle') handle: string,
     @Param('slug') pageSlug = 'home',
     @Query('lang') lang = 'EN',
   ) {
-    return this.websiteFacadeService.getWebpage(handle, pageSlug);
+    console.log('object');
+    const result = await this.websiteFacadeService.getWebpage(handle, pageSlug);
+    console.log('result :>> ', result);
+    return result;
   }
 
   @Post()
   @UseGuards(JwtAuthGuard)
+  // TODO: websiteNotExistsGuard
   async newWebsite(@Request() { user }, @Body() websiteDto: CreateWebsiteDto) {
     const newWebsite = await this.websiteFacadeService.newWebsite(
       user.id,
@@ -81,6 +88,7 @@ export class WebsitesController {
 
   @Post(':handle/pages')
   @UseGuards(JwtAuthGuard)
+  // TODO: websiteExists(handle)Guard
   async newWebpage(
     @Request() { user },
     @Param('handle') handle: string,

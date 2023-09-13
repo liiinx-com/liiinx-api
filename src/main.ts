@@ -1,7 +1,11 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { urlencoded, json } from 'express';
+import { AllExceptionsFilter } from './all-exceptions.filter';
+
+const JSON_SIZE_LIMIT = '50mb';
+const DEFAULT_PORT = 3000;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,8 +16,11 @@ async function bootstrap() {
       transform: true,
     }),
   );
-  app.use(json({ limit: '50mb' }));
-  app.use(urlencoded({ extended: true, limit: '50mb' }));
-  await app.listen(process.env.PORT || 3000);
+  const { httpAdapter } = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
+
+  app.use(json({ limit: JSON_SIZE_LIMIT }));
+  app.use(urlencoded({ extended: true, limit: JSON_SIZE_LIMIT }));
+  await app.listen(process.env.PORT || DEFAULT_PORT);
 }
 bootstrap();

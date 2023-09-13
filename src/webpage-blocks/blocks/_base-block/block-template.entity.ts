@@ -6,7 +6,7 @@ export class BlockTemplateEntity {
   @AutoMap()
   id: string;
 
-  @Column()
+  @Column({ name: 'base_block_id' })
   @AutoMap()
   baseBlockId: string;
 }

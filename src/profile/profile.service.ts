@@ -45,12 +45,6 @@ export class ProfileService {
       copyrightText: `© Copyright ${new Date().getFullYear()}. All Rights Reserved.`,
       termsText: 'default terms text',
       privacyText: 'default privacy text',
-      headerLogo: {
-        textLogo: 'My Header Text Logo',
-      },
-      footerLogo: {
-        textLogo: 'My Footer Text Logo',
-      },
     };
 
     return lodash.merge(pageProfile, defaultProfile);
