@@ -8,14 +8,20 @@ import { CreateWebpageDto, WebpageDto } from 'src/webpages/dto/webpage.dto';
 import { PageType } from 'src/webpages/entities/page-type';
 import { ProfileService } from 'src/profile/profile.service';
 import {
+  ALREADY_EXIST,
   LAYOUT_NOT_FOUND,
+  SERVER_ERROR,
   WEBPAGE_NOT_FOUND,
   WEBSITE_NOT_FOUND,
 } from 'src/shared/error-codes';
+import { EntityManager } from 'typeorm';
+import { Website } from './entities/website.entity';
+import { Webpage } from 'src/webpages/entities/webpage.entity';
 
 @Injectable()
 export class WebsiteFacadeService {
   constructor(
+    private entityManager: EntityManager,
     private websiteService: WebsitesService,
     private webpageService: WebpagesService,
     private websiteBuilder: WebsiteBuilder,
@@ -23,30 +29,25 @@ export class WebsiteFacadeService {
     private profileService: ProfileService,
   ) {}
 
-  async newWebsite(ownerId: string, websiteDto: CreateWebsiteDto) {
+  async newWebsite(
+    ownerId: string,
+    websiteDto: CreateWebsiteDto,
+  ): Promise<Website> {
     const { handle } = websiteDto;
 
     if (await this.websiteService.getByHandle(handle)) {
-      throw new HttpException('ALREADY_EXIST', HttpStatus.CONFLICT);
+      throw new HttpException(ALREADY_EXIST, HttpStatus.CONFLICT);
     }
 
     const themeCode = 'heem';
 
-    const newWebsite = await this.websiteService
-      .save(
-        await this.websiteBuilder
-          .create(ownerId, websiteDto)
-          .then((builder) => builder.addLayout(themeCode))
-          .then((builder) => builder.getWebsite()),
-      )
-      .catch((error) => {
-        console.error(error);
-        throw new HttpException(
-          'SERVER_ERROR',
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-      });
-
+    let newWebsite: Website = null;
+    await this.entityManager.transaction(async (manager) => {
+      newWebsite = await this.websiteBuilder
+        .create(manager, ownerId, websiteDto)
+        .then((builder) => builder.addLayout(themeCode))
+        .then((builder) => builder.getWebsite());
+    });
     return newWebsite;
   }
 
@@ -59,11 +60,21 @@ export class WebsiteFacadeService {
     if (!website)
       throw new HttpException(WEBSITE_NOT_FOUND, HttpStatus.NOT_FOUND);
 
-    const webpage = await this.webpageService.createPage(webpageDto);
-    webpage.website = website;
-    await this.webpageService.save(webpage);
-
-    return 'WEBPAGE_CREATED';
+    try {
+      let newWebpage: Webpage = null;
+      await this.entityManager.transaction(async (manager) => {
+        newWebpage = await this.webpageService.createPage(
+          manager,
+          website.id,
+          webpageDto,
+        );
+        // return newWebpage;
+      });
+      return 'WEBPAGE_CREATED';
+    } catch (e) {
+      console.error(e);
+      throw new HttpException(SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   async getWebpage(handle: string, pageSlug: string): Promise<WebpageDto> {

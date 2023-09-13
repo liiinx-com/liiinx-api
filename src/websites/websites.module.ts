@@ -8,6 +8,7 @@ import { WebsiteFacadeService } from './websites.facade';
 import { WebpagesModule } from 'src/webpages/webpages.module';
 import { ProfileModule } from 'src/profile/profile.module';
 import { WebSiteMappingProfile } from './website.mapping-profile';
+import { BlockModule } from 'src/webpage-blocks/blocks.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Website]), WebpagesModule, ProfileModule],

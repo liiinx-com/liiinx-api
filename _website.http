@@ -11,6 +11,6 @@ Content-Type: application/json
 Authorization: Bearer {{$dotenv JWT_TOKEN}}
 
 {
-  "handle": "salamat-trading",
+  "handle": "salamat-trading"
 }
 

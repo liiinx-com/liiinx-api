@@ -1,53 +1,92 @@
 import { AutoMap } from '@automapper/classes';
 import { PartialType } from '@nestjs/mapped-types';
-import { IsObject, IsOptional, IsString, IsUUID } from 'class-validator';
-import { BaseBlockDto } from 'src/webpage-blocks/base-block/base-block.dto';
 import {
-  CreateBaseUIBlockPayloadDto,
+  IsObject,
+  IsOptional,
+  IsString,
+  IsUUID,
+  ValidateIf,
+} from 'class-validator';
+import {
+  BaseBlockResponseDto,
+  PatchBaseBlockDto,
+} from 'src/webpage-blocks/blocks/_base-block/base-block.dto';
+import {
   DeleteBaseUIBlockPayloadDto,
-  PatchBaseUIBlockPayloadDto,
+  FetchBaseUIBlockPayloadDto,
 } from 'src/webpage-blocks/dto/block-request.dto';
 
-export class HeaderBlockDto extends BaseBlockDto {
+export class HeaderBlockDto extends BaseBlockResponseDto {
+  constructor() {
+    super();
+    this.blockType = 'header';
+  }
+
   @IsString()
   @AutoMap()
-  textLogo: string;
+  @ValidateIf((o: HeaderBlockDto) => !o.imageLogoUrl)
+  textLogo?: string;
 
   @IsObject()
   @AutoMap()
-  textLogoStyle: object;
+  @IsOptional()
+  textLogoProps?: object;
 
   @IsString()
   @AutoMap()
-  textLogoClassName: string;
+  @ValidateIf((o: HeaderBlockDto) => !o.textLogo)
+  imageLogoUrl?: string;
+
+  @IsObject()
+  @IsOptional()
+  @AutoMap()
+  imageLogoProps?: object;
+
+  @IsString()
+  @AutoMap()
+  @IsOptional()
+  @ValidateIf((o: HeaderBlockDto) => !!o.textLogo)
+  slogan?: string;
+
+  @IsObject()
+  @AutoMap()
+  @IsOptional()
+  sloganProps?: object;
 }
 
-export class CreateHeaderBlockPayload extends CreateBaseUIBlockPayloadDto {
-  @IsString()
-  @AutoMap()
-  textLogo: string;
-
-  @IsString()
-  @AutoMap()
-  textLogoClassName: string;
-}
-
-export class DeleteHeaderBlockPayload extends DeleteBaseUIBlockPayloadDto {}
-
-export class PatchHeaderBlockPayload extends PartialType(
-  PatchBaseUIBlockPayloadDto,
-) {
-  @IsUUID()
-  @AutoMap()
-  blockId: string;
-
+class PatchHeaderBlockDto extends PatchBaseBlockDto {
   @IsString()
   @AutoMap()
   @IsOptional()
   textLogo?: string;
 
+  @IsObject()
+  @AutoMap()
+  @IsOptional()
+  textLogoProps?: object;
+
   @IsString()
   @AutoMap()
   @IsOptional()
-  textLogoClassName?: string;
+  imageLogoUrl?: string;
+
+  @IsObject()
+  @IsOptional()
+  @AutoMap()
+  imageLogoProps?: object;
+
+  @IsString()
+  @AutoMap()
+  @IsOptional()
+  slogan?: string;
+
+  @IsObject()
+  @AutoMap()
+  @IsOptional()
+  sloganProps?: object;
 }
+
+export class FetchHeaderBlockPayload extends FetchBaseUIBlockPayloadDto {}
+export class CreateHeaderBlockPayload extends HeaderBlockDto {}
+export class PatchHeaderBlockPayload extends PatchHeaderBlockDto {}
+export class DeleteHeaderBlockPayload extends DeleteBaseUIBlockPayloadDto {}

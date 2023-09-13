@@ -15,7 +15,7 @@ export class BaseEntity {
   @AutoMap()
   isActive: boolean;
 
-  @Column({ type: 'boolean', default: false, name: 'is_archive' })
+  @Column({ type: 'boolean', default: false, name: 'is_archived' })
   @AutoMap()
   isArchived: boolean; // visible to user
 

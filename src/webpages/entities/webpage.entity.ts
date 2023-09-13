@@ -5,10 +5,10 @@ import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.en
 import { AutoMap } from '@automapper/classes';
 import { Menu } from 'src/menu/entities/menu.entity';
 import { SeoMetadataDto } from '../dto/webpage.dto';
-import { WebpageBlock } from '../../webpage-blocks/base-block/base-block.entity';
+import { WebpageBlock } from '../../webpage-blocks/blocks/_base-block/base-block.entity';
 import { PageType } from './page-type';
 import { ThemeDto } from 'src/themes/dto/theme.dto';
-import { PageLayoutDto } from 'src/webpage-blocks/base-block/base-block.dto';
+import { PageLayoutDto } from 'src/webpage-blocks/blocks/_base-block/base-block.dto';
 
 @Entity({ name: 'website_pages' })
 export class Webpage extends BaseEntity {
@@ -53,6 +53,9 @@ export class Webpage extends BaseEntity {
 
   @Column({ length: 50, name: 'theme_code', nullable: true })
   themeCode?: string;
+
+  @OneToMany(() => WebpageBlock, (s) => s.webpage, { cascade: true })
+  blocks?: WebpageBlock[];
 }
 class Webpage2 extends BaseEntity {
   @ManyToOne(() => Website, (ws) => ws.pages)
