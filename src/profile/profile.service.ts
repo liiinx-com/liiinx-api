@@ -36,17 +36,15 @@ export class ProfileService {
     return this.mapper.map(profileDto, ProfileDto, Profile);
   }
 
+  async getProfileDtoByLayoutId(layoutId: string) {
+    return this.mapToProfileDto(await this.getBy(layoutId));
+  }
+
   private generateProfile(pageProfile: Profile): Profile {
     const defaultProfile: Partial<Profile> = {
       copyrightText: `© Copyright ${new Date().getFullYear()}. All Rights Reserved.`,
       termsText: 'default terms text',
       privacyText: 'default privacy text',
-      headerLogo: {
-        textLogo: '',
-      },
-      footerLogo: {
-        textLogo: ' ',
-      },
     };
 
     return lodash.merge(pageProfile, defaultProfile);

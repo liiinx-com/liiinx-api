@@ -6,9 +6,9 @@ import { ThemeDto } from 'src/themes/dto/theme.dto';
 import { ProfileDto } from 'src/profile/dto';
 import { BaseEntityDto } from 'src/shared/base.dto';
 import {
-  BaseBlockDto,
+  BaseBlockResponseDto,
   PageLayoutDto,
-} from 'src/webpage-blocks/base-block/base-block.dto';
+} from 'src/webpage-blocks/blocks/_base-block/base-block.dto';
 
 export class SeoMetadataDto {}
 
@@ -35,14 +35,13 @@ export class CreateWebpageDto {
 }
 
 export class LayoutDto extends BasePageDto {
+  @AutoMap()
   handle: string;
 
   @AutoMap()
   variant: string;
 
   layoutConfig: PageLayoutDto;
-
-  menus: MenusDto;
 }
 
 export class PageDto extends BasePageDto {
@@ -52,12 +51,15 @@ export class PageDto extends BasePageDto {
   @AutoMap()
   slug: string;
 
-  blocks: BaseBlockDto[];
+  // blocks: BaseBlockDto[];
 
   // layoutConfig?: Partial<PageLayoutDto>; // version 0.2
 
   @AutoMap()
   title: string;
+
+  @AutoMap()
+  isHomePage: boolean;
 
   @AutoMap()
   pageVariant: string;
@@ -69,6 +71,7 @@ export class WebpageDto {
     this.page = new PageDto();
   }
   layout: LayoutDto;
+  menus: MenusDto;
   profile: ProfileDto;
   page: PageDto;
   theme: ThemeDto;

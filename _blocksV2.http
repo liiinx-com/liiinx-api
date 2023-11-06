@@ -1,69 +1,10 @@
-@layout_page_id=03f7a954-f928-4a06-8949-fc7bea222ab9
-@home_page_id=650e7134-61af-42d4-a953-e3eb30cb26ca
+@layout_page_id=209a129f-342d-4ecb-b80a-8aa6f61e5030
+
+@header_block_id=db6e194c-a66d-4ca0-be85-60e6a1b0c155
 
 POST http://localhost:{{$dotenv PORT}}/blocks
 Content-Type: application/json
-
-{
-  "webpageId": "{{layout_page_id}}",
-  "actions": [
-    {
-      "resource": "hero",
-      "action": "add",
-      "payload": {
-        "blockType": "header",
-        "blockVariant": "header1",
-        "isActive": true,
-        "wrapperContained": false,
-        "blockContained": true,
-        "blockOptions": {},
-        "order": 1,
-        "sag": 2
-      }
-    }
-  ]
-}
-
-###
-
-POST http://localhost:{{$dotenv PORT}}/blocks
-Content-Type: application/json
-
-{
-  "webpageId": "{{layout_page_id}}",
-  "actions": [
-    {
-      "resource": "hero",
-      "action": "delete",
-      "payload": {
-        "id": "sample-hero-block-id"
-      }
-    }
-  ]
-}
-
-###
-
-POST http://localhost:{{$dotenv PORT}}/blocks
-Content-Type: application/json
-
-{
-  "webpageId": "{{layout_page_id}}",
-  "actions": [
-    {
-      "resource": "hero",
-      "action": "update",
-      "payload": {
-        "id": "sample-hero-block-id"
-      }
-    }
-  ]
-}
-
-###
-
-POST http://localhost:{{$dotenv PORT}}/blocks
-Content-Type: application/json
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
 
 {
   "webpageId": "{{layout_page_id}}",
@@ -73,12 +14,10 @@ Content-Type: application/json
       "action": "create",
       "payload": {
         "blockVariant": "header1",
-        "isActive": true,
         "wrapperContained": true,
         "blockContained": true,
-        "order": 2,
         "textLogo": "toranjMedia",
-        "textLogoStyle": {"color": "red"},
+        "textLogoProps": {"color": "blue"},
         "textLogoClassName": "sample-class-name"
         
       }
@@ -90,6 +29,7 @@ Content-Type: application/json
 
 POST http://localhost:{{$dotenv PORT}}/blocks
 Content-Type: application/json
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
 
 {
   "webpageId": "{{layout_page_id}}",
@@ -97,10 +37,16 @@ Content-Type: application/json
     {
       "resource": "header",
       "action": "patch",
+      "patchActionUpdates": "BOTH",
       "payload": {
-        "blockVariant": "header2",       
-        "wrapperContained": true,
-        "textLogoClassName": "sample-class-name"
+        "blockId": "{{header_block_id}}",
+        # "blockVariant": "header1",
+        # "blockType": "na na na",
+        "isLtr": false,
+        # "blockStyle": {"backgroundColor": "silver"},
+        # "textLogo": "Salamat Trading II"
+        # "slogan": "Your Trusted Broker",
+        "textLogoProps": {"color": "green"}
       }
     }
   ]
@@ -111,6 +57,7 @@ Content-Type: application/json
 
 POST http://localhost:{{$dotenv PORT}}/blocks
 Content-Type: application/json
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
 
 {
   "webpageId": "{{layout_page_id}}",
@@ -119,7 +66,27 @@ Content-Type: application/json
       "resource": "header",
       "action": "delete",
       "payload": {
-        "blockId": "{{layout_page_id}}"
+        "blockId": "{{header_block_id}}"
+      }
+    }
+  ]
+}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/blocks
+Content-Type: application/json
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+
+{
+  "webpageId": "{{layout_page_id}}",
+  "actions": [
+    {
+      "resource": "header",
+      "action": "fetch",
+      "payload": {
+        "blockId": "{{header_block_id}}"
+        # "blockId": "dcfe0b23-ee06-4d66-90ab-444c49781a90"
       }
     }
   ]

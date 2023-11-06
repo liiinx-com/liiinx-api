@@ -5,10 +5,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { MenuBuilder } from './menu-builder';
 import { MenuMappingProfile } from './menu.mapping-profile';
 import { MenuController } from './menu.controller';
-import { WebpagesModule } from 'src/webpages/webpages.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Menu]), WebpagesModule],
+  imports: [TypeOrmModule.forFeature([Menu])],
   controllers: [MenuController],
   providers: [MenuService, MenuBuilder, MenuMappingProfile],
   exports: [MenuService],

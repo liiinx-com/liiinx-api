@@ -8,20 +8,17 @@ import { ThemeService } from 'src/themes/themes.service';
 import { BlockService } from 'src/webpage-blocks/blocks.service';
 import { WebpagesService } from '../webpages.service';
 import { MenusDto } from 'src/menu/dto/menu.dto';
-import { ProfileDto } from 'src/profile/dto';
+import { MenuService } from 'src/menu/menu.service';
+import { ProfileService } from 'src/profile/profile.service';
 
 interface IWebpageDtoBuilder {
-  createDto: (
-    website: Website,
-    layout: Webpage,
-    webpage: Webpage,
-  ) => Promise<WebpageDtoBuilder>;
+  createDto: (layout: Webpage, webpage: Webpage) => Promise<WebpageDtoBuilder>;
   getDto: () => Promise<WebpageDto>;
-  buildLayoutDto: () => Promise<WebpageDtoBuilder>;
+  buildLayoutDto: (menus: MenusDto) => Promise<WebpageDtoBuilder>;
   buildPageDto: () => Promise<WebpageDtoBuilder>;
   buildThemeDto: () => Promise<WebpageDtoBuilder>;
-  withProfileDto: (profile: ProfileDto) => Promise<WebpageDtoBuilder>;
-  withMenusDto: (menus: MenusDto) => Promise<WebpageDtoBuilder>;
+  withMenusDto: () => Promise<WebpageDtoBuilder>;
+  withProfileDto: () => Promise<WebpageDtoBuilder>;
 }
 
 @Injectable()
@@ -35,34 +32,40 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
     private themeService: ThemeService,
     private webpageService: WebpagesService,
     private blockService: BlockService,
+    private menuService: MenuService,
+    private profileService: ProfileService,
 
     @InjectMapper()
     private readonly mapper: Mapper,
   ) {}
 
-  async createDto(website: Website, layout: Webpage, webpage: Webpage) {
+  async createDto(layout: Webpage, webpage: Webpage) {
     this.resultPageDto = new WebpageDto();
-    this.website = website;
+    this.website = webpage.website;
     this.layout = layout;
     this.webpage = webpage;
     return this;
   }
 
-  async withProfileDto(profile: ProfileDto) {
-    this.resultPageDto.profile = profile;
+  async withProfileDto() {
+    // TODO: THIS IS THE PATTERN
+    this.resultPageDto.profile =
+      await this.profileService.getProfileDtoByLayoutId(this.layout.id);
     return this;
   }
 
-  async withMenusDto(menus: MenusDto) {
-    this.resultPageDto.layout.menus = menus;
+  async withMenusDto() {
+    this.resultPageDto.menus = await this.menuService.getPageMenusDto(
+      this.layout.id,
+    );
     return this;
   }
 
   async buildThemeDto() {
     this.resultPageDto.theme = await this.themeService.getThemeByCode(
       this.layout.themeCode,
-      this.layout.themeOverrides,
-      this.webpage.themeOverrides,
+      {}, //this.layout.themeOverrides,
+      {}, //this.webpage.themeOverrides,
     );
     return this;
   }
@@ -74,27 +77,11 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   async buildLayoutDto() {
     this.resultPageDto.layout = {
       id: this.layout.id,
-
       variant: this.layout.pageVariant,
       handle: this.website.handle,
-      menus: {},
-      // menus: await this.menuService.addDynamicMenus(
-      //   this.templateName,
-      //   this.layout.menus,
-      // ),
-
       layoutConfig: await this.blockService.generatePageLayoutConfig(
-        this.layout.blocks,
+        this.layout.id,
       ),
-
-      // sections: lodash.orderBy(
-      //   [
-      //     ...this.sectionService.mapToPageSectionsDto(this.layout.sections),
-      //     ...(await this.sectionService.addDynamicLayoutSections()),
-      //   ],
-      //   ['order'],
-      //   ['asc'],
-      // ),
     };
 
     return this;
@@ -102,21 +89,6 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
 
   async buildPageDto() {
     this.resultPageDto.page = this.mapper.map(this.webpage, Webpage, PageDto);
-
-    this.resultPageDto.page.blocks = this.blockService.mapToBaseBlockDto(
-      this.webpage.blocks,
-    );
-
-    // if (this.resultPageDto.page.sections)
-    //   this.resultPageDto.page.sections =
-    //     this.sectionService.mapToPageSectionsDto(this.webpage.sections);
-
-    // if (this.webpageDto.page.settings)
-    //   this.webpageDto.page.settings =
-    //     await this.settingService.addDynamicSettings(
-    //       this.webpage.pageType,
-    //       this.webpage.settings,
-    //     );
 
     return this;
   }

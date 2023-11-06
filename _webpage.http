@@ -4,16 +4,26 @@
 
 @layout_page_id=03f7a954-f928-4a06-8949-fc7bea222ab9
 
+###
+
+GET http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages/
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+
+### 
+
 GET http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages/{{home_page}}
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
 
 ###
 
 GET http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages/{{bio_page}}
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
 
 ###
 
 POST http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages
 Content-Type: application/json
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
 
 {
   "pageType":"HOME",

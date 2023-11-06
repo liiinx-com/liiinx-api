@@ -4,19 +4,20 @@ import { Website } from './entities/website.entity';
 import { WebsitesService } from './websites.service';
 import { WebsitesController } from './websites.controller';
 import { WebsiteBuilder } from './website-builder';
-import { WebsitesFacadeService } from './websites.facade';
+import { WebsiteFacadeService } from './websites.facade';
 import { WebpagesModule } from 'src/webpages/webpages.module';
-import { MenuModule } from 'src/menu/menu.module';
 import { ProfileModule } from 'src/profile/profile.module';
+import { WebSiteMappingProfile } from './website.mapping-profile';
+import { BlockModule } from 'src/webpage-blocks/blocks.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Website]),
-    WebpagesModule,
-    MenuModule,
-    ProfileModule,
+  imports: [TypeOrmModule.forFeature([Website]), WebpagesModule, ProfileModule],
+  providers: [
+    WebsitesService,
+    WebsiteBuilder,
+    WebsiteFacadeService,
+    WebSiteMappingProfile,
   ],
-  providers: [WebsitesService, WebsiteBuilder, WebsitesFacadeService],
   controllers: [WebsitesController],
 })
 export class WebsitesModule {}
