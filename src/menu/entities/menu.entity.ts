@@ -12,16 +12,13 @@ export class Menu extends BaseEntity {
   @JoinColumn()
   items?: Menu[];
 
-  @ManyToOne(() => Webpage, (wp) => wp.menus)
-  @JoinColumn()
-  webpage?: Webpage;
-  @Column({ nullable: true })
-  webpageId?: string;
+  @Column({ name: 'webpage_id' })
+  webpageId: string;
 
-  @Column({ default: 'ITEM' }) // visit ./menu-keys.ts
+  @Column({ default: 'ITEM', name: 'menu_type' }) // visit ./menu-keys.ts
   menuType: string;
 
-  @Column({ default: false })
+  @Column({ default: false, name: 'is_parent' })
   isParent: boolean;
 
   @ManyToOne(() => Menu, (menu) => menu.items)
@@ -43,7 +40,7 @@ export class Menu extends BaseEntity {
   @AutoMap()
   target?: string;
 
-  @Column({ default: false })
+  @Column({ default: false, name: 'is_featured' })
   @AutoMap()
   isFeatured?: boolean;
 

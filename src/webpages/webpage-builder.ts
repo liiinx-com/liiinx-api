@@ -1,6 +1,5 @@
-import { Injectable, Scope } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Webpage } from './entities/webpage.entity';
-import { Menu } from 'src/menu/entities/menu.entity';
 import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
 import { EntityManager } from 'typeorm';
 import { BlockService } from 'src/webpage-blocks/blocks.service';
@@ -19,7 +18,7 @@ interface IWebpageBuilder {
   withHeader: () => Promise<IWebpageBuilder>;
 
   // withSeoMetadata: (metadata: SeoMetadataDto) => Promise<IWebpageBuilder>;
-  withMenu: (menus: Menu[]) => Promise<IWebpageBuilder>;
+  // withMenu: (menus: Menu[]) => Promise<IWebpageBuilder>;
   withThemeCode: (themeCode: string) => Promise<IWebpageBuilder>;
   // withSections: (sections: WebpageBlock[]) => Promise<IWebpageBuilder>;
   withSettings: (settings: WebpageSetting[]) => Promise<IWebpageBuilder>;
@@ -99,10 +98,10 @@ export class WebpageBuilder implements IWebpageBuilder {
     return this;
   }
 
-  async withMenu(menus: Menu[]) {
-    this.webpage.menus = menus;
-    return this;
-  }
+  // async withMenu(menus: Menu[]) {
+  //   this.webpage.menus = menus;
+  //   return this;
+  // }
 
   // async withSeoMetadata(metadata: SeoMetadataDto) {
   //   this.webpage.seoMetadata = metadata;

@@ -3,7 +3,6 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
 import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
 import { AutoMap } from '@automapper/classes';
-import { Menu } from 'src/menu/entities/menu.entity';
 import { WebpageBlock } from '../../webpage-blocks/blocks/_base-block/base-block.entity';
 import { PageType } from './page-type';
 
@@ -19,9 +18,6 @@ export class Webpage extends BaseEntity {
   @Column({ length: 100 })
   @AutoMap()
   title: string;
-
-  @OneToMany(() => Menu, (m) => m.webpage, { cascade: true })
-  menus: Menu[];
 
   @OneToMany(() => WebpageSetting, (setting) => setting.webpage, {
     cascade: true,
