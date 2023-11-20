@@ -80,6 +80,7 @@ export class WebsiteFacadeService {
   async getWebpage(handle: string, pageSlug: string): Promise<WebpageDto> {
     const webpage = await this.webpageService.getBySlug(handle, pageSlug);
 
+    // TODO: Website/page guard to catch non-existed entity sooner. cleaner code
     if (!webpage)
       throw new HttpException(WEBPAGE_NOT_FOUND, HttpStatus.NOT_FOUND);
 
@@ -94,13 +95,16 @@ export class WebsiteFacadeService {
     // 1. build page based on the pageType with all the dynamic settings
     // 2. merge with the webpage and layout
 
-    return this.webpageDtoBuilder
-      .createDto(layout, webpage)
-      .then((builder) => builder.buildLayoutDto())
-      .then((builder) => builder.buildPageDto())
-      .then((builder) => builder.buildThemeDto())
-      .then((builder) => builder.withMenusDto())
-      .then((builder) => builder.withProfileDto())
-      .then((builder) => builder.getDto());
+    return (
+      this.webpageDtoBuilder
+        .createDto(layout, webpage)
+        .then((builder) => builder.buildLayoutDto())
+        .then((builder) => builder.buildPageDto())
+        .then((builder) => builder.withPageConfig())
+        // .then((builder) => builder.buildThemeDto())
+        // .then((builder) => builder.withMenusDto())
+        // .then((builder) => builder.withProfileDto())
+        .then((builder) => builder.getDto())
+    );
   }
 }

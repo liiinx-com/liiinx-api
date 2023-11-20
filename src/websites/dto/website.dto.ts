@@ -18,6 +18,18 @@ export class CreateWebsiteDto {
   @IsNotEmpty()
   handle: string;
 
+  @IsNotEmpty()
+  title: string;
+
+  @IsNotEmpty()
+  description: string;
+
   @IsOptional()
-  customUrl: string;
+  customUrl?: string;
+
+  @IsOptional()
+  isRtl?: boolean;
+
+  @IsOptional()
+  faviconUrl?: string;
 }

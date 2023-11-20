@@ -1,20 +1,17 @@
 import { Injectable, Scope } from '@nestjs/common';
 import { Webpage } from './entities/webpage.entity';
 import { Menu } from 'src/menu/entities/menu.entity';
-import { WebpageBlock } from 'src/webpage-blocks/blocks/_base-block/base-block.entity';
 import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
-import { PageType } from './entities/page-type';
 import { EntityManager } from 'typeorm';
-import { HeaderService } from 'src/webpage-blocks/blocks/header/header.service';
 import { BlockService } from 'src/webpage-blocks/blocks.service';
+import { CreateWebpageDto } from './dto/webpage.dto';
 
 interface IWebpageBuilder {
   getPage: () => Promise<Webpage>;
   create: (
     manager: EntityManager,
     websiteId: string,
-    pageType: string,
-    pageVariant: string,
+    params: CreateWebpageDto,
   ) => Promise<IWebpageBuilder>;
   reset: () => Promise<IWebpageBuilder>;
   withTitle: (title: string, slug: string) => Promise<IWebpageBuilder>;
@@ -47,19 +44,23 @@ export class WebpageBuilder implements IWebpageBuilder {
   async create(
     manager: EntityManager,
     websiteId: string,
-    pageType: PageType,
-    pageVariant: string,
+    params: CreateWebpageDto,
   ) {
     this.manager = manager;
+
+    const { pageType, pageVariant, isRtl, title, faviconUrl } = params;
     this.webpage = new Webpage();
     this.webpage.pageType = pageType;
     this.webpage.pageVariant = pageVariant;
-    this.webpage.menus = [];
-    this.webpage.blocks = [];
+    this.webpage.isRtl = isRtl;
+    this.webpage.title = title;
+    this.webpage.faviconUrl = faviconUrl;
     this.webpage.websiteId = websiteId;
 
     return this;
   }
+
+  // TODO: withResource(name:  string) {}
 
   async withHeader() {
     const resource = 'header';

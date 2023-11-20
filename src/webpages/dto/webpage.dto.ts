@@ -1,16 +1,10 @@
 import { AutoMap } from '@automapper/classes';
-import { IsNotEmpty, IsEnum, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsEnum, IsOptional, IsBoolean } from 'class-validator';
 import { MenusDto } from 'src/menu/dto/menu.dto';
 import { PageType } from 'src/webpages/entities/page-type';
 import { ThemeDto } from 'src/themes/dto/theme.dto';
 import { ProfileDto } from 'src/profile/dto';
 import { BaseEntityDto } from 'src/shared/base.dto';
-import {
-  BaseBlockResponseDto,
-  PageLayoutDto,
-} from 'src/webpage-blocks/blocks/_base-block/base-block.dto';
-
-export class SeoMetadataDto {}
 
 export class BasePageDto extends BaseEntityDto {}
 
@@ -25,13 +19,19 @@ export class CreateWebpageDto {
   title: string;
 
   @IsNotEmpty()
+  description: string;
+
+  @IsOptional()
+  faviconUrl?: string;
+
+  @IsBoolean()
+  isRtl: boolean;
+
+  @IsNotEmpty()
   pageVariant: string;
 
-  @IsOptional()
-  themeCode?: string;
-
-  @IsOptional()
-  layoutOverrides?: Partial<PageLayoutDto>;
+  @IsNotEmpty()
+  themeCode: string;
 }
 
 export class LayoutDto extends BasePageDto {
@@ -41,7 +41,7 @@ export class LayoutDto extends BasePageDto {
   @AutoMap()
   variant: string;
 
-  layoutConfig: PageLayoutDto;
+  // layoutConfig: PageLayoutDto;
 }
 
 export class PageDto extends BasePageDto {
@@ -65,7 +65,7 @@ export class PageDto extends BasePageDto {
   pageVariant: string;
 }
 
-export class WebpageDto {
+export class WebpageDto_org {
   constructor() {
     this.layout = new LayoutDto();
     this.page = new PageDto();
@@ -75,4 +75,39 @@ export class WebpageDto {
   profile: ProfileDto;
   page: PageDto;
   theme: ThemeDto;
+}
+
+// =======
+
+abstract class BlockDto {}
+
+class UIBlockDto extends BlockDto {}
+class NUIBlockDto extends BlockDto {}
+
+// =================================
+
+export class PageBlockDto {
+  id: string;
+  pageType: string;
+  pageVariant: string;
+  blocks: BlockDto[];
+}
+
+class PageConfigDto {
+  dir: string;
+  title: string;
+  favicon: string;
+  lang: string;
+  websiteHandle: string; // slug
+  pageHandle: string;
+}
+
+export class WebpageDto {
+  id: string;
+  layout: PageBlockDto;
+  content: PageBlockDto;
+  config: PageConfigDto;
+  // seo: NUIBlockDto;
+  // theme: ThemeDto which is a NUIBlockDto;
+  // menus: we already have it;
 }

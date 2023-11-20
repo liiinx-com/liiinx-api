@@ -20,10 +20,7 @@ import { transformAndValidate } from 'class-transformer-validator';
 import { ValidationError } from 'class-validator';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
 import { RESOURCE_OR_ACTION_NOT_SUPPORTED } from 'src/shared/error-codes';
-import {
-  BaseBlockResponseDto,
-  PageLayoutDto,
-} from './blocks/_base-block/base-block.dto';
+import { BaseBlockResponseDto } from './blocks/_base-block/base-block.dto';
 import { FooterService } from './blocks/footer/footer.service';
 import { IBlockServiceActions } from './iblock-service-actions';
 import { WebpageBlock } from './blocks/_base-block/base-block.entity';
@@ -130,30 +127,13 @@ export class BlockService {
           payload,
         );
 
-        // base block - create
-        // 1. const baseBlock = await baseBlockService.getDefaultBlock()
-        // 2. setPropertiesFrom(source: payload , dest:defaultBaseBlock)
-        // 3. call await beforeSave([baseBlock]);
-        // 4. await manager.getRepository().save(baseBlock)
-        // 5. call await afterSave([baseBlock]);
-
-        // block - create
-        // 1. const block = await executerService.getDefaultBlock()
-        // 2. utils.setPropertiesFrom(source: payload , dest:block)
-        // 3. block.BaseBlockId = baseBlock.id;
-        // 4. call await executerService.beforeSave([baseBlock, block]);
-        // 5. await manager.getRepository().save(block)
-        // 6. call await afterSave([baseBlock, block]);
-
-        // result = executerService.mapToBlockDto(baseBlock, block)
-
         // TODO: preAction operations
 
         const params = {
           resource,
           action,
           manager,
-          ...(action === 'patch' ? { patchActionUpdates } : {}),
+          ...(action === 'patch' ? { patchActionUpdates } : {}), // TODO: Do we really need it?
           webpage: injectedWebpage,
           payload: validatedPayload as any,
         };
@@ -245,20 +225,5 @@ export class BlockService {
         HttpStatus.BAD_REQUEST,
       );
     return blocks[resource][action];
-  }
-
-  async generatePageLayoutConfig(
-    webPageId: string,
-    // blocks: WebpageBlock[],
-  ): Promise<PageLayoutDto> {
-    const pageBaseBlocks = await this.getBlocksByPageId(webPageId);
-
-    return {
-      dir: 'rtl',
-      footer: null, // this.footerService.getByPageId(webPageId),
-      header: null, //await this.headerService.getDefaultBlockDto(),
-      faviconUrl:
-        'https://pbwebmedia.nl/wp-content/uploads/2021/08/cropped-logo-bars-32x32.png',
-    };
   }
 }

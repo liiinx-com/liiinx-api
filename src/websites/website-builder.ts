@@ -2,9 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { Website } from './entities/website.entity';
 import { WebpagesService } from 'src/webpages/webpages.service';
 import { CreateWebsiteDto } from './dto/website.dto';
-import { PageType } from 'src/webpages/entities/page-type';
 import { EntityManager, Repository } from 'typeorm';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
+enum WebsiteSubscriptionPlan {
+  FREE = 'FREE',
+}
 
 interface IWebsiteBuilder {
   create: (
@@ -42,7 +44,7 @@ export class WebsiteBuilder implements IWebsiteBuilder {
     this.website = new Website();
     this.website.handle = handle;
     this.website.customUrl = customUrl;
-    this.website.subscriptionPlan = 'FREE';
+    this.website.subscriptionPlan = WebsiteSubscriptionPlan.FREE;
     this.website.ownerId = ownerId;
 
     await this.websiteRepository.save(this.website);
@@ -50,16 +52,20 @@ export class WebsiteBuilder implements IWebsiteBuilder {
     return this;
   }
 
-  async addLayout(themeCode: string, variant = 'heem1') {
+  async addLayout(themeCode: string, pageVariant = 'heem1') {
+    const { title, description, faviconUrl, isRtl } = this.params;
     this.layout = await this.webpagesService.createLayout(
       this.manager,
       this.website.id,
       {
-        pageType: PageType.LAYOUT,
+        pageType: null,
+        slug: '',
         themeCode,
-        title: 'LAYOUT',
-        slug: 'LAYOUT',
-        pageVariant: variant,
+        description,
+        isRtl,
+        faviconUrl,
+        title,
+        pageVariant,
       },
     );
 

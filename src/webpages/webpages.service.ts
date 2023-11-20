@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { Webpage } from './entities/webpage.entity';
-import { PageType } from 'src/webpages/entities/page-type';
+import { PageType, getPaySlugByType } from 'src/webpages/entities/page-type';
 import { Repository, DataSource, Not, EntityManager } from 'typeorm';
-import { CreateWebpageDto } from './dto/webpage.dto';
+import { CreateWebpageDto, PageBlockDto } from './dto/webpage.dto';
 import { WebpageBuilder } from './webpage-builder';
+
+const DEFAULT_FAVICON_URL = 'liiinx-favicon-url';
 
 @Injectable()
 export class WebpagesService {
@@ -89,16 +91,37 @@ export class WebpagesService {
     });
   }
 
+  // TODO: implement this
+  private async mapToPageDto(pageEntity: Webpage): Promise<PageBlockDto> {
+    const { id, pageType, pageVariant } = pageEntity;
+    // this.mapper.map(this.webpage, Webpage, PageBlockDto);
+    return {
+      id,
+      blocks: [],
+      pageType,
+      pageVariant,
+    };
+  }
+
+  async getPageDtoFrom(pageEntity: Webpage): Promise<PageBlockDto> {
+    const pageDto = await this.mapToPageDto(pageEntity);
+    // override or inject settings/... here
+    return pageDto;
+  }
+
   async createLayout(
     manager: EntityManager,
     websiteId: string,
     params: CreateWebpageDto,
   ): Promise<Webpage> {
+    params.pageType = PageType.LAYOUT;
+    params.slug = getPaySlugByType(params.pageType);
+
     const layoutBuilder = await this.initPageBuilder(
       manager,
       websiteId,
       params,
-    ).then((builder) => builder.withHeader());
+    );
 
     return layoutBuilder.getPage();
   }
@@ -115,20 +138,16 @@ export class WebpagesService {
   private async initPageBuilder(
     manager: EntityManager,
     websiteId: string,
-    {
-      pageType,
-      pageVariant,
-      title,
-      layoutOverrides,
-      slug,
-      themeCode,
-    }: CreateWebpageDto,
+    params: CreateWebpageDto,
   ): Promise<WebpageBuilder> {
+    const { title, slug, themeCode } = params;
+
+    params.isRtl = !!params.isRtl;
+    params.faviconUrl = params.faviconUrl || DEFAULT_FAVICON_URL;
+
     const builder = await this.webpageBuilder
       .reset()
-      .then((builder) =>
-        builder.create(manager, websiteId, pageType, pageVariant),
-      )
+      .then((builder) => builder.create(manager, websiteId, params))
       .then((builder) => builder.withTitle(title, slug))
       .then((builder) => builder.withThemeCode(themeCode));
 

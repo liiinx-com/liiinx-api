@@ -127,14 +127,14 @@ export class PatchBaseBlockDto {
   isActive?: boolean;
 }
 
-export class PageLayoutDto {
-  dir: 'ltr' | 'rtl';
-  faviconUrl: string;
-  topBar?: BaseBlockResponseDto;
-  header?: HeaderBlockDto;
-  hero?: BaseBlockResponseDto;
-  sidebar?: BaseBlockResponseDto;
-  content?: BaseBlockResponseDto;
-  footer?: FooterBlockDto;
-  footerBar?: BaseBlockResponseDto;
-}
+// export class PageLayoutDto {
+//   dir: 'ltr' | 'rtl';
+//   faviconUrl: string;
+//   topBar?: BaseBlockResponseDto;
+//   header?: HeaderBlockDto;
+//   hero?: BaseBlockResponseDto;
+//   sidebar?: BaseBlockResponseDto;
+//   content?: BaseBlockResponseDto;
+//   footer?: FooterBlockDto;
+//   footerBar?: BaseBlockResponseDto;
+// }

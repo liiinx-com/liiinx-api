@@ -16,9 +16,10 @@ interface IWebpageDtoBuilder {
   getDto: () => Promise<WebpageDto>;
   buildLayoutDto: (menus: MenusDto) => Promise<WebpageDtoBuilder>;
   buildPageDto: () => Promise<WebpageDtoBuilder>;
-  buildThemeDto: () => Promise<WebpageDtoBuilder>;
-  withMenusDto: () => Promise<WebpageDtoBuilder>;
-  withProfileDto: () => Promise<WebpageDtoBuilder>;
+  withPageConfig: () => Promise<WebpageDtoBuilder>;
+  // buildThemeDto: () => Promise<WebpageDtoBuilder>;
+  // withMenusDto: () => Promise<WebpageDtoBuilder>;
+  // withProfileDto: () => Promise<WebpageDtoBuilder>;
 }
 
 @Injectable()
@@ -47,48 +48,59 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
     return this;
   }
 
-  async withProfileDto() {
-    // TODO: THIS IS THE PATTERN
-    this.resultPageDto.profile =
-      await this.profileService.getProfileDtoByLayoutId(this.layout.id);
-    return this;
-  }
+  // async withProfileDto() {
+  //   // TODO: THIS IS THE PATTERN
+  //   this.resultPageDto.profile =
+  //     await this.profileService.getProfileDtoByLayoutId(this.layout.id);
+  //   return this;
+  // }
 
-  async withMenusDto() {
-    this.resultPageDto.menus = await this.menuService.getPageMenusDto(
-      this.layout.id,
-    );
-    return this;
-  }
+  // async withMenusDto() {
+  //   this.resultPageDto.menus = await this.menuService.getPageMenusDto(
+  //     this.layout.id,
+  //   );
+  //   return this;
+  // }
 
-  async buildThemeDto() {
-    this.resultPageDto.theme = await this.themeService.getThemeByCode(
-      this.layout.themeCode,
-      {}, //this.layout.themeOverrides,
-      {}, //this.webpage.themeOverrides,
-    );
-    return this;
-  }
+  // async buildThemeDto() {
+  //   this.resultPageDto.theme = await this.themeService.getThemeByCode(
+  //     this.layout.themeCode,
+  //     {}, //this.layout.themeOverrides,
+  //     {}, //this.webpage.themeOverrides,
+  //   );
+  //   return this;
+  // }
 
   async getDto() {
     return this.resultPageDto;
   }
 
-  async buildLayoutDto() {
-    this.resultPageDto.layout = {
-      id: this.layout.id,
-      variant: this.layout.pageVariant,
-      handle: this.website.handle,
-      layoutConfig: await this.blockService.generatePageLayoutConfig(
-        this.layout.id,
-      ),
+  async withPageConfig() {
+    const title = this.layout.title + ' | ' + this.webpage.title;
+
+    this.resultPageDto.config = {
+      title,
+      dir: 'ltr', //this.webpage.dir || this.layout.dir
+      favicon: 'someFaviconUrl', //this.webpage.favicon || this.layout.favicon
+      lang: 'en', // settings service
+      pageHandle: this.webpage.slug,
+      websiteHandle: this.website.handle,
     };
 
     return this;
   }
 
+  async buildLayoutDto() {
+    this.resultPageDto.layout = await this.webpageService.getPageDtoFrom(
+      this.layout,
+    );
+    return this;
+  }
+
   async buildPageDto() {
-    this.resultPageDto.page = this.mapper.map(this.webpage, Webpage, PageDto);
+    this.resultPageDto.content = await this.webpageService.getPageDtoFrom(
+      this.webpage,
+    );
 
     return this;
   }
