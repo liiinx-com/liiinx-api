@@ -58,7 +58,7 @@ export class BlockService {
     private readonly footerService: FooterService,
   ) {}
 
-  async getBlocksByPageId(id: string): Promise<WebpageBlock[]> {
+  async getBaseBlocksByPageId(id: string): Promise<WebpageBlock[]> {
     return this.entityManager.getRepository(WebpageBlock).find({
       where: {
         webpageId: id,
@@ -70,6 +70,23 @@ export class BlockService {
         order: 'asc',
       },
     });
+  }
+
+  async generateFetchBlockActionsRequestFor(
+    webpage: Webpage,
+    baseBlockEntities: WebpageBlock[],
+  ): Promise<BlockActionsRequest> {
+    return {
+      webpageId: webpage.id,
+      injectedWebpage: webpage,
+      actions: baseBlockEntities.map(({ blockType, blockId }) => ({
+        resource: blockType,
+        action: 'fetch',
+        payload: {
+          blockId,
+        },
+      })),
+    };
   }
 
   // async mapToBaseBlock(block: BlockTemplateEntity): Promise<WebpageBlock> {
@@ -175,22 +192,22 @@ export class BlockService {
     return actionResults;
   }
 
-  async executeActions(
-    actions: BlockActionsRequest,
+  async executeBlockActionsReq(
+    blockActionsReq: BlockActionsRequest,
   ): Promise<ActionResult<unknown>[]> {
     let actionResults: ActionResult<unknown>[] = [];
 
     await this.entityManager.transaction(async (manager) => {
-      actionResults = await this.execute(manager, actions);
+      actionResults = await this.execute(manager, blockActionsReq);
     });
     return actionResults;
   }
 
-  async executeActionsUsingManager(
+  async executeBlockActionsReqUsingManager(
     manager: EntityManager,
-    actions: BlockActionsRequest,
+    blockActionsReq: BlockActionsRequest,
   ): Promise<ActionResult<unknown>[]> {
-    return this.execute(manager, actions);
+    return this.execute(manager, blockActionsReq);
   }
 
   // TODO: Can we move this method to a separate service?

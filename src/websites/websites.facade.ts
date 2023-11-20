@@ -39,13 +39,11 @@ export class WebsiteFacadeService {
       throw new HttpException(ALREADY_EXIST, HttpStatus.CONFLICT);
     }
 
-    const themeCode = 'heem';
-
     let newWebsite: Website = null;
     await this.entityManager.transaction(async (manager) => {
       newWebsite = await this.websiteBuilder
         .create(manager, ownerId, websiteDto)
-        .then((builder) => builder.addLayout(themeCode))
+        .then((builder) => builder.addLayout())
         .then((builder) => builder.getWebsite());
     });
     return newWebsite;
@@ -80,6 +78,7 @@ export class WebsiteFacadeService {
   async getWebpage(handle: string, pageSlug: string): Promise<WebpageDto> {
     const webpage = await this.webpageService.getBySlug(handle, pageSlug);
 
+    // TODO: Guard which set website/webpage to Request Service
     // TODO: Website/page guard to catch non-existed entity sooner. cleaner code
     if (!webpage)
       throw new HttpException(WEBPAGE_NOT_FOUND, HttpStatus.NOT_FOUND);
@@ -104,7 +103,7 @@ export class WebsiteFacadeService {
         // .then((builder) => builder.buildThemeDto())
         // .then((builder) => builder.withMenusDto())
         // .then((builder) => builder.withProfileDto())
-        .then((builder) => builder.getDto())
+        .then((builder) => builder.build())
     );
   }
 }

@@ -1,6 +1,6 @@
 import { Webpage } from 'src/webpages/entities/webpage.entity';
 import { Website } from 'src/websites/entities/website.entity';
-import { PageDto, WebpageDto } from './webpage.dto';
+import { PageBlockDto, WebpageDto } from './webpage.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
@@ -13,7 +13,7 @@ import { ProfileService } from 'src/profile/profile.service';
 
 interface IWebpageDtoBuilder {
   createDto: (layout: Webpage, webpage: Webpage) => Promise<WebpageDtoBuilder>;
-  getDto: () => Promise<WebpageDto>;
+  build: () => Promise<WebpageDto>;
   buildLayoutDto: (menus: MenusDto) => Promise<WebpageDtoBuilder>;
   buildPageDto: () => Promise<WebpageDtoBuilder>;
   withPageConfig: () => Promise<WebpageDtoBuilder>;
@@ -71,13 +71,14 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   //   return this;
   // }
 
-  async getDto() {
+  async build() {
     return this.resultPageDto;
   }
 
   async withPageConfig() {
     const title = this.layout.title + ' | ' + this.webpage.title;
 
+    // TODO: fix this
     this.resultPageDto.config = {
       title,
       dir: 'ltr', //this.webpage.dir || this.layout.dir
@@ -90,17 +91,33 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
     return this;
   }
 
-  async buildLayoutDto() {
-    this.resultPageDto.layout = await this.webpageService.getPageDtoFrom(
-      this.layout,
+  private async buildPageDtoHelper(pageEntity: Webpage) {
+    const result: PageBlockDto = await this.webpageService.getPageDtoFrom(
+      pageEntity,
     );
+
+    const baseBlocks = await this.blockService.getBaseBlocksByPageId(
+      pageEntity.id,
+    );
+    result.blocks = (
+      await this.blockService.executeBlockActionsReq(
+        await this.blockService.generateFetchBlockActionsRequestFor(
+          pageEntity,
+          baseBlocks,
+        ),
+      )
+    ).map((a) => a.response);
+
+    return result;
+  }
+
+  async buildLayoutDto() {
+    this.resultPageDto.layout = await this.buildPageDtoHelper(this.layout);
     return this;
   }
 
   async buildPageDto() {
-    this.resultPageDto.content = await this.webpageService.getPageDtoFrom(
-      this.webpage,
-    );
+    this.resultPageDto.content = await this.buildPageDtoHelper(this.webpage);
 
     return this;
   }
