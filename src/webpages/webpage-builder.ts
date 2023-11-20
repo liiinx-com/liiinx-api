@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Scope } from '@nestjs/common';
 import { Webpage } from './entities/webpage.entity';
 import { Menu } from 'src/menu/entities/menu.entity';
 import { WebpageSetting } from 'src/webpage-settings/entities/webpage-setting.entity';
