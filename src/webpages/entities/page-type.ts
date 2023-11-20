@@ -6,4 +6,4 @@ export enum PageType {
   BIO = 'BIO',
 }
 
-export const getPaySlugByType = (type: PageType) => type.toLowerCase();
+export const getSlugByType = (type: PageType) => type.toLowerCase();

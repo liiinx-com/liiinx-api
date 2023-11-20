@@ -19,10 +19,9 @@ export class Webpage extends BaseEntity {
   @AutoMap()
   title: string;
 
-  @OneToMany(() => WebpageSetting, (setting) => setting.webpage, {
-    cascade: true,
-  })
-  settings: WebpageSetting[];
+  @Column({ length: 300, nullable: true })
+  @AutoMap()
+  description?: string;
 
   @Column({ length: 100 })
   @AutoMap()
@@ -39,8 +38,8 @@ export class Webpage extends BaseEntity {
   @Column({ name: 'is_rtl', default: false })
   isRtl: boolean;
 
-  @Column({ name: 'favicon_url' })
-  faviconUrl: string;
+  @Column({ name: 'favicon_url', nullable: true })
+  faviconUrl?: string;
 
   @Column({ length: 50, name: 'page_variant' })
   @AutoMap()

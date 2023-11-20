@@ -32,19 +32,3 @@ Authorization: Bearer {{$dotenv JWT_TOKEN}}
   "slug": "home"
 }
 
-###
-
-POST http://localhost:{{$dotenv PORT}}/websites/{{handle}}/pages
-Content-Type: application/json
-
-{
-  "pageType":"BIO",
-  "pageVariant": "bio1",
-  "title": "Bio",
-  "slug": "bio",
-  "layoutOverrides": {
-    "dir": "rtl",
-    "header": {"isActive": false},
-    "footer": {"isActive": false}
-  }
-}

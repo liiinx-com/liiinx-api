@@ -1,6 +1,6 @@
 import { Webpage } from 'src/webpages/entities/webpage.entity';
 import { Website } from 'src/websites/entities/website.entity';
-import { PageDto, WebpageDto } from './webpage.dto';
+import { WebpageDto } from './webpage.dto';
 import { Injectable } from '@nestjs/common';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
@@ -13,7 +13,7 @@ import { ProfileService } from 'src/profile/profile.service';
 
 interface IWebpageDtoBuilder {
   createDto: (layout: Webpage, webpage: Webpage) => Promise<WebpageDtoBuilder>;
-  getDto: () => Promise<WebpageDto>;
+  build: () => Promise<WebpageDto>;
   buildLayoutDto: (menus: MenusDto) => Promise<WebpageDtoBuilder>;
   buildPageDto: () => Promise<WebpageDtoBuilder>;
   withPageConfig: () => Promise<WebpageDtoBuilder>;
@@ -71,7 +71,7 @@ export class WebpageDtoBuilder implements IWebpageDtoBuilder {
   //   return this;
   // }
 
-  async getDto() {
+  async build() {
     return this.resultPageDto;
   }
 

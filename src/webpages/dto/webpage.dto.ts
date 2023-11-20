@@ -1,5 +1,11 @@
 import { AutoMap } from '@automapper/classes';
-import { IsNotEmpty, IsEnum, IsOptional, IsBoolean } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsEnum,
+  IsOptional,
+  IsBoolean,
+  IsString,
+} from 'class-validator';
 import { MenusDto } from 'src/menu/dto/menu.dto';
 import { PageType } from 'src/webpages/entities/page-type';
 import { ThemeDto } from 'src/themes/dto/theme.dto';
@@ -13,25 +19,32 @@ export class CreateWebpageDto {
   pageType: PageType;
 
   @IsNotEmpty()
+  @IsString()
   slug: string;
 
   @IsNotEmpty()
+  @IsString()
   title: string;
 
-  @IsNotEmpty()
-  description: string;
+  @IsOptional()
+  @IsString()
+  description?: string;
 
   @IsOptional()
+  @IsString()
   faviconUrl?: string;
 
+  @IsOptional()
   @IsBoolean()
-  isRtl: boolean;
+  isRtl?: boolean;
 
   @IsNotEmpty()
+  @IsString()
   pageVariant: string;
 
-  @IsNotEmpty()
-  themeCode: string;
+  @IsOptional()
+  @IsString()
+  themeCode?: string;
 }
 
 export class LayoutDto extends BasePageDto {

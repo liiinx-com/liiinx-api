@@ -8,8 +8,8 @@ import { JwtAuthGuard } from 'src/auth/jwt.guard';
 export class BlockController {
   constructor(private readonly blockService: BlockService) {}
 
-  @UseGuards(InjectWebpageGuard)
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(InjectWebpageGuard)
+  @UseGuards(JwtAuthGuard, InjectWebpageGuard)
   @HttpCode(200)
   @Post()
   async performActions(@Body() dto: BlockActionsRequest) {

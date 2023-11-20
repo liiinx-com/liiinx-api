@@ -15,7 +15,6 @@ interface IWebsiteBuilder {
     params: CreateWebsiteDto,
   ) => Promise<IWebsiteBuilder>;
   addLayout: (themeCode: string, variant: string) => Promise<IWebsiteBuilder>;
-  // addSettings:
   getWebsite: () => Promise<Website>;
 }
 
@@ -52,8 +51,9 @@ export class WebsiteBuilder implements IWebsiteBuilder {
     return this;
   }
 
-  async addLayout(themeCode: string, pageVariant = 'heem1') {
-    const { title, description, faviconUrl, isRtl } = this.params;
+  async addLayout() {
+    const { title, description, faviconUrl, isRtl, themeCode, layoutVariant } =
+      this.params;
     this.layout = await this.webpagesService.createLayout(
       this.manager,
       this.website.id,
@@ -65,7 +65,7 @@ export class WebsiteBuilder implements IWebsiteBuilder {
         isRtl,
         faviconUrl,
         title,
-        pageVariant,
+        pageVariant: layoutVariant,
       },
     );
 
