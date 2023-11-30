@@ -1,6 +1,5 @@
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from 'src/shared/base.entity';
-import { Webpage } from 'src/webpages/entities/webpage.entity';
 
 @Entity({ name: 'webpage_settings' })
 export class WebpageSetting extends BaseEntity {
@@ -14,10 +13,6 @@ export class WebpageSetting extends BaseEntity {
     if (this.value['__value']) return this.value['__value'];
     return this.value;
   }
-
-  @ManyToOne(() => Webpage, (wp) => wp.settings)
-  @JoinColumn()
-  webpage: Webpage;
 
   @Column()
   webpageId: string;

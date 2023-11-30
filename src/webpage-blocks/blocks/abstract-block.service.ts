@@ -87,24 +87,34 @@ export abstract class AbstractBlockService<
       throw new HttpException(INVALID_BLOCK_VARIANT, HttpStatus.BAD_REQUEST);
     }
 
+    // save baseBlock
     const baseBlockPayload = await this.mapToBaseBlockEntity(payload);
     baseBlockPayload.webpageId = webpage.id;
+    baseBlockPayload.blockId = '-';
     const saveBaseBlockEntity = await this.baseBlockService.saveBaseBlock(
       manager,
       baseBlockPayload,
     );
 
+    // save Block
     const blockEntityPayload = await this.mapToBlockEntity(payload);
     blockEntityPayload.baseBlockId = saveBaseBlockEntity.id;
     const saveBlockEntity = await this.getBlockRepository(manager).save(
       blockEntityPayload,
     );
 
+    // update baseBlock.blockId
+    saveBaseBlockEntity.blockId = saveBlockEntity.id;
+    const updateBaseBlockEntity = await this.baseBlockService.saveBaseBlock(
+      manager,
+      saveBaseBlockEntity,
+    );
+
     return new ActionResult<BlockDto>({
       resource,
       action,
       ok: true,
-      response: this.mapToBlockDto(saveBaseBlockEntity, saveBlockEntity),
+      response: this.mapToBlockDto(updateBaseBlockEntity, saveBlockEntity),
     });
   }
 
@@ -124,9 +134,10 @@ export abstract class AbstractBlockService<
     if (
       payload.blockVariant &&
       !(await this.isValidVariant(payload.blockVariant))
-    ) {
+    )
       throw new HttpException(INVALID_BLOCK_VARIANT, HttpStatus.BAD_REQUEST);
-    }
+
+    // TODO: avoid update blockId, type,
 
     let patchedBaseBlock = baseBlockEntity;
     let patchedBlock = blockEntity;

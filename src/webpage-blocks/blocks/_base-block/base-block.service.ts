@@ -33,9 +33,10 @@ export class BaseBlockService {
     return manager.getRepository(WebpageBlock).save(baseBlock);
   }
 
+  // TODO: refactor this and use baseBlock.blockId field
   async fetchOneByBlockIdOrException<T extends BlockTemplateEntity>(
     blockRepository: Repository<T>,
-    id: string,
+    blockId: string,
   ): Promise<[WebpageBlock, T]> {
     const { raw, entities } = await blockRepository
       .createQueryBuilder('blk')
@@ -45,7 +46,7 @@ export class BaseBlockService {
         'base.id::varchar = blk.base_block_id',
       )
       .where(
-        `blk.id::varchar = '${id}' and base.is_deleted=false and base.is_archived=false and base.is_active=true`,
+        `blk.id::varchar = '${blockId}' and base.is_deleted=false and base.is_archived=false and base.is_active=true`,
       )
       .getRawAndEntities();
 

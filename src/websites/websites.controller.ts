@@ -19,7 +19,6 @@ import { User } from 'src/users/entities/user.entity';
 import { InjectMapper } from '@automapper/nestjs';
 import { Mapper } from '@automapper/core';
 import { Website } from './entities/website.entity';
-import { BAD_REQUEST } from 'src/shared/error-codes';
 import { WebpagesService } from 'src/webpages/webpages.service';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
 
@@ -61,6 +60,7 @@ export class WebsitesController {
   }
 
   @Get(':handle/pages/:slug')
+  // @UseGuards( InjectWebpageGuard)
   // TODO: websiteExists(handle)Guard
   // TODO: webpageExistsGuard
   async getPage(
@@ -68,22 +68,16 @@ export class WebsitesController {
     @Param('slug') pageSlug = 'home',
     @Query('lang') lang = 'EN',
   ) {
-    console.log('object');
-    const result = await this.websiteFacadeService.getWebpage(handle, pageSlug);
-    console.log('result :>> ', result);
-    return result;
+    return this.websiteFacadeService.getWebpage(handle, pageSlug);
   }
 
   @Post()
   @UseGuards(JwtAuthGuard)
   // TODO: websiteNotExistsGuard
   async newWebsite(@Request() { user }, @Body() websiteDto: CreateWebsiteDto) {
-    const newWebsite = await this.websiteFacadeService.newWebsite(
-      user.id,
-      websiteDto,
-    );
-    if (!newWebsite.id)
-      throw new HttpException(BAD_REQUEST, HttpStatus.BAD_REQUEST);
+    return this.websiteFacadeService.newWebsite(user.id, websiteDto);
+    // if (!newWebsite.id)
+    //   throw new HttpException(BAD_REQUEST, HttpStatus.BAD_REQUEST);
   }
 
   @Post(':handle/pages')
@@ -92,12 +86,9 @@ export class WebsitesController {
   async newWebpage(
     @Request() { user },
     @Param('handle') handle: string,
-    @Body() webpageDto: CreateWebpageDto,
+    @Body() newPageDto: CreateWebpageDto,
   ) {
-    const newPage = await this.websiteFacadeService.newWebpage(
-      handle,
-      webpageDto,
-    );
+    return this.websiteFacadeService.newWebpage(handle, newPageDto);
 
     // if (!newWebsite.id)
     //   throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);

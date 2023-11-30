@@ -1,6 +1,6 @@
 import { AutoMap } from '@automapper/classes';
 
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { BaseEntityDto } from 'src/shared/base.dto';
 
 export class WebsiteDto extends BaseEntityDto {
@@ -16,20 +16,34 @@ export class WebsiteDto extends BaseEntityDto {
 
 export class CreateWebsiteDto {
   @IsNotEmpty()
+  @IsString()
   handle: string;
 
   @IsNotEmpty()
+  @IsString()
   title: string;
 
-  @IsNotEmpty()
-  description: string;
+  @IsOptional()
+  @IsString()
+  description?: string;
 
   @IsOptional()
+  @IsString()
+  themeCode?: string;
+
+  @IsOptional()
+  @IsString()
+  layoutVariant?: string;
+
+  @IsOptional()
+  @IsString()
   customUrl?: string;
 
   @IsOptional()
+  @IsBoolean()
   isRtl?: boolean;
 
   @IsOptional()
+  @IsString()
   faviconUrl?: string;
 }

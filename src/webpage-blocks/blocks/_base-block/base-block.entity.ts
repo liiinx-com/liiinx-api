@@ -12,6 +12,10 @@ export class WebpageBlock extends BaseEntity {
   @Column()
   webpageId: string;
 
+  @Column({ length: 100 })
+  @AutoMap()
+  blockId: string;
+
   @Column()
   @AutoMap()
   blockType: string;
