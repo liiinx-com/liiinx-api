@@ -118,13 +118,7 @@ export class WebpagesService {
     params.themeCode = params.themeCode || DEFAULT_THEME_CODE;
     params.faviconUrl = params.faviconUrl || DEFAULT_FAVICON_URL;
 
-    const layoutBuilder = await this.initPageBuilder(
-      manager,
-      websiteId,
-      params,
-    );
-
-    return layoutBuilder.build();
+    return (await this.initPageBuilder(manager, websiteId, params)).build();
   }
 
   async createPage(
@@ -132,8 +126,7 @@ export class WebpagesService {
     websiteId: string,
     params: CreateWebpageDto,
   ): Promise<Webpage> {
-    const pageBuilder = await this.initPageBuilder(manager, websiteId, params);
-    return pageBuilder.build();
+    return (await this.initPageBuilder(manager, websiteId, params)).build();
   }
 
   private async initPageBuilder(

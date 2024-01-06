@@ -29,6 +29,8 @@ Authorization: Bearer {{$dotenv JWT_TOKEN}}
   "pageType":"HOME",
   "pageVariant": "home1",
   "title": "Home",
-  "slug": "home"
+  # "faviconUrl": "homepagefav",
+  # "isRtl": true,
+   "slug": "home"
 }
 

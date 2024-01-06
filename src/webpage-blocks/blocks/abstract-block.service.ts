@@ -147,18 +147,19 @@ export abstract class AbstractBlockService<
         PatchActionChangeTypes.BOTH,
       ].includes(patchActionUpdates)
     ) {
-      const baseBlockPayload = await this.mapToBaseBlockEntity(payload);
       this.baseBlockService.mergeEntities(
         manager,
         baseBlockEntity,
-        baseBlockPayload,
+        await this.mapToBaseBlockEntity(payload),
       );
       // baseBlockPayload.webpageId = webpage.id; // TODO: may not be needed
       patchedBaseBlock = await this.baseBlockService.saveBaseBlock(
         manager,
         baseBlockEntity,
       );
-    } else if (
+    }
+
+    if (
       [PatchActionChangeTypes.BLOCK_ONLY, PatchActionChangeTypes.BOTH].includes(
         patchActionUpdates,
       )

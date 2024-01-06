@@ -2,12 +2,12 @@ import {
   Body,
   Controller,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   Post,
   Query,
   Request,
+  Res,
+  StreamableFile,
   UseGuards,
 } from '@nestjs/common';
 import { WebsiteFacadeService } from './websites.facade';
@@ -21,6 +21,8 @@ import { Mapper } from '@automapper/core';
 import { Website } from './entities/website.entity';
 import { WebpagesService } from 'src/webpages/webpages.service';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
+import { Response } from 'express';
+import { Stream } from 'stream';
 
 @Controller('websites')
 export class WebsitesController {
@@ -69,6 +71,28 @@ export class WebsitesController {
     @Query('lang') lang = 'EN',
   ) {
     return this.websiteFacadeService.getWebpage(handle, pageSlug);
+  }
+
+  @Get(':handle/styles/:slug?')
+  async getPageStyle(
+    @Res({ passthrough: true }) res: Response,
+    @Param('handle') handle: string,
+    @Param('slug') _ = 'root',
+  ) {
+    const uniqueFilenameFor = (handle: string) => {
+      return `${handle}-styles.${Date.now()}.css`;
+    };
+    const generateStylesFor = (handle: string) => [
+      `:root { --main-color: #red; } /* styles for ${handle}*/`,
+    ];
+
+    res.set({
+      'Content-Type': 'text/css',
+      'Content-Disposition': `attachment; filename="${uniqueFilenameFor(
+        handle,
+      )}"`,
+    });
+    return new StreamableFile(Stream.Readable.from(generateStylesFor(handle)));
   }
 
   @Post()

@@ -1,6 +1,10 @@
-@layout_page_id=209a129f-342d-4ecb-b80a-8aa6f61e5030
+@layout_page_id=45c76935-b531-41e2-8994-7e309bee7ca5
 
-@header_block_id=db6e194c-a66d-4ca0-be85-60e6a1b0c155
+@header_block_id=c5321fbf-c849-4233-a667-9c02bf7146fa
+
+GET http://localhost:{{$dotenv PORT}}/blocks
+
+###
 
 POST http://localhost:{{$dotenv PORT}}/blocks
 Content-Type: application/json
@@ -37,16 +41,17 @@ Authorization: Bearer {{$dotenv JWT_TOKEN}}
     {
       "resource": "header",
       "action": "patch",
-      "patchActionUpdates": "BOTH",
+      "patchActionUpdates": "BLOCK_ONLY",
       "payload": {
         "blockId": "{{header_block_id}}",
         # "blockVariant": "header1",
         # "blockType": "na na na",
-        "isLtr": false,
-        # "blockStyle": {"backgroundColor": "silver"},
-        # "textLogo": "Salamat Trading II"
+        # "isLtr": true,
+        # "blockStyle": {"backgroundColor": "#03A9F4"},
+        # "textLogo": "Salamat Trading",
         # "slogan": "Your Trusted Broker",
-        "textLogoProps": {"color": "green"}
+        # "textLogoProps": {"color": "green"},
+        "sloganProps": {"backgroundColor": "aqua", "padding": ".7rem", "borderRadius":"0.5rem"}
       }
     }
   ]

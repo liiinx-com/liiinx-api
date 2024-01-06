@@ -44,6 +44,10 @@ export class HeaderBlockMappingProfile extends AutomapperProfile {
           (dest) => dest.imageLogoProps,
           mapFrom((src) => src.imageLogoProps),
         ),
+        forMember(
+          (dest) => dest.sloganProps,
+          mapFrom((src) => src.sloganProps),
+        ),
       );
       createMap(
         mapper,
@@ -60,6 +64,10 @@ export class HeaderBlockMappingProfile extends AutomapperProfile {
         forMember(
           (dest) => dest.imageLogoProps,
           mapFrom((src) => src.imageLogoProps),
+        ),
+        forMember(
+          (dest) => dest.sloganProps,
+          mapFrom((src) => src.sloganProps),
         ),
       );
       createMap(
