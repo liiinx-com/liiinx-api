@@ -47,3 +47,9 @@ export class CreateWebsiteDto {
   @IsString()
   faviconUrl?: string;
 }
+
+export class CreateWebsiteForYoutubeChannelDto extends CreateWebsiteDto {
+  @IsNotEmpty()
+  @IsString()
+  youtubeHandle: string;
+}
