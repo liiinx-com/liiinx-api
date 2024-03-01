@@ -11,9 +11,25 @@ Content-Type: application/json
 Authorization: Bearer {{$dotenv JWT_TOKEN}}
 
 {
-  "handle": "salamat-trading",
-  "title": "Salamat Trading Broker",
-  "description": "Your Trusted Crypto Broker"
+  "handle": "mrbeast",
+  "title": "Mr Beast",
+  "description": "Mr Beast"
+  # "themeCode": "my-theme",
+  # "layoutVariant": "heem2",
+  # "isRtl": true
+}
+
+###
+
+POST http://localhost:{{$dotenv PORT}}/websites/new-website-for-youtube-channel
+Content-Type: application/json
+Authorization: Bearer {{$dotenv JWT_TOKEN}}
+
+{
+  "handle": "mrbeast",
+  "title": "Mr Beast",
+  "description": "Mr Beast",
+  "youtubeHandle": "mrbeast"
   # "themeCode": "my-theme",
   # "layoutVariant": "heem2",
   # "isRtl": true

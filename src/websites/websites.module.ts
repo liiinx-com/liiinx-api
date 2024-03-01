@@ -8,10 +8,15 @@ import { WebsiteFacadeService } from './websites.facade';
 import { WebpagesModule } from 'src/webpages/webpages.module';
 import { ProfileModule } from 'src/profile/profile.module';
 import { WebSiteMappingProfile } from './website.mapping-profile';
-import { BlockModule } from 'src/webpage-blocks/blocks.module';
+import { WebhooksModule } from 'src/webhooks/webhooks.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Website]), WebpagesModule, ProfileModule],
+  imports: [
+    TypeOrmModule.forFeature([Website]),
+    WebpagesModule,
+    ProfileModule,
+    WebhooksModule,
+  ],
   providers: [
     WebsitesService,
     WebsiteBuilder,

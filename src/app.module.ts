@@ -17,6 +17,7 @@ import { BlockModule } from './webpage-blocks/blocks.module';
 import { ProfileModule } from './profile/profile.module';
 import { MediaModule } from './media/media.module';
 import { AuthModule } from './auth/auth.module';
+import { WebhooksModule } from './webhooks/webhooks.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
     UsersModule,
     WebsitesModule,
+    WebhooksModule,
     // WebpagesModule,
     // MenuModule,
     // SettingsModule,
