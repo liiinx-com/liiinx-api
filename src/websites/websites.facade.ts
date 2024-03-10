@@ -6,7 +6,7 @@ import { CreateWebsiteDto } from './dto/website.dto';
 import { WebpageDtoBuilder } from 'src/webpages/dto/webpage.dto-builder';
 import { CreateWebpageDto, WebpageDto } from 'src/webpages/dto/webpage.dto';
 import { PageType } from 'src/webpages/entities/page-type';
-import { ProfileService } from 'src/profile/profile.service';
+
 import {
   ALREADY_EXIST,
   LAYOUT_NOT_FOUND,
@@ -26,7 +26,6 @@ export class WebsiteFacadeService {
     private webpageService: WebpagesService,
     private websiteBuilder: WebsiteBuilder,
     private webpageDtoBuilder: WebpageDtoBuilder,
-    private profileService: ProfileService,
   ) {}
 
   async newWebsite(

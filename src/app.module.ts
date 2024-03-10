@@ -7,21 +7,17 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/user.module';
 import { ConfigurationService } from './configuration/configuration.service';
 import { WebsitesModule } from './websites/websites.module';
-import { WebpagesModule } from './webpages/webpages.module';
-import { MenuModule } from './menu/menu.module';
-import { SettingsModule } from './webpage-settings/settings.module';
-import { ThemesModule } from './themes/themes.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
-import { BlockModule } from './webpage-blocks/blocks.module';
-import { ProfileModule } from './profile/profile.module';
-import { MediaModule } from './media/media.module';
 import { AuthModule } from './auth/auth.module';
 import { WebhooksModule } from './webhooks/webhooks.module';
+import { NewWebsitesModule } from './websites/new-website/new-website.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    EventEmitterModule.forRoot(),
     AutomapperModule.forRoot({
       strategyInitializer: classes(),
     }),
@@ -47,6 +43,8 @@ import { WebhooksModule } from './webhooks/webhooks.module';
     // BlockModule,
     // ProfileModule,
     // MediaModule,
+    // ! API V2
+    NewWebsitesModule,
   ],
   providers: [AppService],
   controllers: [AppController],

@@ -1,39 +1,64 @@
 import { HttpService } from '@nestjs/axios';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { promiseUtils } from 'src/utils';
 
-const RESOURCE = {
+export const WEBHOOK_RESOURCE = {
   YOUTUBE: 'youtube',
 };
 
-const RESOURCE_ACTION = {
+export const WEBHOOK_RESOURCE_ACTION = {
   SYNC_YOUTUBE_CHANNEL_DETAILS: 'sync-youtube-channel-details',
 };
 
 const SYNC_API_BASE_URL = 'http://localhost:3003'; // TODO: config service
 
+class SubmitSyncJobResult {
+  resource: string;
+  action: string;
+  result: string;
+}
+
 @Injectable()
 export class WebhooksService {
+  private readonly logger = new Logger(WebhooksService.name);
+
   constructor(private readonly httpService: HttpService) {}
 
-  private submitSyncJob(resource: string, action: string, payload?: object) {
-    console.log(
-      `sending ${action} to resource ${resource} with payload ${payload}`,
+  private async submitSyncJob(
+    resource: string,
+    action: string,
+    payload?: object,
+  ): Promise<SubmitSyncJobResult> {
+    const response = await promiseUtils.throwExceptionIfFailed(
+      this.logger,
+      this.httpService.axiosRef.post(this.urlFor(), { items: [payload] }),
     );
-    console.log(this.urlFor(resource, action));
+
+    return {
+      result: response.statusText,
+      resource,
+      action,
+    };
   }
 
-  private urlFor(resource: string, action: string): string {
-    return `${SYNC_API_BASE_URL}/${resource}/${action}`;
+  private urlFor(): string {
+    return `${SYNC_API_BASE_URL}/sync`;
   }
 
-  submitSyncYoutubeChannelDetailsJob(params: {
+  async submitSyncYoutubeChannelDetailsJob(params: {
     youtubeHandle: string;
     liiinxHandle: string;
-  }) {
+  }): Promise<SubmitSyncJobResult> {
     return this.submitSyncJob(
-      RESOURCE.YOUTUBE,
-      RESOURCE_ACTION.SYNC_YOUTUBE_CHANNEL_DETAILS,
-      params,
+      WEBHOOK_RESOURCE.YOUTUBE,
+      WEBHOOK_RESOURCE_ACTION.SYNC_YOUTUBE_CHANNEL_DETAILS,
+      {
+        resource: 'youtube',
+        action: 'sync-youtube-channel-details',
+        payload: {
+          ...params,
+        },
+      },
     );
   }
 }

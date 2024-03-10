@@ -40,6 +40,9 @@ export class WebhookCallbackPayload<Payload> {
 
 export class YoutubeChannelCallbackPayload {
   @IsString()
+  liiinxHandle: string;
+
+  @IsString()
   channelId: string;
 
   @IsString()

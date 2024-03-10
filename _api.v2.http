@@ -1,0 +1,16 @@
+@liiinxHandle=mrbeast
+@liiinxApi=http://localhost:3001
+@lang=en
+
+
+GET {{liiinxApi}}/websites/{{liiinxHandle}}/pages/home?lang={{lang}}
+###
+GET {{liiinxApi}}/websites/{{liiinxHandle}}/themes/home?lang={{lang}}
+###
+GET {{liiinxApi}}/websites/{{liiinxHandle}}/menus/header-menu?lang={{lang}}
+###
+GET {{liiinxApi}}/websites/{{liiinxHandle}}/media-libs/video-gallery1?lang={{lang}}
+
+##### WEBSITE MANAGEMENT #####
+POST {{liiinxApi}}/websites
+Content-Type: application/json

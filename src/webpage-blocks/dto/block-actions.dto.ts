@@ -1,13 +1,3 @@
-import { AutoMap } from '@automapper/classes';
-import {
-  IsBoolean,
-  IsInt,
-  IsNotEmpty,
-  IsObject,
-  IsOptional,
-  IsString,
-} from 'class-validator';
-
 export class ActionResult<T> {
   messages: string[];
   response: T;
