@@ -24,5 +24,6 @@ import { WebhooksModule } from 'src/webhooks/webhooks.module';
     WebSiteMappingProfile,
   ],
   controllers: [WebsitesController],
+  exports: [WebsiteFacadeService],
 })
 export class WebsitesModule {}

@@ -11,11 +11,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { WebsiteFacadeService } from './websites.facade';
-import {
-  CreateWebsiteDto,
-  CreateWebsiteForYoutubeChannelDto,
-  WebsiteDto,
-} from './dto/website.dto';
+import { CreateWebsiteDto, WebsiteDto } from './dto/website.dto';
 import { CreateWebpageDto, PageDto } from 'src/webpages/dto/webpage.dto';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { WebsitesService } from './websites.service';
@@ -27,7 +23,6 @@ import { WebpagesService } from 'src/webpages/webpages.service';
 import { Webpage } from 'src/webpages/entities/webpage.entity';
 import { Response } from 'express';
 import { Stream } from 'stream';
-import { WebhooksService } from 'src/webhooks/webhooks.service';
 
 @Controller('websites')
 export class WebsitesController {
@@ -35,7 +30,7 @@ export class WebsitesController {
     private readonly websiteFacadeService: WebsiteFacadeService,
     private readonly websiteService: WebsitesService,
     private readonly webpageService: WebpagesService,
-    private readonly webhooksService: WebhooksService,
+
     @InjectMapper()
     private mapper: Mapper,
   ) {}
@@ -135,23 +130,6 @@ export class WebsitesController {
 
     // if (!newWebsite.id)
     //   throw new HttpException(BAD_REQUEST, HttpStatus.BAD_REQUEST);
-  }
-
-  @Post('new-website-for-youtube-channel')
-  @UseGuards(JwtAuthGuard)
-  // TODO: websiteNotExistsGuard
-  async newWebsiteForYoutubeChannel(
-    @Request() { user },
-    @Body() websiteDto: CreateWebsiteForYoutubeChannelDto,
-  ) {
-    const website = await this.websiteFacadeService.newWebsite(
-      user.id,
-      websiteDto,
-    );
-    this.webhooksService.submitSyncYoutubeChannelDetailsJob({
-      liiinxHandle: website.handle,
-      youtubeHandle: websiteDto.youtubeHandle,
-    });
   }
 
   @Post(':handle/pages')
